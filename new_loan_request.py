@@ -189,6 +189,23 @@ user_helpers2 = """
                     on_press: app.fetch_product_name()
                     text_size: self.width - dp(20), None
                     disabled: not group_id2.text or group_id2.text == 'Select Categories'
+                    
+        MDGridLayout:
+            cols: 2
+            BoxLayout:
+                orientation:"horizontal"
+                pos_hint: {'center_x':0.5, 'center_y':0.5}
+                padding: dp(25)
+                spacing: dp(20)
+                 
+                MDLabel:
+                    font_size: dp(16)
+                    text: "Product Description"
+                    bold: True
+                MDLabel:
+                    id: product_description
+                    text: " "
+
 
         MDLabel:
             text: " "             

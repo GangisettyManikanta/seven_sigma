@@ -1,3 +1,4 @@
+
 from kivymd.uix.list import *
 import anvil.server
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -68,7 +69,7 @@ view_loan_request = """
                         id: box1
                         orientation: 'vertical'
                         size_hint_y: None
-                        height: dp(680)
+                        height: dp(750)
 
                         padding: [10, 0,0,0]
                         canvas.before:
@@ -290,6 +291,10 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
+                        GridLayout:
+                            cols: 2
+                            spacing: dp(10)
+                            padding: dp(10)
 
                             MDLabel:
                                 text: "Borrower Name:" 
@@ -302,6 +307,11 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
+                                
+                        GridLayout:
+                            cols: 2
+                            spacing: dp(10)
+                            padding: dp(10)
                             MDLabel:
                                 text: "Date Of Apply:" 
                                 size_hint_y:None
@@ -314,6 +324,11 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
+                                
+                        GridLayout:
+                            cols: 2
+                            spacing: dp(10)
+                            padding: dp(10)
                             MDLabel:
                                 text: "Loan Tenure:" 
                                 size_hint_y:None
@@ -327,6 +342,11 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
+                                
+                        GridLayout:
+                            cols: 2
+                            spacing: dp(10)
+                            padding: dp(10)
                             MDLabel:
                                 text: "Phone Number:" 
                                 size_hint_y:None
@@ -339,6 +359,11 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
+                                
+                        GridLayout:
+                            cols: 2
+                            spacing: dp(10)
+                            padding: dp(10)
 
                             MDLabel:
                                 text: "Product Name:" 
@@ -352,6 +377,11 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
+                                
+                        GridLayout:
+                            cols: 2
+                            spacing: dp(10)
+                            padding: dp(10)
                             MDLabel:
                                 text: "Product Description:" 
                                 size_hint_y:None
@@ -364,6 +394,11 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
+                                
+                        GridLayout:
+                            cols: 2
+                            spacing: dp(10)
+                            padding: dp(10)
                             MDLabel:
                                 text: "Interest Rate:" 
                                 size_hint_y:None
@@ -376,6 +411,11 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
+                        
+                        GridLayout:
+                            cols: 2
+                            spacing: dp(10)
+                            padding: dp(10)
                             MDLabel:
                                 text: "Loan Amount Applied:" 
                                 size_hint_y:None
@@ -388,6 +428,11 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
+                                
+                        GridLayout:
+                            cols: 2
+                            spacing: dp(10)
+                            padding: dp(10)
                             MDLabel:
                                 text: "Loan ID:" 
                                 size_hint_y:None
@@ -400,6 +445,11 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
+                                
+                        GridLayout:
+                            cols: 2
+                            spacing: dp(10)
+                            padding: dp(10)
                             MDLabel:
                                 text: "Loan Status:" 
                                 size_hint_y:None
@@ -412,19 +462,15 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
-                            MDRaisedButton:
-                                text: "Cancel"
-                                md_bg_color: 11/255, 4/255, 64/255, 1
-                                on_release: app.root.current = 'ViewLoansRequest'
-                                text_color: 1,1,1,1
-                                font_name: "Roboto-Bold.ttf"
-                                size_hint: 1, None
+                        GridLayout:
+                            cols: 1
+                            spacing: dp(10)
+                            padding: dp(10)
 
                             MDRaisedButton:
-                                text: "Pay Now"
-                                md_bg_color: 11/255, 4/255, 64/255, 1
+                                text: "Loan Disbursed"
+                                md_bg_color: 0.043, 0.145, 0.278, 1
                                 font_name: "Roboto-Bold.ttf"
-                                text_color: 1,1,1,1
                                 size_hint: 1, None
                                 on_release: root.paynow()
 

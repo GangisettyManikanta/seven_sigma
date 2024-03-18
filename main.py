@@ -1,3 +1,5 @@
+import re
+
 from anvil.tables import app_tables
 from kivy.app import App
 from kivy.core.window import Window
@@ -62,29 +64,43 @@ class MyApp(MDApp):
         # Get the selected product category
         selected_category = self.root.get_screen('NewloanScreen').ids.group_id2.text
         # Call the server function using Anvil Uplink to filter product names based on the selected category
-        product_names = app_tables.fin_product_details.search(product_categories=selected_category)
-
-        if product_names:
-            # Update the Spinner with filtered product names
-            spinner = self.root.get_screen('NewloanScreen').ids.group_id3
-            spinner.values = [user['product_name'] for user in product_names]
-        else:
-            # If no product names are found, clear the Spinner
-            self.clear_product_name_spinner()
-
-    def clear_product_name_spinner(self):
-        # Clear the Spinner for product names
+        product_name = app_tables.fin_product_details.search(product_categories=selected_category)
+        # Update the Spinner with filtered product names
         spinner = self.root.get_screen('NewloanScreen').ids.group_id3
-        spinner.values = []
+        spinner.values = [user['product_name'] for user in product_name]
+
+        # Call fetch_product_description immediately after updating product names
+        self.fetch_product_description()
+
+    def fetch_product_description(self):
+        # Get the selected product name
+        selected_product_name = self.root.get_screen('NewloanScreen').ids.group_id3.text
+        # Call the server function using Anvil Uplink to fetch the product description based on the selected product name
+        product = app_tables.fin_product_details.search(product_name=selected_product_name)
+        # Check if product list is not empty before accessing its elements
+        if product:
+            if len(product) > 0:
+                # Update the product description label with the fetched description
+                self.root.get_screen('NewloanScreen').ids.product_description.text = product[0]['product_discription']
+        else:
+            # Clear the product description label if no product description is found
+            self.root.get_screen('NewloanScreen').ids.product_description.text = ""
 
     def fetch_emi_type(self):
         # Get the selected product category
         selected_category = self.root.get_screen('NewloanScreen').ids.group_id3.text
         # Call the server function using Anvil Uplink to filter product names based on the selected category
-        emi_type = app_tables.fin_product_details.search(product_name=selected_category)
-        # Update the Spinner with filtered product names
+        emi_type_results = app_tables.fin_product_details.search(product_name=selected_category)
+        # Initialize an empty list to store the individual emi types
+        emi_type = []
+        # Split the emi_payment text and extend the emi_type list with the alphabetical words
+        for row in emi_type_results:
+            # Use regular expression to find alphabetical words
+            words = re.findall(r'\b[a-zA-Z]+\b', row['emi_payment'])
+            emi_type.extend(words)
+        # Update the Spinner with filtered emi types
         spinner = self.root.get_screen('NewloanScreen1').ids.group_id4
-        spinner.values = [user['emi_payment'] for user in emi_type]
+        spinner.values = emi_type
 
     def on_start(self):
         Window.softinput_mode = "below_target"
