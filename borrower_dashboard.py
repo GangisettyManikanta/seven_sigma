@@ -1,6 +1,7 @@
 import sqlite3
 
 import anvil
+from anvil.tables import app_tables
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.core.window import Window
@@ -2517,14 +2518,13 @@ class DashboardScreen(Screen):
         # Store the animation object
         loading_label.animation = anim  # Store the animation object in a custom attribute
 
-
     def go_to_newloan_screen(self):
-        modal_view = ModalView(size_hint=(None, None), size=(500, 200), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2539,36 +2539,23 @@ class DashboardScreen(Screen):
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.perform_loan_request_action(modal_view), 2)
 
-
     def perform_loan_request_action(self, modal_view):
         # Cancel the animation
         modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         # Close the modal view after performing the action
         modal_view.dismiss()
         # Get the existing ScreenManager
-        '''sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        login_screen = NewloanScreen(name='NewloanScreen')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'NewloanScreen'''
         self.manager.add_widget(Factory.NewloanScreen(name='NewloanScreen'))
         self.manager.current = 'NewloanScreen'
 
-
-
-
     def go_to_view_loan_screen(self):
-        modal_view = ModalView(size_hint=(None, None), size=(500, 200), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2586,26 +2573,17 @@ class DashboardScreen(Screen):
     def perform_view_loan_screen_action(self, modal_view):
         # Close the modal view after performing the action
         modal_view.dismiss()
-        '''sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        login_screen = DashboardScreenVLB(name='DashboardScreenVLB')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'DashboardScreenVLB'''
         self.manager.add_widget(Factory.DashboardScreenVLB(name='DashboardScreenVLB'))
         self.manager.current = 'DashboardScreenVLB'
 
     def go_to_app_tracker(self):
-        modal_view = ModalView(size_hint=(None, None), size=(500, 200), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2624,27 +2602,17 @@ class DashboardScreen(Screen):
         # Close the modal view after performing the action
         modal_view.dismiss()
         # Get the existing ScreenManager
-        '''sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        login_screen = ALLLoansAPT(name='ALLLoansAPT')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'ALLLoansAPT'''
         self.manager.add_widget(Factory.ALLLoansAPT(name='ALLLoansAPT'))
         self.manager.current = 'ALLLoansAPT'
 
-
     def go_to_extend(self):
-        modal_view = ModalView(size_hint=(None, None), size=(500, 200), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2662,23 +2630,17 @@ class DashboardScreen(Screen):
     def perform_extend_action(self, modal_view):
         # Close the modal view after performing the action
         modal_view.dismiss()
-        '''sm = self.manager
-        # Create a new instance of the LoginScreen
-        login_screen = ExtensionLoansRequest(name='ExtensionLoansRequest')
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-        # Switch to the LoginScreen
-        sm.current = 'ExtensionLoansRequest'''
+
         self.manager.add_widget(Factory.ExtensionLoansRequest(name='ExtensionLoansRequest'))
         self.manager.current = 'ExtensionLoansRequest'
 
     def go_to_fore_closer_details(self):
-        modal_view = ModalView(size_hint=(None, None), size=(500, 200), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2696,26 +2658,17 @@ class DashboardScreen(Screen):
     def perform_fore_closer_details_action(self, modal_view):
         # Close the modal view after performing the action
         modal_view.dismiss()
-        '''sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        login_screen = LoansDetailsB(name='LoansDetailsB')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'LoansDetailsB'''
         self.manager.add_widget(Factory.LoansDetailsB(name='LoansDetailsB'))
         self.manager.current = 'LoansDetailsB'
 
     def go_to_loan_details(self):
-        modal_view = ModalView(size_hint=(None, None), size=(500, 200), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2734,16 +2687,7 @@ class DashboardScreen(Screen):
         # Close the modal view after performing the action
         modal_view.dismiss()
         # Get the existing ScreenManager
-        '''sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        login_screen = LoansDetails(name='LoansDetails')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'LoansDetails'''
         self.manager.add_widget(Factory.LoansDetails(name='LoansDetails'))
         self.manager.current = 'LoansDetails'
 
@@ -2751,12 +2695,12 @@ class DashboardScreen(Screen):
         self.manager.current = 'MainScreen'
 
     def go_to_profile(self):
-        modal_view = ModalView(size_hint=(None, None), size=(500, 200), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2775,26 +2719,17 @@ class DashboardScreen(Screen):
         # Close the modal view after performing the action
         modal_view.dismiss()
         # Get the existing ScreenManager
-        '''sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        login_screen = ProfileScreen(name='ProfileScreen')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'ProfileScreen'''
         self.manager.add_widget(Factory.ProfileScreen(name='ProfileScreen'))
         self.manager.current = 'ProfileScreen'
 
     def go_to_wallet(self):
-        modal_view = ModalView(size_hint=(None, None), size=(500, 200), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2813,16 +2748,7 @@ class DashboardScreen(Screen):
         from borrower_wallet import WalletScreen
         modal_view.dismiss()
         # Get the existing ScreenManager
-        '''sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        login_screen = WalletScreen(name='WalletScreen')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'WalletScreen'''
         self.manager.add_widget(Factory.WalletScreen(name='WalletScreen'))
         self.manager.current = 'WalletScreen'
 
@@ -2831,7 +2757,7 @@ class ProfileScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         email = self.get_email()
-        data = self.get_table()
+        data = app_tables.fin_user_profile.search()
         customer = []
         name_list = []
         email1 = []
@@ -2966,7 +2892,6 @@ class ProfileScreen(Screen):
         # Make a call to the Anvil server function
         # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
         return anvil.server.call('profile')
-
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1")

@@ -1,5 +1,7 @@
 import sqlite3
 import threading
+
+from anvil.tables import app_tables
 from kivy.clock import Clock
 from kivy.core.window import Window
 from kivy.factory import Factory
@@ -17,7 +19,6 @@ from lender_dashboard import LenderDashboard
 from borrower_dashboard import DashboardScreen
 from kivy.factory import Factory
 import bcrypt
-#anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
 
 KV = """
 <WindowManager>:
@@ -176,8 +177,8 @@ KV = """
 """
 Builder.load_string(KV)
 
-class LoginScreen(Screen):
 
+class LoginScreen(Screen):
 
     def on_checkbox_active(self, checkbox, value):
         # Handle checkbox state change
@@ -246,7 +247,7 @@ class LoginScreen(Screen):
         if not entered_password:
             self.show_error_dialog("Please enter password")
             self.hide_loading_spinner()
-             # Hide spinner in case of error
+            # Hide spinner in case of error
             return
 
         # Start another thread for SQLite operations
@@ -262,8 +263,8 @@ class LoginScreen(Screen):
         ''', (entered_email,))
 
         user_data = cursor.fetchone()
-        data = self.login_data()
-        profile = self.profile()
+        data = app_tables.users.search()
+        profile = app_tables.fin_user_profile.search()
         email_list = []
         password_list = []
         registartion_approve = []
@@ -376,7 +377,6 @@ class LoginScreen(Screen):
                 self.manager.add_widget(Factory.DashScreen(name='DashScreen'))
                 self.manager.current = 'DashScreen'
 
-
         Clock.schedule_once(switch_screen, 0)
 
     def share_email_with_anvil(self, email):
@@ -398,19 +398,17 @@ class LoginScreen(Screen):
         dialog.open()
         self.hide_loading_spinner()
 
-
-
     def go_to_signup(self):
         from signup import SignupScreen
         self.manager.add_widget(Factory.SignupScreen(name='SignupScreen'))
         self.manager.current = 'SignupScreen'
-
 
     def on_pre_enter(self):
         Window.bind(on_keyboard=self.on_back_button)
         # Clear input fields when navigating back to the login page
         self.ids.email.text = ""
         self.ids.password.text = ""
+
     def on_pre_leave(self):
         Window.unbind(on_keyboard=self.on_back_button)
 
@@ -428,12 +426,6 @@ class LoginScreen(Screen):
 
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'MainScreen'
-
-    def login_data(self):
-        return anvil.server.call('login_data')
-
-    def profile(self):
-        return anvil.server.call('profile')
 
 
 class MyScreenManager(ScreenManager):

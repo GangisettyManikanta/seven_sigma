@@ -1,5 +1,6 @@
 import re
 import bcrypt
+from anvil.tables import app_tables
 from kivy.animation import Animation
 from kivy.clock import Clock
 from kivy.core.window import Window
@@ -11,7 +12,7 @@ import sqlite3
 
 from kivymd.uix.label import MDLabel
 
-from tables import create_user_table,create_registration_table
+from tables import create_user_table, create_registration_table
 from kivymd.uix.selectioncontrol import MDCheckbox
 from kivymd.uix.snackbar import Snackbar
 from kivymd.uix.dialog import MDDialog
@@ -21,8 +22,6 @@ import anvil.server
 from kivymd.uix.spinner import MDSpinner
 
 from login import LoginScreen
-
-
 
 KV = """
 <WindowManager>:
@@ -57,6 +56,7 @@ KV = """
             icon_left: 'account'
             font_name: "Roboto-Bold"
             pos_hint: {'center_y': 0.1}
+            on_text: root.on_text_validate(self, label1)
 
         MDTextField:
             id: mobile
@@ -68,6 +68,7 @@ KV = """
             font_name: "Roboto-Bold"
             input_type: 'number'  
             on_touch_down: root.on_mobile_number_touch_down()
+            
 
         MDTextField:
             id: email
@@ -165,6 +166,14 @@ class SignupScreen(Screen):
     create_user_table()
     create_registration_table()
 
+    def on_text_validate(self, text_field, error_label):
+        if not text_field.text:
+            error_label.text = "This field is required"
+            error_label.color = [1, 0, 0, 1]  # Red color for error text
+        else:
+            error_label.text = ""  # Clear error text when there's input
+            error_label.color = [0, 0, 0, 0]  # Transparent color to hide the label
+
     def on_mobile_number_touch_down(self):
         # Change keyboard mode to numeric when the mobile number text input is touched
         self.ids.mobile.input_type = 'number'
@@ -179,7 +188,7 @@ class SignupScreen(Screen):
             cursor.execute('SELECT user_id FROM fin_users ORDER BY user_id DESC LIMIT 1')
             latest_user_id = cursor.fetchone()
 
-            c_id = anvil.server.call('profile')
+            c_id = app_tables.fin_user_profile.search()
 
             id_c = []
             for i in c_id:
@@ -237,14 +246,13 @@ class SignupScreen(Screen):
         # Store the animation object
         loading_label.animation = anim  # Store the animation object in a custom attribute
 
-
     def go_to_login(self):
-        modal_view = ModalView(size_hint=(None, None), size=(200, 150), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -258,7 +266,6 @@ class SignupScreen(Screen):
         # Perform the actual action (e.g., fetching loan requests)
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.perform_signup_action(modal_view), 2)
-
 
     def perform_signup_action(self, modal_view):
         # Close the modal view after
@@ -362,9 +369,11 @@ class SignupScreen(Screen):
         sm.add_widget(lender_screen)
         sm.transition.direction = 'left'  # Set the transition direction explicitly
         sm.current = 'DashScreen'
+
     def share_email_with_anvil(self, email):
         # Make an API call to Anvil server to share the email
         anvil.server.call('share_email', email)
+
     def show_validation_error(self, widget, error_text):
         widget.error = True
         widget.helper_text_color = (1, 0, 0, 1)
@@ -393,8 +402,8 @@ class SignupScreen(Screen):
     def is_strong_password(self, password):
         # Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter,
         # one digit, and one special character
-        return len(password) >= 8 and bool(re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+=-])[A-Za-z\d!@#$%^&*()_+=-]+$', password))
-
+        return len(password) >= 8 and bool(
+            re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+=-])[A-Za-z\d!@#$%^&*()_+=-]+$', password))
 
     def on_pre_enter(self):
         Window.bind(on_keyboard=self.on_back_button)

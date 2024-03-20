@@ -22,7 +22,7 @@ from datetime import datetime
 
 from kivymd.uix.spinner import MDSpinner
 
-#anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
+
 
 user_helpers2 = """
 <WindowManager>:
@@ -75,7 +75,7 @@ user_helpers2 = """
                     id: credit_limit        
                     text: "" 
                     font_size:dp(20)
-                    
+
         MDGridLayout:
             cols: 2
             BoxLayout:
@@ -92,7 +92,7 @@ user_helpers2 = """
                     id: product_id       
                     text: "" 
                     font_size:dp(20)
-                    
+
         MDGridLayout:
             cols: 2
             BoxLayout:
@@ -189,7 +189,9 @@ user_helpers2 = """
                     on_press: app.fetch_product_name()
                     text_size: self.width - dp(20), None
                     disabled: not group_id2.text or group_id2.text == 'Select Categories'
-                    
+
+        MDLabel:
+            text: " "   
         MDGridLayout:
             cols: 2
             BoxLayout:
@@ -197,18 +199,15 @@ user_helpers2 = """
                 pos_hint: {'center_x':0.5, 'center_y':0.5}
                 padding: dp(25)
                 spacing: dp(20)
-                 
                 MDLabel:
                     font_size: dp(16)
                     text: "Product Description"
                     bold: True
                 MDLabel:
                     id: product_description
-                    text: " "
+                    text: " "      
+                    font_size: dp(12)     
 
-
-        MDLabel:
-            text: " "             
         MDFloatLayout:
             MDRaisedButton:
                 text: "Next"
@@ -218,7 +217,7 @@ user_helpers2 = """
                 size_hint:0.4, None  
                 font_name:"Roboto-Bold"
                 font_size:dp(15)
-                
+
         MDLabel:
             text: " "  
 <NewloanScreen1>:
@@ -304,12 +303,10 @@ user_helpers2 = """
                 pos_hint: {'center_x':0.5, 'center_y':0.5}
                 padding: dp(25)
                 spacing: dp(20)
-
-
                 MDLabel:
+                    font_size: dp(16)
                     text: "EMI Type"
                     bold: True
-                    font_size:dp(16)
 
                 Spinner:
                     id: group_id4
@@ -323,15 +320,16 @@ user_helpers2 = """
                     color: 0, 0, 0, 1
                     canvas.before:
                         Color:
-                            rgba: 0,0,0,1
+                            rgba: 0, 0, 0, 1
                         Line:
                             width: 0.7
                             rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
-                            
+
                     on_press: app.fetch_emi_type()
                     text_size: self.width - dp(20), None
                     disabled: not group_id4.text or group_id4.text == 'Select Categories'
-                    
+
+
         MDLabel:
             id: max_tenure 
             color:1,1,1,1      
@@ -495,26 +493,23 @@ user_helpers2 = """
 
 Builder.load_string(user_helpers2)
 
+
 class NewloanScreen(Screen):
-     # Add this line to check if the build method is called
-
-
+    # Add this line to check if the build method is called
 
     def on_pre_enter(self, *args):
         Window.bind(on_keyboard=self.on_back_button)
         try:
+            # Get the first row from the 'fin_borrower' table
+            row = app_tables.fin_borrower.search()[0]  # Fetch the first row
 
-            # Call the Anvil server function to get the latest credit limit for the specified customer_id
-            credit_limit = anvil.server.call('get_credit_limit')
-            product_id = anvil.server.call('get_product')
+            # Fetch the credit limit from the row
+            credit_limit = row['credit_limit']
 
             # Update the credit_limit MDLabel with the fetched data
             self.ids.credit_limit.text = str(credit_limit)
-            self.ids.product_id.text = str(product_id)
-        except anvil._server.AnvilWrappedError as e:
-            print(f"Anvil error: {e}")
-
-
+        except Exception as e:
+            print(f"Error: {e}")
 
     def on_pre_leave(self):
         Window.unbind(on_keyboard=self.on_back_button)
@@ -560,22 +555,22 @@ class NewloanScreen(Screen):
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.performance_go_to_newloan_screen1(modal_view), 2)
 
-    def performance_go_to_newloan_screen1(self,modal_view):
+    def performance_go_to_newloan_screen1(self, modal_view):
 
-        #selected_group = self.ids.group_id1.text
-        #selected_category = self.ids.group_id2.text
-        #self.selected_category = selected_category
-        #self.selected_group = selected_group
+        # selected_group = self.ids.group_id1.text
+        # selected_category = self.ids.group_id2.text
+        # self.selected_category = selected_category
+        # self.selected_group = selected_group
         # Get the existing ScreenManager
-        #product_name = self.ids.product_id1.text
+        # product_name = self.ids.product_id1.text
 
         modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         # Close the modal view after performing the action
         modal_view.dismiss()
         self.manager.add_widget(Factory.NewloanScreen1(name='NewloanScreen1'))
         self.manager.current = 'NewloanScreen1'
-        #print(self.selected_category)
-        #print(product_name)
+        # print(self.selected_category)
+        # print(product_name)
 
 
 class NewloanScreen1(Screen):
@@ -679,7 +674,6 @@ class NewloanScreen1(Screen):
         # Store the animation object
         loading_label.animation = anim  # Store the animation object in a custom attribute
 
-
     def go_to_newloan_screen2(self):
         # Show modal view with loading label
         modal_view = ModalView(size_hint=(None, None), size=(300, 100),
@@ -697,7 +691,7 @@ class NewloanScreen1(Screen):
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.performance_go_to_newloan_screen2(modal_view), 2)
 
-    def performance_go_to_newloan_screen2(self,modal_view):
+    def performance_go_to_newloan_screen2(self, modal_view):
 
         loan_amount = self.ids.text_input1.text
         loan_tenure = self.ids.text_input2.text
@@ -773,7 +767,6 @@ class NewloanScreen2(Screen):
         anim.start(loading_label)
         # Store the animation object
         loading_label.animation = anim  # Store the animation object in a custom attribute
-
 
     def send_request(self):
         # Show modal view with loading label

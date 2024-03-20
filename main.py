@@ -1,9 +1,9 @@
-import re
-
 from anvil.tables import app_tables
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.lang import Builder
+from kivy.metrics import dp
+from kivy.uix.spinner import SpinnerOption
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, SlideTransition
 from homepage import MainScreen
@@ -14,7 +14,9 @@ class MyApp(MDApp):
     def build(self):
         sm = ScreenManager(transition=SlideTransition())
         main_screen = MainScreen(name='MainScreen')
-
+        SpinnerOption.font_size = dp(10.5)
+        SpinnerOption.background_color = [0.2, 0.4, 0.6, 1]
+        SpinnerOption.font_name = "Roboto-Bold"
         sm.add_widget(main_screen)
 
         return sm
@@ -68,9 +70,27 @@ class MyApp(MDApp):
         # Update the Spinner with filtered product names
         spinner = self.root.get_screen('NewloanScreen').ids.group_id3
         spinner.values = [user['product_name'] for user in product_name]
-
-        # Call fetch_product_description immediately after updating product names
+        # Clear product description label when selecting a new product name
+        self.root.get_screen('NewloanScreen').ids.product_description.text = ""
+        # Fetch product description
         self.fetch_product_description()
+        # Fetch product ID
+        self.fetch_product_id()
+
+    def fetch_emi_type(self):
+        # Get the selected product category
+        selected_category = self.root.get_screen('NewloanScreen').ids.group_id3.text
+        # Call the server function using Anvil Uplink to filter product names based on the selected category
+        emi_type = app_tables.fin_product_details.search(product_name=selected_category)
+        # Extract emi_type from the fetched data
+        if emi_type:
+            emi_type_list = emi_type[0]['emi_payment'].split(',')  # Split the emi_type string by commas
+            # Update the Spinner with filtered product names
+            spinner = self.root.get_screen('NewloanScreen1').ids.group_id4
+            spinner.values = emi_type_list
+        else:
+            # Clear the Spinner if no emi_type is found
+            self.root.get_screen('NewloanScreen1').ids.group_id4.values = []
 
     def fetch_product_description(self):
         # Get the selected product name
@@ -86,21 +106,19 @@ class MyApp(MDApp):
             # Clear the product description label if no product description is found
             self.root.get_screen('NewloanScreen').ids.product_description.text = ""
 
-    def fetch_emi_type(self):
-        # Get the selected product category
-        selected_category = self.root.get_screen('NewloanScreen').ids.group_id3.text
-        # Call the server function using Anvil Uplink to filter product names based on the selected category
-        emi_type_results = app_tables.fin_product_details.search(product_name=selected_category)
-        # Initialize an empty list to store the individual emi types
-        emi_type = []
-        # Split the emi_payment text and extend the emi_type list with the alphabetical words
-        for row in emi_type_results:
-            # Use regular expression to find alphabetical words
-            words = re.findall(r'\b[a-zA-Z]+\b', row['emi_payment'])
-            emi_type.extend(words)
-        # Update the Spinner with filtered emi types
-        spinner = self.root.get_screen('NewloanScreen1').ids.group_id4
-        spinner.values = emi_type
+    def fetch_product_id(self):
+        # Get the selected product name
+        selected_product_name = self.root.get_screen('NewloanScreen').ids.group_id3.text
+        # Call the server function using Anvil Uplink to fetch the product ID based on the selected product name
+        product = app_tables.fin_product_details.search(product_name=selected_product_name)
+        # Check if product list is not empty before accessing its elements
+        if product:
+            if len(product) > 0:
+                # Update the product ID label with the fetched product ID
+                self.root.get_screen('NewloanScreen').ids.product_id.text = str(product[0]['product_id'])
+        else:
+            # Clear the product ID label if no product ID is found
+            self.root.get_screen('NewloanScreen').ids.product_id.text = ""
 
     def on_start(self):
         Window.softinput_mode = "below_target"
