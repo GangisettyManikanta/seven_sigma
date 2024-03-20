@@ -1,3 +1,4 @@
+
 import anvil.server
 from anvil.tables import app_tables
 from kivy.clock import Clock
@@ -13,7 +14,7 @@ from kivymd.uix.list import *
 from kivy.animation import Animation
 from kivymd.uix.label import MDLabel
 
-# anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
+
 
 view_loans = '''
 <WindowManager>:
@@ -725,12 +726,12 @@ class ViewLoansScreen(Screen):
         anim.start(loading_label)
 
     def all_loanscreen(self):
-        modal_view = ModalView(size_hint=(None, None), size=(500, 200), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -760,12 +761,12 @@ class ViewLoansScreen(Screen):
         sm.current = 'ALlLoansScreen'
 
     def go_to_open_loans(self):
-        modal_view = ModalView(size_hint=(None, None), size=(500, 200), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -795,12 +796,12 @@ class ViewLoansScreen(Screen):
         sm.current = 'OpenViewLoanScreen'
 
     def go_to_approved_loans(self):
-        modal_view = ModalView(size_hint=(None, None), size=(500, 200), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -830,12 +831,12 @@ class ViewLoansScreen(Screen):
         sm.current = 'ViewApprovedLoansScreen'
 
     def go_to_rejected_loans(self):
-        modal_view = ModalView(size_hint=(None, None), size=(500, 200), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -865,12 +866,12 @@ class ViewLoansScreen(Screen):
         sm.current = 'ViewRejectedLoansScreen'
 
     def go_to_under_process_loans(self):
-        modal_view = ModalView(size_hint=(None, None), size=(500, 200), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -900,12 +901,12 @@ class ViewLoansScreen(Screen):
         sm.current = 'ViewUnderProcessLoansScreen'
 
     def go_to_closed_loans(self):
-        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -938,11 +939,13 @@ class ViewLoansScreen(Screen):
 class OpenViewLoanScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        data = self.get_table_data()
+        data = app_tables.fin_loan_details.search()
+        profile = app_tables.fin_user_profile.search()
         customer_id = []
         loan_id = []
         borrower_name = []
         loan_status = []
+        product_name = []
         s = 0
         for i in data:
             s += 1
@@ -950,7 +953,13 @@ class OpenViewLoanScreen(Screen):
             loan_id.append(i['loan_id'])
             borrower_name.append(i['borrower_full_name'])
             loan_status.append(i['loan_updated_status'])
+            product_name.append(i['product_name'])
 
+        profile_customer_id = []
+        profile_mobile_number = []
+        for i in profile:
+            profile_customer_id.append(i['customer_id'])
+            profile_mobile_number.append(i['mobile'])
         c = -1
         index_list = []
         for i in range(s):
@@ -963,23 +972,32 @@ class OpenViewLoanScreen(Screen):
         for i in index_list:
             b += 1
             k += 1
+            if customer_id[i] in profile_customer_id:
+                number = profile_customer_id.index(customer_id[i])
+            else:
+                number = 0
             item = ThreeLineAvatarIconListItem(
 
                 IconLeftWidget(
                     icon="card-account-details-outline"
                 ),
-                text=f"Loan ID : {loan_id[i]}",
-                secondary_text=f"Borrower Name: {borrower_name[i]}",
-                tertiary_text=f"Status: {loan_status[i]}",
+                text=f"Borrower Name : {borrower_name[i]}",
+                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                tertiary_text=f"Product Name : {product_name[i]}",
+                text_color=(0, 0, 0, 1),  # Black color
+                theme_text_color='Custom',
+                secondary_text_color=(0, 0, 0, 1),
+                secondary_theme_text_color='Custom',
+                tertiary_text_color=(0, 0, 0, 1),
+                tertiary_theme_text_color='Custom'
             )
-            item.bind(on_release=self.icon_button_clicked)  # Corrected the binding
+            item.bind(on_release=lambda instance, loan_id = loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container1.add_widget(item)
 
-    def icon_button_clicked(self, instance):
+    def icon_button_clicked(self, instance,loan_id):
         # Handle the on_release event here
-        value = instance.text.split(':')
-        value = value[-1][1:]
-        data = self.get_table_data()
+
+        data = app_tables.fin_loan_details.search()
         sm = self.manager
 
         # Create a new instance of the LoginScreen
@@ -990,7 +1008,7 @@ class OpenViewLoanScreen(Screen):
 
         # Switch to the LoginScreen
         sm.current = 'ViewLoansProfileScreens'
-        self.manager.get_screen('ViewLoansProfileScreens').initialize_with_value(value, data)
+        self.manager.get_screen('ViewLoansProfileScreens').initialize_with_value(loan_id, data)
 
     def on_pre_enter(self):
         # Bind the back button event to the on_back_button method
@@ -1015,11 +1033,6 @@ class OpenViewLoanScreen(Screen):
     def refresh(self):
         self.ids.container1.clear_widgets()
         self.__init__()
-
-    def get_table_data(self):
-        # Make a call to the Anvil server function
-        # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
-        return anvil.server.call('get_table_data')
 
 
 class ViewLoansProfileScreens(Screen):
@@ -1166,11 +1179,13 @@ class ViewLoansProfileScreens2(Screen):
 class ViewApprovedLoansScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        data = self.get_table_data()
+        data = app_tables.fin_loan_details.search()
+        profile = app_tables.fin_user_profile.search()
         customer_id = []
         loan_id = []
         borrower_name = []
         loan_status = []
+        product_name = []
         s = 0
         for i in data:
             s += 1
@@ -1178,7 +1193,13 @@ class ViewApprovedLoansScreen(Screen):
             loan_id.append(i['loan_id'])
             borrower_name.append(i['borrower_full_name'])
             loan_status.append(i['loan_updated_status'])
+            product_name.append(i['product_name'])
 
+        profile_customer_id = []
+        profile_mobile_number = []
+        for i in profile:
+            profile_customer_id.append(i['customer_id'])
+            profile_mobile_number.append(i['mobile'])
         c = -1
         index_list = []
         for i in range(s):
@@ -1191,23 +1212,31 @@ class ViewApprovedLoansScreen(Screen):
         for i in index_list:
             b += 1
             k += 1
+            if customer_id[i] in profile_customer_id:
+                number = profile_customer_id.index(customer_id[i])
+            else:
+                number = 0
             item = ThreeLineAvatarIconListItem(
 
                 IconLeftWidget(
                     icon="card-account-details-outline"
                 ),
-                text=f"Loan ID : {loan_id[i]}",
-                secondary_text=f"Borrower Name: {borrower_name[i]}",
-                tertiary_text=f"Status: {loan_status[i]}",
+                text=f"Borrower Name : {borrower_name[i]}",
+                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                tertiary_text=f"Product Name : {product_name[i]}",
+                text_color=(0, 0, 0, 1),  # Black color
+                theme_text_color='Custom',
+                secondary_text_color=(0, 0, 0, 1),
+                secondary_theme_text_color='Custom',
+                tertiary_text_color=(0, 0, 0, 1),
+                tertiary_theme_text_color='Custom'
             )
-            item.bind(on_release=self.icon_button_clicked)  # Corrected the binding
+            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container3.add_widget(item)
 
-    def icon_button_clicked(self, instance):
+    def icon_button_clicked(self, instance,loan_id):
         # Handle the on_release event here
-        value = instance.text.split(':')
-        value = value[-1][1:]
-        data = self.get_table_data()
+        data = app_tables.fin_loan_details.search()
         sm = self.manager
 
         # Create a new instance of the LoginScreen
@@ -1218,7 +1247,7 @@ class ViewApprovedLoansScreen(Screen):
 
         # Switch to the LoginScreen
         sm.current = 'ViewLoansProfileScreens'
-        self.manager.get_screen('ViewLoansProfileScreens').initialize_with_value(value, data)
+        self.manager.get_screen('ViewLoansProfileScreens').initialize_with_value(loan_id, data)
 
     def on_pre_enter(self):
         # Bind the back button event to the on_back_button method
@@ -1244,20 +1273,16 @@ class ViewApprovedLoansScreen(Screen):
         self.ids.container3.clear_widgets()
         self.__init__()
 
-    def get_table_data(self):
-        # Make a call to the Anvil server function
-        # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
-        return anvil.server.call('get_table_data')
-
-
 class ViewRejectedLoansScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        data = self.get_table_data()
+        data = app_tables.fin_loan_details.search()
+        profile = app_tables.fin_user_profile.search()
         customer_id = []
         loan_id = []
         borrower_name = []
         loan_status = []
+        product_name=[]
         s = 0
         for i in data:
             s += 1
@@ -1265,7 +1290,11 @@ class ViewRejectedLoansScreen(Screen):
             loan_id.append(i['loan_id'])
             borrower_name.append(i['borrower_full_name'])
             loan_status.append(i['loan_updated_status'])
-
+        profile_customer_id = []
+        profile_mobile_number = []
+        for i in profile:
+            profile_customer_id.append(i['customer_id'])
+            profile_mobile_number.append(i['mobile'])
         c = -1
         index_list = []
         for i in range(s):
@@ -1278,23 +1307,31 @@ class ViewRejectedLoansScreen(Screen):
         for i in index_list:
             b += 1
             k += 1
+            if customer_id[i] in profile_customer_id:
+                number = profile_customer_id.index(customer_id[i])
+            else:
+                number = 0
             item = ThreeLineAvatarIconListItem(
 
                 IconLeftWidget(
                     icon="card-account-details-outline"
                 ),
-                text=f"Loan ID : {loan_id[i]}",
-                secondary_text=f"Borrower Name: {borrower_name[i]}",
-                tertiary_text=f"Status: {loan_status[i]}",
+                text=f"Borrower Name : {borrower_name[i]}",
+                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                tertiary_text=f"Product Name : {product_name[i]}",
+                text_color=(0, 0, 0, 1),  # Black color
+                theme_text_color='Custom',
+                secondary_text_color=(0, 0, 0, 1),
+                secondary_theme_text_color='Custom',
+                tertiary_text_color=(0, 0, 0, 1),
+                tertiary_theme_text_color='Custom'
             )
-            item.bind(on_release=self.icon_button_clicked)  # Corrected the binding
+            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container4.add_widget(item)
 
-    def icon_button_clicked(self, instance):
+    def icon_button_clicked(self, instance,loan_id):
         # Handle the on_release event here
-        value = instance.text.split(':')
-        value = value[-1][1:]
-        data = self.get_table_data()
+        data = app_tables.fin_loan_details.search()
         sm = self.manager
 
         # Create a new instance of the LoginScreen
@@ -1305,7 +1342,7 @@ class ViewRejectedLoansScreen(Screen):
 
         # Switch to the LoginScreen
         sm.current = 'ViewLoansProfileScreens'
-        self.manager.get_screen('ViewLoansProfileScreens').initialize_with_value(value, data)
+        self.manager.get_screen('ViewLoansProfileScreens').initialize_with_value(loan_id, data)
 
     def on_pre_enter(self):
         # Bind the back button event to the on_back_button method
@@ -1331,20 +1368,17 @@ class ViewRejectedLoansScreen(Screen):
         self.ids.container4.clear_widgets()
         self.__init__()
 
-    def get_table_data(self):
-        # Make a call to the Anvil server function
-        # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
-        return anvil.server.call('get_table_data')
-
 
 class ViewUnderProcessLoansScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        data = self.get_table_data()
+        data = app_tables.fin_loan_details.search()
+        profile = app_tables.fin_user_profile.search()
         customer_id = []
         loan_id = []
         borrower_name = []
         loan_status = []
+        product_name = []
         s = 0
         for i in data:
             s += 1
@@ -1352,7 +1386,13 @@ class ViewUnderProcessLoansScreen(Screen):
             loan_id.append(i['loan_id'])
             borrower_name.append(i['borrower_full_name'])
             loan_status.append(i['loan_updated_status'])
+            product_name.append(i['product_name'])
 
+        profile_customer_id = []
+        profile_mobile_number = []
+        for i in profile:
+            profile_customer_id.append(i['customer_id'])
+            profile_mobile_number.append(i['mobile'])
         c = -1
         index_list = []
         for i in range(s):
@@ -1365,23 +1405,32 @@ class ViewUnderProcessLoansScreen(Screen):
         for i in index_list:
             b += 1
             k += 1
+            if customer_id[i] in profile_customer_id:
+                number = profile_customer_id.index(customer_id[i])
+            else:
+                number = 0
             item = ThreeLineAvatarIconListItem(
 
                 IconLeftWidget(
                     icon="card-account-details-outline"
                 ),
-                text=f"Loan ID : {loan_id[i]}",
-                secondary_text=f"Borrower Name: {borrower_name[i]}",
-                tertiary_text=f"Status: {loan_status[i]}",
+                text=f"Borrower Name : {borrower_name[i]}",
+                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                tertiary_text=f"Product Name : {product_name[i]}",
+                text_color=(0, 0, 0, 1),  # Black color
+                theme_text_color='Custom',
+                secondary_text_color=(0, 0, 0, 1),
+                secondary_theme_text_color='Custom',
+                tertiary_text_color=(0, 0, 0, 1),
+                tertiary_theme_text_color='Custom'
             )
-            item.bind(on_release=self.icon_button_clicked)  # Corrected the binding
+            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container5.add_widget(item)
 
-    def icon_button_clicked(self, instance):
+    def icon_button_clicked(self, instance,loan_id):
         # Handle the on_release event here
-        value = instance.text.split(':')
-        value = value[-1][1:]
-        data = self.get_table_data()
+
+        data = app_tables.fin_loan_details.search()
         sm = self.manager
 
         # Create a new instance of the LoginScreen
@@ -1392,7 +1441,7 @@ class ViewUnderProcessLoansScreen(Screen):
 
         # Switch to the LoginScreen
         sm.current = 'ViewLoansProfileScreens'
-        self.manager.get_screen('ViewLoansProfileScreens').initialize_with_value(value, data)
+        self.manager.get_screen('ViewLoansProfileScreens').initialize_with_value(loan_id, data)
 
     def on_pre_enter(self):
         # Bind the back button event to the on_back_button method
@@ -1418,20 +1467,17 @@ class ViewUnderProcessLoansScreen(Screen):
         self.ids.container5.clear_widgets()
         self.__init__()
 
-    def get_table_data(self):
-        # Make a call to the Anvil server function
-        # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
-        return anvil.server.call('get_table_data')
-
 
 class ViewClosedLoansScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        data = self.get_table_data()
+        data = app_tables.fin_loan_details.search()
+        profile = app_tables.fin_user_profile.search()
         customer_id = []
         loan_id = []
         borrower_name = []
         loan_status = []
+        product_name = []
         s = 0
         for i in data:
             s += 1
@@ -1439,7 +1485,13 @@ class ViewClosedLoansScreen(Screen):
             loan_id.append(i['loan_id'])
             borrower_name.append(i['borrower_full_name'])
             loan_status.append(i['loan_updated_status'])
+            product_name.append(i['product_name'])
 
+        profile_customer_id = []
+        profile_mobile_number = []
+        for i in profile:
+            profile_customer_id.append(i['customer_id'])
+            profile_mobile_number.append(i['mobile'])
         c = -1
         index_list = []
         for i in range(s):
@@ -1452,22 +1504,29 @@ class ViewClosedLoansScreen(Screen):
         for i in index_list:
             b += 1
             k += 1
+            if customer_id[i] in profile_customer_id:
+                number = profile_customer_id.index(customer_id[i])
+            else:
+                number = 0
             item = ThreeLineAvatarIconListItem(
 
                 IconLeftWidget(
                     icon="card-account-details-outline"
                 ),
-                text=f"Loan ID : {loan_id[i]}",
-                secondary_text=f"Borrower Name: {borrower_name[i]}",
-                tertiary_text=f"Status: {loan_status[i]}",
+                text=f"Borrower Name : {borrower_name[i]}",
+                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                tertiary_text=f"Product Name : {product_name[i]}",
+                text_color=(0, 0, 0, 1),  # Black color
+                theme_text_color='Custom',
+                secondary_text_color=(0, 0, 0, 1),
+                secondary_theme_text_color='Custom',
+                tertiary_text_color=(0, 0, 0, 1),
+                tertiary_theme_text_color='Custom'
             )
-            item.bind(on_release=self.icon_button_clicked)  # Corrected the binding
+            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container6.add_widget(item)
-
-    def icon_button_clicked(self, instance):
+    def icon_button_clicked(self, instance,loan_id):
         # Handle the on_release event here
-        value = instance.text.split(':')
-        value = value[-1][1:]
         data = self.get_table_data()
         sm = self.manager
 
@@ -1479,7 +1538,7 @@ class ViewClosedLoansScreen(Screen):
 
         # Switch to the LoginScreen
         sm.current = 'ViewLoansProfileScreens'
-        self.manager.get_screen('ViewLoansProfileScreens').initialize_with_value(value, data)
+        self.manager.get_screen('ViewLoansProfileScreens').initialize_with_value(loan_id, data)
 
     def on_pre_enter(self):
         # Bind the back button event to the on_back_button method
@@ -1504,12 +1563,6 @@ class ViewClosedLoansScreen(Screen):
     def refresh(self):
         self.ids.container6.clear_widgets()
         self.__init__()
-
-    def get_table_data(self):
-        # Make a call to the Anvil server function
-        # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
-        return anvil.server.call('get_table_data')
-
 
 class MyScreenManager(ScreenManager):
     pass

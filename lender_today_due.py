@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 
+from anvil.tables import app_tables
 from bson import utc
 from kivy.lang import Builder
 from kivy.core.window import Window
@@ -9,7 +10,7 @@ from kivymd.uix.list import ThreeLineAvatarIconListItem, IconLeftWidget
 import anvil.server
 import anvil.server
 
-#anvil.server.connect("server_7XBQPRK5DHGMPT3D64UT7ZSN-UNTISDEQ66OGRORV")
+
 
 lender_today_due = '''
 
@@ -145,8 +146,8 @@ class TodayDuesTD(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        data = self.get_table_data()
-        data1 = self.get_table()
+        data = app_tables.fin_emi_table.search()
+        data1 = app_tables.fin_loan_details.search()
         loan_id = []
         schedule_payment = []
         scheduled_payment_date_list = []
@@ -222,9 +223,9 @@ class TodayDuesTD(Screen):
             self.ids.container.add_widget(item)
 
     def icon_button_clicked(self, instance, value):
-        data = self.get_table_data()
-        data1 = self.get_table()
-        data2 = self.menu()
+        data = app_tables.fin_emi_table.search()
+        data1 = app_tables.fin_loan_details.search()
+        data2 = app_tables.fin_extends_loan.search()
         print(value)
         loan_status = None
         for row in data1:
@@ -243,6 +244,8 @@ class TodayDuesTD(Screen):
         sm.current = 'ViewProfileTD'
         self.manager.get_screen('ViewProfileTD').initialize_with_value(value, data, data1, data2)
 
+
+    '''
     def get_table_data(self):
         # Make a call to the Anvil server function
         # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
@@ -257,6 +260,7 @@ class TodayDuesTD(Screen):
         # Make a call to the Anvil server function
         # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
         return anvil.server.call('get_extension_data')
+    '''
 
     def on_pre_enter(self):
         # Bind the back button event to the on_back_button method

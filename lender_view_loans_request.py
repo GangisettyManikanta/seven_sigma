@@ -1,4 +1,8 @@
-
+from anvil.tables import app_tables
+from kivy.animation import Animation
+from kivy.clock import Clock
+from kivy.uix.modalview import ModalView
+from kivymd.uix.label import MDLabel
 from kivymd.uix.list import *
 import anvil.server
 from kivy.uix.screenmanager import ScreenManager, Screen
@@ -13,9 +17,8 @@ from datetime import datetime, timedelta, timezone
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.snackbar import Snackbar
-from lender_wallet import WalletScreen
+from lender_wallet import LenderWalletScreen
 
-#anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
 view_loan_request = """
 <WindowManager>:
     ViewLoansRequest:
@@ -669,12 +672,11 @@ view_loan_request = """
 Builder.load_string(view_loan_request)
 
 
-
 class ViewLoansRequest(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        data = self.get_table_data()
-        profile = self.profile()
+        data = app_tables.fin_loan_details.search()
+        profile = app_tables.fin_user_profile.search()
         customer_id = []
         loan_id = []
         borrower_name = []
@@ -689,7 +691,7 @@ class ViewLoansRequest(Screen):
             loan_status.append(i['loan_updated_status'])
             product_name.append(i['product_name'])
 
-        profile_customer_id =[]
+        profile_customer_id = []
         profile_mobile_number = []
         for i in profile:
             profile_customer_id.append(i['customer_id'])
@@ -731,7 +733,7 @@ class ViewLoansRequest(Screen):
     def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
         print(loan_id)
-        data = self.get_table_data()  # Fetch data here
+        data = app_tables.fin_loan_details.search()  # Fetch data here
         loan_status = None
         for loan in data:
             if loan['loan_id'] == loan_id:
@@ -807,13 +809,6 @@ class ViewLoansRequest(Screen):
         self.ids.container.clear_widgets()
         self.__init__()
 
-    def get_table_data(self):
-        # Make a call to the Anvil server function
-        # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
-        return anvil.server.call('get_table_data')
-    def profile(self):
-        return anvil.server.call('profile')
-
 
 class ViewLoansProfileScreen(Screen):
     def __init__(self, **kwargs):
@@ -823,7 +818,7 @@ class ViewLoansProfileScreen(Screen):
         self.manager.current = 'ViewLoansRequest'
 
     def initialize_with_value(self, value, data):
-        profile = self.profile()
+        profile = app_tables.fin_user_profile.search()
         profile_customer_id = []
         profile_mobile_number = []
         for i in profile:
@@ -865,8 +860,6 @@ class ViewLoansProfileScreen(Screen):
             self.ids.status.text = str(loan_status[index])
             self.ids.number.text = str(profile_mobile_number[number])
             self.ids.product_description.text = str(product_description[index])
-    def profile(self):
-        return anvil.server.call('profile')
 
     def email_user(self):
         return anvil.server.call('another_method')
@@ -887,7 +880,8 @@ class ViewLoansProfileScreen(Screen):
         return False  # Continue handling the event
 
     def approved_click(self):
-        profile = self.profile()
+
+        profile = app_tables.fin_user_profile.search()
         email_user = self.email_user()
         profile_customer_id = []
         profile_email = []
@@ -903,7 +897,7 @@ class ViewLoansProfileScreen(Screen):
             print("no email found")
 
         approved_date = datetime.now()
-        data = self.get_table_data()
+        data = app_tables.fin_loan_details.search()
         loan_id = self.ids.loan_id.text
         print(loan_id)
 
@@ -925,7 +919,7 @@ class ViewLoansProfileScreen(Screen):
             pass
 
     def rejected_click(self):
-        data = self.get_table_data()
+        data = app_tables.fin_loan_details.search()
         loan_id = self.ids.loan_id.text
         print(loan_id)
 
@@ -944,11 +938,6 @@ class ViewLoansProfileScreen(Screen):
 
     def show_snackbar(self, text):
         Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
-
-    def get_table_data(self):
-        # Make a call to the Anvil server function
-        # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
-        return anvil.server.call('get_table_data')
 
     def go_back(self):
         # Navigate to the previous screen with a slide transition
@@ -979,16 +968,11 @@ class ViewLoansProfileScreenLR(Screen):
         # Close alert box
         self.dialog.dismiss()
 
-    def get_table_data(self):
-        # Make a call to the Anvil server function
-        # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
-        return anvil.server.call('get_table_data')
-
     def on_back_button_press(self):
         self.manager.current = 'ViewLoansRequest'
 
     def initialize_with_value(self, value, data):
-        profile = self.profile()
+        profile = app_tables.fin_user_profile.search()
         profile_customer_id = []
         profile_mobile_number = []
         for i in profile:
@@ -1030,9 +1014,6 @@ class ViewLoansProfileScreenLR(Screen):
             self.ids.status.text = str(loan_status[index])
             self.ids.number.text = str(profile_mobile_number[number])
             self.ids.product_description.text = str(product_description[index])
-    def profile(self):
-        return anvil.server.call('profile')
-
 
     def on_pre_enter(self):
         # Bind the back button event to the on_back_button method
@@ -1058,7 +1039,7 @@ class ViewLoansProfileScreenLR(Screen):
         Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
 
     def paynow(self):
-        data = self.get_table_data()
+        data = app_tables.fin_loan_details.search()
         disbursed_time = datetime.now()
         paid_time = datetime.now()
         loan_id = self.ids.loan_id.text
@@ -1118,7 +1099,7 @@ class ViewLoansProfileScreenRL(Screen):
         self.manager.current = 'ViewLoansRequest'
 
     def initialize_with_value(self, value, data):
-        profile = self.profile()
+        profile = app_tables.fin_user_profile.search()
         profile_customer_id = []
         profile_mobile_number = []
         for i in profile:
@@ -1160,9 +1141,6 @@ class ViewLoansProfileScreenRL(Screen):
             self.ids.status.text = str(loan_status[index])
             self.ids.number.text = str(profile_mobile_number[number])
             self.ids.product_description.text = str(product_description[index])
-    def profile(self):
-        return anvil.server.call('profile')
-
 
     def on_pre_enter(self):
         # Bind the back button event to the on_back_button method

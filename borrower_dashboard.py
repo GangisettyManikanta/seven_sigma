@@ -12,6 +12,7 @@ from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.spinner import MDSpinner
 from borrower_extend_loan import ExtensionLoansRequest
 from borrower_application_tracker import ALLLoansAPT
+from borrower_today_dues import BorrowerDuesScreen
 from new_loan_request import NewloanScreen
 from borrower_viewloan import DashboardScreenVLB
 from borrower_foreclosure import LoansDetailsB
@@ -118,9 +119,11 @@ user_helpers = """
 
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 md_bg_color: 0.043, 0.145, 0.278, 1 
+                on_release: root.go_to_borrowerdues_screen()
 
                 size_hint_y: None
                 height: dp(60)
+                
                 size_hint_x: None
                 width: dp(110)
 
@@ -135,6 +138,7 @@ user_helpers = """
                         halign: "center"
                         text_color:1,1,1,1
                         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        
 
             MDFlatButton:
                 size_hint: None, None
@@ -2484,8 +2488,7 @@ user_helpers = """
                         md_bg_color: 0.031, 0.463, 0.91, 1
                         size_hint: 1, None
 """
-conn = sqlite3.connect('fin_user_profile.db')
-cursor = conn.cursor()
+
 
 
 class DashboardScreen(Screen):
@@ -2751,6 +2754,42 @@ class DashboardScreen(Screen):
 
         self.manager.add_widget(Factory.WalletScreen(name='WalletScreen'))
         self.manager.current = 'WalletScreen'
+
+    def go_to_borrowerdues_screen(self):
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
+        modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
+        Clock.schedule_once(lambda dt: self.perform_go_to_borrowerdues_screen(modal_view), 2)
+
+    def perform_go_to_borrowerdues_screen(self, modal_view):
+        # Close the modal view after performing the action
+        from borrower_today_dues import BorrowerDuesScreen
+        modal_view.dismiss()
+        sm = self.manager
+
+        # Create a new instance of the LoginScreen
+        login_screen = BorrowerDuesScreen(name='BorrowerDuesScreen')
+
+        # Add the LoginScreen to the existing ScreenManager
+        sm.add_widget(login_screen)
+
+        # Switch to the LoginScreen
+        sm.current = 'BorrowerDuesScreen'
 
 
 class ProfileScreen(Screen):

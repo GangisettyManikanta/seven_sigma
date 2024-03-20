@@ -71,6 +71,7 @@ user_helpers1 = """
 
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 md_bg_color: 0.043, 0.145, 0.278, 1 
+                on_release: root.newloan_extension()
 
                 size_hint_y: None
                 height: dp(60)
@@ -81,7 +82,7 @@ user_helpers1 = """
                     orientation: 'horizontal'
                     spacing:dp(10)
                     MDLabel:
-                        text: "View Opening Balance"
+                        text: "View Loan Extensions"
                         font_size:dp(14)
                         bold:True
                         theme_text_color: 'Custom'
@@ -95,6 +96,7 @@ user_helpers1 = """
 
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 md_bg_color:0.043, 0.145, 0.278, 1 
+                on_release: root.view_loan_foreclose()
                 size_hint_y: None
                 height: dp(60)
                 size_hint_x: None
@@ -104,7 +106,7 @@ user_helpers1 = """
                     orientation: 'horizontal'
                     spacing:dp(10)
                     MDLabel:
-                        text: "View Available Balance"
+                        text: "View Loan Foreclosure"
                         font_size:dp(14)
                         bold:True
                         theme_text_color: 'Custom'
@@ -207,7 +209,7 @@ user_helpers1 = """
                 size_hint: None, None
 
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                on_release: root.newloan_extension()
+                
                 md_bg_color: 0.043, 0.145, 0.278, 1 
                 size_hint_y: None
                 height: dp(60)
@@ -218,7 +220,7 @@ user_helpers1 = """
                     orientation: 'horizontal'
                     spacing:dp(10)
                     MDLabel:
-                        text: "View Loan Extensions"
+                        text: "View Lost Opportunities"
                         font_size:dp(14)
                         bold:True
                         theme_text_color: 'Custom'
@@ -230,7 +232,7 @@ user_helpers1 = """
                 size_hint: None, None
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 md_bg_color: 0.043, 0.145, 0.278, 1
-                on_release: root.view_loan_foreclose()
+                
                 size_hint_y: None
                 height: dp(60)
                 size_hint_x: None
@@ -240,7 +242,7 @@ user_helpers1 = """
                     orientation: 'horizontal'
                     spacing:dp(10)
                     MDLabel:
-                        text: "View Loan Foreclosure"
+                        text: "View Transaction History"
                         font_size:dp(14)
                         bold:True
                         theme_text_color: 'Custom'
@@ -1456,19 +1458,31 @@ class LenderDashboard(Screen):
         self.manager.add_widget(Factory.ViewProfileScreen(name='ViewProfileScreen'))
         self.manager.current = 'ViewProfileScreen'
 
-
-
     def lender_today_due(self):
-        sm = self.manager
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
-        # Create a new instance of the LoginScreen
-        profile_screen = TodayDuesTD(name='TodayDuesTD')
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
 
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(profile_screen)
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
 
-        # Switch to the LoginScreen
-        sm.current = 'TodayDuesTD'
+        modal_view.add_widget(loading_label)
+        modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
+        Clock.schedule_once(lambda dt: self.performance_lender_today_due(modal_view), 2)
+
+    def performance_lender_today_due(self, modal_view):
+        modal_view.dismiss()
+        self.manager.add_widget(Factory.TodayDuesTD(name='TodayDuesTD'))
+        self.manager.current = 'TodayDuesTD'
 
     def view_loan_request(self):
         modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
@@ -1505,8 +1519,6 @@ class LenderDashboard(Screen):
         self.manager.add_widget(Factory.ViewLoansRequest(name='ViewLoansRequest'))
         self.manager.current = 'ViewLoansRequest'
 
-
-
     def view_loanscreen(self):
         modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
@@ -1533,8 +1545,6 @@ class LenderDashboard(Screen):
         modal_view.dismiss()
         self.manager.add_widget(Factory.ViewLoansScreen(name='ViewLoansScreen'))
         self.manager.current = 'ViewLoansScreen'
-
-
 
     def newloan_extension(self):
         modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
@@ -1564,8 +1574,6 @@ class LenderDashboard(Screen):
         self.manager.add_widget(Factory.NewExtension(name='NewExtension'))
         self.manager.current = 'NewExtension'
 
-
-
     def view_loan_foreclose(self):
         modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
@@ -1592,7 +1600,6 @@ class LenderDashboard(Screen):
         self.manager.add_widget(Factory.DashboardScreenLF(name='DashboardScreenLF'))
         self.manager.current = 'DashboardScreenLF'
 
-
     def go_to_wallet(self):
         modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
@@ -1615,13 +1622,12 @@ class LenderDashboard(Screen):
         Clock.schedule_once(lambda dt: self.perform_wallet(modal_view), 2)
 
     def perform_wallet(self, modal_view):
-        from lender_wallet import WalletScreen
+        from lender_wallet import LenderWalletScreen
 
         modal_view.dismiss()
-        self.manager.add_widget(Factory.WalletScreen(name='WalletScreen'))
-        self.manager.current = 'WalletScreen'
+        self.manager.add_widget(Factory.LenderWalletScreen(name='LenderWalletScreen'))
+        self.manager.current = 'LenderWalletScreen'
         # Get the existing ScreenManager
-
 
 
 class ViewProfileScreen(Screen):

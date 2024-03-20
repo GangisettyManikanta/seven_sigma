@@ -1,3 +1,4 @@
+from anvil.tables import app_tables
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from kivymd.app import MDApp
@@ -10,10 +11,10 @@ import anvil
 Builder.load_string(
     """
 <WindowManager>:
-    WalletScreen:
+    LenderWalletScreen:
 
 
-<WalletScreen>:
+<LenderWalletScreen>:
     MDTopAppBar:
         title: "GP2P-Wallet"
         elevation: 2
@@ -173,11 +174,11 @@ Builder.load_string(
 )
 
 
-class WalletScreen(Screen):
+class LenderWalletScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.type = None
-        data = self.wallet()
+        data = app_tables.fin_wallet.search()
         email = self.email()
         w_email = []
         w_id = []
@@ -213,7 +214,7 @@ class WalletScreen(Screen):
         Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
     def submit(self):
         if self.type == 'deposit':
-            data = self.wallet()
+            data = app_tables.fin_wallet.search()
             email = self.email()
             w_email = []
             w_id = []
@@ -232,7 +233,7 @@ class WalletScreen(Screen):
                 print("no email found")
 
         elif self.type == 'withdraw':
-            data = self.wallet()
+            data = app_tables.fin_wallet.search()
             email = self.email()
             w_email = []
             w_id = []
@@ -261,8 +262,7 @@ class WalletScreen(Screen):
     def email(self):
         return anvil.server.call('another_method')
 
-    def wallet(self):
-        return anvil.server.call('wallet_data')
+
 
 class MyScreenManager(ScreenManager):
     pass

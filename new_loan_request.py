@@ -22,204 +22,216 @@ from datetime import datetime
 
 from kivymd.uix.spinner import MDSpinner
 
-
-
 user_helpers2 = """
 <WindowManager>:
     NewloanScreen:
     NewloanScreen1:
     NewloanScreen2:
 <NewloanScreen>:
-    BoxLayout:
-        id:new_loan_screen
-        pos_hint: {'center_x':0.5, 'center_y':0.5}
-        elevation: 2
-        padding: dp(20)
-        spacing: dp(20)
-        orientation: 'vertical'
-        MDFloatLayout:
-            MDIconButton:
-                icon: 'arrow-left'
-                on_release:root.go_back()
-                pos_hint: {'center_x': 0.045, 'center_y': 0.90}
-                theme_text_color: 'Custom'
-                text_color: 0,0,0,1  # Set color to white
-            Image:
-                source:"LOGO.png"
-                size_hint:None,None
-                size:"100dp","100dp"
-                pos_hint: {'center_x': 0.5, 'center_y': 0.89}
+    ScrollView:  # Wrap the BoxLayout inside a ScrollView
+        BoxLayout:
+            id:new_loan_screen
+            pos_hint: {'center_x':0.5, 'center_y':0.5}
+            elevation: 2
+            padding: dp(20)
+            spacing: dp(20)
+            orientation: 'vertical'
+            MDFloatLayout:
+                MDIconButton:
+                    icon: 'arrow-left'
+                    on_release:root.go_back()
+                    pos_hint: {'center_x': 0.045, 'center_y': 0.90}
+                    theme_text_color: 'Custom'
+                    text_color: 0,0,0,1  # Set color to white
+                Image:
+                    source:"LOGO.png"
+                    size_hint:None,None
+                    size:"100dp","100dp"
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.89}
+
+            BoxLayout:
+                orientation:"horizontal"
+                pos_hint: {'center_x':0.5, 'center_y':0.5}
+                padding: dp(25)
+                spacing: dp(20)
+                MDLabel:
+                    text: "  Experience Hassle-Free Borrowing  " 
+                    font_size:dp(15)
+                    halign:"center"
+                    bold:True
+                    underline:True
+                    italic:True
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.4}
+
+            MDGridLayout:
+                cols: 2
+                BoxLayout:
+                    orientation:"horizontal"
+                    pos_hint: {'center_x':0.5, 'center_y':0.5}
+                    padding: dp(25)
+                    spacing: dp(20)
+                    MDLabel:
+                        text: "Credit Limit" 
+                        color:0.031, 0.463, 0.91, 1
+                        bold:True
+                        font_size:dp(23)
+                    MDLabel:
+                        id: credit_limit        
+                        text: "" 
+                        font_size:dp(20)
+
+            MDGridLayout:
+                cols: 2
+                BoxLayout:
+                    orientation:"horizontal"
+                    pos_hint: {'center_x':0.5, 'center_y':0.5}
+                    padding: dp(25)
+                    spacing: dp(20)
+                    MDLabel:
+                        text: "Product ID" 
+                        color:0.031, 0.463, 0.91, 1
+                        bold:True
+                        font_size:dp(23)
+                    MDLabel:
+                        id: product_id       
+                        text: "" 
+                        font_size:dp(20)
+
+            MDGridLayout:
+                cols: 2
+                BoxLayout:
+                    orientation:"horizontal"
+                    pos_hint: {'center_x':0.5, 'center_y':0.5}
+                    padding: dp(25)
+                    spacing: dp(20)
+                    MDLabel:
+                        font_size: dp(16)
+                        text: "Product Group"
+                        bold: True
+
+                    Spinner:
+                        id: group_id1
+                        text: "Select Group"
+                        width: dp(200)
+                        multiline: False
+                        size_hint: None, None
+                        pos_hint: {'center_x':0.5, 'center_y':0.5}
+                        size: "180dp", "45dp"
+                        background_color: 1, 1, 1, 0
+                        color: 0, 0, 0, 1
+                        canvas.before:
+                            Color:
+                                rgba: 0, 0, 0, 1
+                            Line:
+                                width: 0.7
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
+
+                        on_press: app.fetch_product_groups()
+                        text_size: self.width - dp(20), None
+
+            MDGridLayout:
+                cols: 2
+                BoxLayout:
+                    orientation:"horizontal"
+                    pos_hint: {'center_x':0.5, 'center_y':0.5}
+                    padding: dp(25)
+                    spacing: dp(20)
+                    MDLabel:
+                        font_size:dp(16)
+                        text: "Product Categories"
+                        bold: True
+
+                    Spinner:
+                        id: group_id2
+                        text: "Select Categories"
+                        width: dp(200)
+                        multiline: False
+                        size_hint: None, None
+                        pos_hint: {'center_x':0.5, 'center_y':0.5}
+                        size: "180dp", "45dp"
+                        background_color: 1, 1, 1, 0
+                        color: 0, 0, 0, 1
+                        canvas.before:
+                            Color:
+                                rgba: 0, 0, 0, 1
+                            Line:
+                                width: 0.7
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
+
+                        on_press: app.fetch_product_categories()
+                        text_size: self.width - dp(20), None
+                        disabled: not group_id1.text or group_id1.text == 'Select Group'
+
+            MDGridLayout:
+                cols: 2
+                BoxLayout:
+                    orientation:"horizontal"
+                    pos_hint: {'center_x':0.5, 'center_y':0.5}
+                    padding: dp(25)
+                    spacing: dp(20)
+                    MDLabel:
+                        font_size:dp(16)
+                        text: "Product Name"
+                        bold: True
+                    Spinner:
+                        id: group_id3
+                        text: "Select product name"
+                        width: dp(200)
+                        multiline: False
+                        size_hint: None, None
+                        pos_hint: {'center_x':0.5, 'center_y':0.5}
+                        size: "180dp", "45dp"
+                        background_color: 1, 1, 1, 0
+                        color: 0, 0, 0, 1
+                        canvas.before:
+                            Color:
+                                rgba: 0, 0, 0, 1
+                            Line:
+                                width: 0.7
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
+
+                        on_press: app.fetch_product_name()
+                        text_size: self.width - dp(20), None
+                        disabled: not group_id2.text or group_id2.text == 'Select Categories'
+
             MDLabel:
-                text: "  Experience Hassle-Free Borrowing  " 
-                font_size:dp(15)
-                halign:"center"
-                bold:True
-                underline:True
-                italic:True
-                pos_hint: {'center_x': 0.5, 'center_y': 0.4}
-        MDLabel:
-            text:""
-        MDGridLayout:
-            cols: 2
-            BoxLayout:
-                orientation:"horizontal"
-                pos_hint: {'center_x':0.5, 'center_y':0.5}
-                padding: dp(25)
-                spacing: dp(20)
-                MDLabel:
-                    text: "Credit Limit" 
-                    color:0.031, 0.463, 0.91, 1
-                    bold:True
-                    font_size:dp(23)
-                MDLabel:
-                    id: credit_limit        
-                    text: "" 
-                    font_size:dp(20)
-
-        MDGridLayout:
-            cols: 2
-            BoxLayout:
-                orientation:"horizontal"
-                pos_hint: {'center_x':0.5, 'center_y':0.5}
-                padding: dp(25)
-                spacing: dp(20)
-                MDLabel:
-                    text: "Product ID" 
-                    color:0.031, 0.463, 0.91, 1
-                    bold:True
-                    font_size:dp(23)
-                MDLabel:
-                    id: product_id       
-                    text: "" 
-                    font_size:dp(20)
-
-        MDGridLayout:
-            cols: 2
-            BoxLayout:
-                orientation:"horizontal"
-                pos_hint: {'center_x':0.5, 'center_y':0.5}
-                padding: dp(25)
-                spacing: dp(20)
-                MDLabel:
-                    font_size: dp(16)
-                    text: "Product Group"
-                    bold: True
-
-                Spinner:
-                    id: group_id1
-                    text: "Select Group"
-                    width: dp(200)
-                    multiline: False
-                    size_hint: None, None
+                text: " "   
+            MDGridLayout:
+                cols: 2
+                BoxLayout:
+                    orientation:"horizontal"
                     pos_hint: {'center_x':0.5, 'center_y':0.5}
-                    size: "180dp", "45dp"
-                    background_color: 1, 1, 1, 0
-                    color: 0, 0, 0, 1
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0, 0, 1
-                        Line:
-                            width: 0.7
-                            rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
+                    padding: dp(25)
+                    spacing: dp(20)
+                    MDLabel:
+                        font_size: dp(16)
+                        text: "Product Description"
+                        bold: True
+                    MDLabel:
+                        id: product_description
+                        text: " "      
+                        font_size: dp(12)  
+            MDLabel:
+                text: " "
+            MDLabel:
+                text: " "
+            MDLabel:
+                text: " " 
+            MDLabel:
+                text: " "             
 
-                    on_press: app.fetch_product_groups()
-                    text_size: self.width - dp(20), None
+            MDFloatLayout:
+                MDRaisedButton:
+                    text: "Next"
+                    md_bg_color: 0.043, 0.145, 0.278, 1
+                    on_release: root.go_to_newloan_screen1()
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                    size_hint:0.4, None  
+                    font_name:"Roboto-Bold"
+                    font_size:dp(15)
 
-        MDGridLayout:
-            cols: 2
-            BoxLayout:
-                orientation:"horizontal"
-                pos_hint: {'center_x':0.5, 'center_y':0.5}
-                padding: dp(25)
-                spacing: dp(20)
-                MDLabel:
-                    font_size:dp(16)
-                    text: "Product Categories"
-                    bold: True
-
-                Spinner:
-                    id: group_id2
-                    text: "Select Categories"
-                    width: dp(200)
-                    multiline: False
-                    size_hint: None, None
-                    pos_hint: {'center_x':0.5, 'center_y':0.5}
-                    size: "180dp", "45dp"
-                    background_color: 1, 1, 1, 0
-                    color: 0, 0, 0, 1
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0, 0, 1
-                        Line:
-                            width: 0.7
-                            rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
-
-                    on_press: app.fetch_product_categories()
-                    text_size: self.width - dp(20), None
-                    disabled: not group_id1.text or group_id1.text == 'Select Group'
-
-        MDGridLayout:
-            cols: 2
-            BoxLayout:
-                orientation:"horizontal"
-                pos_hint: {'center_x':0.5, 'center_y':0.5}
-                padding: dp(25)
-                spacing: dp(20)
-                MDLabel:
-                    font_size:dp(16)
-                    text: "Product Name"
-                    bold: True
-                Spinner:
-                    id: group_id3
-                    text: "Select product name"
-                    width: dp(200)
-                    multiline: False
-                    size_hint: None, None
-                    pos_hint: {'center_x':0.5, 'center_y':0.5}
-                    size: "180dp", "45dp"
-                    background_color: 1, 1, 1, 0
-                    color: 0, 0, 0, 1
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0, 0, 1
-                        Line:
-                            width: 0.7
-                            rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
-
-                    on_press: app.fetch_product_name()
-                    text_size: self.width - dp(20), None
-                    disabled: not group_id2.text or group_id2.text == 'Select Categories'
-
-        MDLabel:
-            text: " "   
-        MDGridLayout:
-            cols: 2
-            BoxLayout:
-                orientation:"horizontal"
-                pos_hint: {'center_x':0.5, 'center_y':0.5}
-                padding: dp(25)
-                spacing: dp(20)
-                MDLabel:
-                    font_size: dp(16)
-                    text: "Product Description"
-                    bold: True
-                MDLabel:
-                    id: product_description
-                    text: " "      
-                    font_size: dp(12)     
-
-        MDFloatLayout:
-            MDRaisedButton:
-                text: "Next"
-                md_bg_color: 0.043, 0.145, 0.278, 1
-                on_release: root.go_to_newloan_screen1()
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                size_hint:0.4, None  
-                font_name:"Roboto-Bold"
-                font_size:dp(15)
-
-        MDLabel:
-            text: " "  
+            MDLabel:
+                text: " "  
 <NewloanScreen1>:
     BoxLayout:
         pos_hint: {'center_x':0.5, 'center_y':0.5}
@@ -832,3 +844,5 @@ class NewloanScreen2(Screen):
 
 class MyScreenManager(ScreenManager):
     pass
+
+
