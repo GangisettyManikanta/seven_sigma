@@ -28,15 +28,21 @@ user_helpers2 = """
     NewloanScreen1:
     NewloanScreen2:
 <NewloanScreen>:
-    ScrollView:  # Wrap the BoxLayout inside a ScrollView
-        BoxLayout:
-            id:new_loan_screen
-            pos_hint: {'center_x':0.5, 'center_y':0.5}
-            elevation: 2
-            padding: dp(20)
-            spacing: dp(20)
-            orientation: 'vertical'
-            MDFloatLayout:
+    name: 'NewloanScreen' 
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: 1, 1
+        pos_hint: {'center_x':0.5, 'center_y':0.5}
+
+        ScrollView:  # Add ScrollView here
+            do_scroll_x: False
+            BoxLayout:
+                orientation: "vertical"
+                padding:dp(10)
+                spacing:dp(30)
+                size_hint_y: None
+                height: self.minimum_height
+
                 MDIconButton:
                     icon: 'arrow-left'
                     on_release:root.go_back()
@@ -48,12 +54,6 @@ user_helpers2 = """
                     size_hint:None,None
                     size:"100dp","100dp"
                     pos_hint: {'center_x': 0.5, 'center_y': 0.89}
-
-            BoxLayout:
-                orientation:"horizontal"
-                pos_hint: {'center_x':0.5, 'center_y':0.5}
-                padding: dp(25)
-                spacing: dp(20)
                 MDLabel:
                     text: "  Experience Hassle-Free Borrowing  " 
                     font_size:dp(15)
@@ -62,176 +62,188 @@ user_helpers2 = """
                     underline:True
                     italic:True
                     pos_hint: {'center_x': 0.5, 'center_y': 0.4}
-
-            MDGridLayout:
-                cols: 2
-                BoxLayout:
-                    orientation:"horizontal"
-                    pos_hint: {'center_x':0.5, 'center_y':0.5}
-                    padding: dp(25)
-                    spacing: dp(20)
-                    MDLabel:
-                        text: "Credit Limit" 
-                        color:0.031, 0.463, 0.91, 1
-                        bold:True
-                        font_size:dp(23)
-                    MDLabel:
-                        id: credit_limit        
-                        text: "" 
-                        font_size:dp(20)
-
-            MDGridLayout:
-                cols: 2
-                BoxLayout:
-                    orientation:"horizontal"
-                    pos_hint: {'center_x':0.5, 'center_y':0.5}
-                    padding: dp(25)
-                    spacing: dp(20)
-                    MDLabel:
-                        text: "Product ID" 
-                        color:0.031, 0.463, 0.91, 1
-                        bold:True
-                        font_size:dp(23)
-                    MDLabel:
-                        id: product_id       
-                        text: "" 
-                        font_size:dp(20)
-
-            MDGridLayout:
-                cols: 2
-                BoxLayout:
-                    orientation:"horizontal"
-                    pos_hint: {'center_x':0.5, 'center_y':0.5}
-                    padding: dp(25)
-                    spacing: dp(20)
-                    MDLabel:
-                        font_size: dp(16)
-                        text: "Product Group"
-                        bold: True
-
-                    Spinner:
-                        id: group_id1
-                        text: "Select Group"
-                        width: dp(200)
-                        multiline: False
-                        size_hint: None, None
+                MDLabel:
+                    text:""
+                MDGridLayout:
+                    cols: 2
+                    BoxLayout:
+                        orientation:"horizontal"
                         pos_hint: {'center_x':0.5, 'center_y':0.5}
-                        size: "180dp", "45dp"
-                        background_color: 1, 1, 1, 0
-                        color: 0, 0, 0, 1
-                        canvas.before:
-                            Color:
-                                rgba: 0, 0, 0, 1
-                            Line:
-                                width: 0.7
-                                rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
+                        padding: dp(25)
+                        spacing: dp(10)
+                        MDLabel:
+                            text: "Credit Limit" 
+                            color:0.031, 0.463, 0.91, 1
+                            bold:True
+                            font_size:dp(23)
+                        MDLabel:
+                            id: credit_limit        
+                            text: "" 
+                            font_size:dp(20)
+                MDLabel:
+                    text:""
+                MDLabel:
+                    text:""
 
-                        on_press: app.fetch_product_groups()
-                        text_size: self.width - dp(20), None
-
-            MDGridLayout:
-                cols: 2
-                BoxLayout:
-                    orientation:"horizontal"
-                    pos_hint: {'center_x':0.5, 'center_y':0.5}
-                    padding: dp(25)
-                    spacing: dp(20)
-                    MDLabel:
-                        font_size:dp(16)
-                        text: "Product Categories"
-                        bold: True
-
-                    Spinner:
-                        id: group_id2
-                        text: "Select Categories"
-                        width: dp(200)
-                        multiline: False
-                        size_hint: None, None
+                MDGridLayout:
+                    cols: 2
+                    BoxLayout:
+                        orientation:"horizontal"
                         pos_hint: {'center_x':0.5, 'center_y':0.5}
-                        size: "180dp", "45dp"
-                        background_color: 1, 1, 1, 0
-                        color: 0, 0, 0, 1
-                        canvas.before:
-                            Color:
-                                rgba: 0, 0, 0, 1
-                            Line:
-                                width: 0.7
-                                rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
+                        padding: dp(25)
+                        spacing: dp(20)
+                        MDLabel:
+                            font_size: dp(16)
+                            text: "Product Group"
+                            bold: True
 
-                        on_press: app.fetch_product_categories()
-                        text_size: self.width - dp(20), None
-                        disabled: not group_id1.text or group_id1.text == 'Select Group'
+                        Spinner:
+                            id: group_id1
+                            text: "Select Group"
+                            width: dp(200)
+                            multiline: False
+                            size_hint: None, None
+                            pos_hint: {'center_x':0.5, 'center_y':0.5}
+                            size: "180dp", "45dp"
+                            background_color: 1, 1, 1, 0
+                            color: 0, 0, 0, 1
+                            canvas.before:
+                                Color:
+                                    rgba: 0, 0, 0, 1
+                                Line:
+                                    width: 0.7
+                                    rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
 
-            MDGridLayout:
-                cols: 2
-                BoxLayout:
-                    orientation:"horizontal"
-                    pos_hint: {'center_x':0.5, 'center_y':0.5}
-                    padding: dp(25)
-                    spacing: dp(20)
-                    MDLabel:
-                        font_size:dp(16)
-                        text: "Product Name"
-                        bold: True
-                    Spinner:
-                        id: group_id3
-                        text: "Select product name"
-                        width: dp(200)
-                        multiline: False
-                        size_hint: None, None
+                            on_press: app.fetch_product_groups()
+                            text_size: self.width - dp(20), None
+                MDLabel:
+                    text:""
+                MDLabel:
+                    text:""
+
+
+                MDGridLayout:
+                    cols: 2
+                    BoxLayout:
+                        orientation:"horizontal"
                         pos_hint: {'center_x':0.5, 'center_y':0.5}
-                        size: "180dp", "45dp"
-                        background_color: 1, 1, 1, 0
-                        color: 0, 0, 0, 1
-                        canvas.before:
-                            Color:
-                                rgba: 0, 0, 0, 1
-                            Line:
-                                width: 0.7
-                                rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
+                        padding: dp(25)
+                        spacing: dp(20)
+                        MDLabel:
+                            font_size:dp(16)
+                            text: "Product Categories"
+                            bold: True
 
-                        on_press: app.fetch_product_name()
-                        text_size: self.width - dp(20), None
-                        disabled: not group_id2.text or group_id2.text == 'Select Categories'
+                        Spinner:
+                            id: group_id2
+                            text: "Select Categories"
+                            width: dp(200)
+                            multiline: False
+                            size_hint: None, None
+                            pos_hint: {'center_x':0.5, 'center_y':0.5}
+                            size: "180dp", "45dp"
+                            background_color: 1, 1, 1, 0
+                            color: 0, 0, 0, 1
+                            canvas.before:
+                                Color:
+                                    rgba: 0, 0, 0, 1
+                                Line:
+                                    width: 0.7
+                                    rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
 
-            MDLabel:
-                text: " "   
-            MDGridLayout:
-                cols: 2
-                BoxLayout:
-                    orientation:"horizontal"
-                    pos_hint: {'center_x':0.5, 'center_y':0.5}
-                    padding: dp(25)
-                    spacing: dp(20)
-                    MDLabel:
-                        font_size: dp(16)
-                        text: "Product Description"
-                        bold: True
-                    MDLabel:
-                        id: product_description
-                        text: " "      
-                        font_size: dp(12)  
-            MDLabel:
-                text: " "
-            MDLabel:
-                text: " "
-            MDLabel:
-                text: " " 
-            MDLabel:
-                text: " "             
+                            on_press: app.fetch_product_categories()
+                            text_size: self.width - dp(20), None
+                            disabled: not group_id1.text or group_id1.text == 'Select Group'
+                MDLabel:
+                    text:""
+                MDLabel:
+                    text:""
 
-            MDFloatLayout:
-                MDRaisedButton:
-                    text: "Next"
-                    md_bg_color: 0.043, 0.145, 0.278, 1
-                    on_release: root.go_to_newloan_screen1()
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    size_hint:0.4, None  
-                    font_name:"Roboto-Bold"
-                    font_size:dp(15)
+                MDGridLayout:
+                    cols: 2
+                    BoxLayout:
+                        orientation:"horizontal"
+                        pos_hint: {'center_x':0.5, 'center_y':0.5}
+                        padding: dp(25)
+                        spacing: dp(20)
+                        MDLabel:
+                            font_size:dp(16)
+                            text: "Product Name"
+                            bold: True
+                        Spinner:
+                            id: group_id3
+                            text: "Select product name"
+                            width: dp(200)
+                            multiline: False
+                            size_hint: None, None
+                            pos_hint: {'center_x':0.5, 'center_y':0.5}
+                            size: "180dp", "45dp"
+                            background_color: 1, 1, 1, 0
+                            color: 0, 0, 0, 1
+                            canvas.before:
+                                Color:
+                                    rgba: 0, 0, 0, 1
+                                Line:
+                                    width: 0.7
+                                    rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
 
-            MDLabel:
-                text: " "  
+                            on_press: app.fetch_product_name()
+                            text_size: self.width - dp(20), None
+                            disabled: not group_id2.text or group_id2.text == 'Select Categories'
+
+                MDLabel:
+                    text: " "  
+                MDLabel:
+                    text:"" 
+                MDLabel:
+                    text:""
+                MDLabel:
+                    text:""
+                MDLabel:
+                    text:""
+                MDGridLayout:
+                    cols: 2
+                    BoxLayout:
+                        orientation:"horizontal"
+                        pos_hint: {'center_x':0.5, 'center_y':0.5}
+                        padding: dp(25)
+                        spacing: dp(20)
+                        MDLabel:
+                            font_size: dp(16)
+                            text: "Product Description"
+                            bold: True
+                        MDLabel:
+                            id: product_description
+                            text: " "
+                            font_size: dp(10)
+                            size_hint_y: None
+                            height: self.texture_size[1] + dp(20) if self.text else 0  # Adjust height to fit content
+                            canvas.before:
+                                Color:
+                                    rgba: 1, 1, 1, 1  # Background color
+                                RoundedRectangle:
+                                    size: self.size
+                                    pos: self.pos
+                                    radius: [15, 15, 15, 15]  # Adjust radius for rounded corners
+                                Color:
+                                    rgba: 0, 0, 0, 1  # Border color
+                                Line:
+                                    width: 1  # Border width
+                                    rounded_rectangle: (self.x, self.y, self.width, self.height, 15)  # Draw rounded border
+
+
+                MDFloatLayout:
+                    MDRaisedButton:
+                        text: "Next"
+                        md_bg_color: 0.043, 0.145, 0.278, 1
+                        on_release: root.go_to_newloan_screen1()
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        size_hint:0.4, None  
+                        font_name:"Roboto-Bold"
+                        font_size:dp(15)
+
+                MDLabel:
+                    text: " "  
 <NewloanScreen1>:
     BoxLayout:
         pos_hint: {'center_x':0.5, 'center_y':0.5}
@@ -347,7 +359,27 @@ user_helpers2 = """
             color:1,1,1,1      
             text: "" 
             font_size:dp(1)
+        MDLabel:
+            id: min_tenure 
+            color:1,1,1,1      
+            text: "" 
+            font_size:dp(1)
 
+        MDLabel:
+            id: max_amount
+            color:1,1,1,1      
+            text: "" 
+            font_size:dp(1)
+        MDLabel:
+            id: min_amount
+            color:1,1,1,1      
+            text: "" 
+            font_size:dp(1)
+        MDLabel:
+            id: product_id
+            color:1,1,1,1      
+            text: "" 
+            font_size:dp(1)
         MDFloatLayout:
             MDRaisedButton:
                 text: "Next"
@@ -403,7 +435,7 @@ user_helpers2 = """
             padding:dp(50)
 
             MDLabel:
-                text: "ROI"
+                text: "Total Interest Amount"
                 bold:True
 
             MDLabel:
@@ -417,7 +449,7 @@ user_helpers2 = """
             padding:dp(50)
 
             MDLabel:
-                text: "Processing Fee "
+                text: " Total Processing Amount "
                 bold:True
 
             MDLabel:
@@ -432,7 +464,7 @@ user_helpers2 = """
             padding:dp(50)
 
             MDLabel:
-                text: "Monthly EMI"
+                text: "EMI Payment"
                 bold:True
 
             MDLabel:
@@ -587,18 +619,25 @@ class NewloanScreen(Screen):
 
 class NewloanScreen1(Screen):
     selected_category = ""
+    product_id = ""
 
     def on_pre_enter(self):
         Window.bind(on_keyboard=self.on_back_button)
         self.root_screen = self.manager.get_screen('NewloanScreen')
         selected_category = self.root_screen.ids.group_id2.text
-
+        selected_product_name = self.root_screen.ids.group_id3.text
         try:
             # Call the Anvil server function to get the latest credit limit for the specified customer_id
-            max_tenure = anvil.server.call('get_max_tenure', selected_category)
-
+            tenure = app_tables.fin_product_details.search(product_name=selected_product_name)
+            max_tenure = tenure[0]['max_tenure']
+            min_tenure = tenure[0]['min_tenure']
+            max_amount = tenure[0]['max_amount']
+            min_amount = tenure[0]['min_amount']
             # Update the credit_limit MDLabel with the fetched data
             self.ids.max_tenure.text = str(max_tenure)
+            self.ids.min_tenure.text = str(min_tenure)
+            self.ids.max_amount.text = str(max_amount)
+            self.ids.min_amount.text = str(min_amount)
         except anvil._server.AnvilWrappedError as e:
             print(f"Anvil error: {e}")
 
@@ -611,10 +650,13 @@ class NewloanScreen1(Screen):
 
             amount = float(text)
             text_input.helper_text = ""
-
-            if amount > float(self.root_screen.ids.credit_limit.text):
-                text_input.helper_text = f"Amount exceeds credit limit ({self.root_screen.ids.credit_limit.text})"
+            if amount < float(self.ids.min_amount.text):
+                text_input.helper_text = f"enter amount more than {self.ids.min_amount.text} "
                 text_input.error = True
+            elif amount > float(self.ids.max_amount.text):
+                text_input.helper_text = f"enter amount less than {self.ids.max_amount.text}"
+                text_input.error = True
+
             else:
                 text_input.error = False
 
@@ -643,8 +685,11 @@ class NewloanScreen1(Screen):
             tenure = float(text)
             text_input.helper_text = ""
 
-            if tenure > float(self.ids.max_tenure.text):
-                text_input.helper_text = f"maximum tenure limit: ({self.ids.max_tenure.text})"
+            if tenure < float(self.ids.min_tenure.text):
+                text_input.helper_text = f"enter tenure more than {self.ids.min_tenure.text} "
+                text_input.error = True
+            elif tenure > float(self.ids.max_tenure.text):
+                text_input.helper_text = f"enter tenure less than {self.ids.max_tenure.text}"
                 text_input.error = True
             else:
                 text_input.error = False
@@ -720,6 +765,7 @@ class NewloanScreen1(Screen):
 class NewloanScreen2(Screen):
     loan_amount = ""
     loan_tenure = ""
+    product_name = ""
 
     def on_pre_enter(self):
         Window.bind(on_keyboard=self.on_back_button)
@@ -731,18 +777,21 @@ class NewloanScreen2(Screen):
             self.ids.loan_amount.text = str(loan_amount)
             selected_category = self.root_screen.selected_category
             self.ids.tenure.text = str(self.loan_tenure)
-
+            #selected_product_name = self.root_screen.selected_product_name
             try:
-                details = anvil.server.call('get_details', selected_category)
-                roi = details.get('roi', '')
-                processing_fee = details.get('processing_fee', '')
+                data = app_tables.fin_product_details.search(product_categories=selected_category)
+                processing_fee = data[0]['processing_fee']
+                roi = data[0]['roi']
                 self.ids.roi.text = str(roi)
                 self.ids.processing_fee.text = str(processing_fee)
+                monthly_interest_rate = (roi / 100) / 12
+                # Number of Monthly Installments
+                num_installments = self.loan_tenure
 
-                emi = anvil.server.call('calculate_emi', selected_category, loan_amount,
-                                        self.loan_tenure)  # Use self.loan_tenure here
-                total_repayment = anvil.server.call('calculate_total_repayment', selected_category, loan_amount,
-                                                    self.loan_tenure)  # Use self.loan_tenure here
+                # Calculate EMI using the formula
+                emi = (loan_amount * monthly_interest_rate * pow(1 + monthly_interest_rate, num_installments)) / \
+                      (pow(1 + monthly_interest_rate, num_installments) - 1)
+                total_repayment = emi * num_installments
                 self.ids.monthly_emi.text = f"{float(emi):.2f}"
                 self.ids.total.text = f"{total_repayment:.2f}"
 
