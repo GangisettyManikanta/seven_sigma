@@ -10,7 +10,7 @@ from kivy.uix.screenmanager import Screen, SlideTransition
 from kivy.utils import platform
 from kivy.clock import mainthread
 from kivymd.uix.filemanager import MDFileManager
-
+from lender_lost_opportunities import LostOpportunitiesScreen
 from lender_view_loans import ViewLoansScreen
 from lender_view_loans_request import ViewLoansRequest
 from lender_view_extension_request import NewExtension
@@ -207,9 +207,8 @@ user_helpers1 = """
 
             MDFlatButton:
                 size_hint: None, None
-
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                
+                on_release: root.view_lost_opportunities()
                 md_bg_color: 0.043, 0.145, 0.278, 1 
                 size_hint_y: None
                 height: dp(60)
@@ -1478,6 +1477,33 @@ class LenderDashboard(Screen):
         # Perform the actual action (e.g., fetching loan requests)
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.performance_lender_today_due(modal_view), 2)
+
+    def view_lost_opportunities(self):
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
+        modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
+        Clock.schedule_once(lambda dt: self.perform_view_lost_opportunities(modal_view), 2)
+
+    def perform_view_lost_opportunities(self, modal_view):
+        # Close the modal view after performing the action
+        modal_view.dismiss()
+        self.manager.add_widget(Factory.LostOpportunitiesScreen(name='LostOpportunitiesScreen'))
+        self.manager.current = 'LostOpportunitiesScreen'
 
     def performance_lender_today_due(self, modal_view):
         modal_view.dismiss()

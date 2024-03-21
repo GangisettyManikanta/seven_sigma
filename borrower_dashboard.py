@@ -12,7 +12,7 @@ from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.spinner import MDSpinner
 from borrower_extend_loan import ExtensionLoansRequest
 from borrower_application_tracker import ALLLoansAPT
-from borrower_today_dues import BorrowerDuesScreen
+#from borrower_today_dues import BorrowerDuesScreen
 from new_loan_request import NewloanScreen
 from borrower_viewloan import DashboardScreenVLB
 from borrower_foreclosure import LoansDetailsB
