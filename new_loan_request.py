@@ -1,6 +1,7 @@
 import anvil
 from anvil.tables import app_tables
 from kivy.animation import Animation
+from kivy.uix.popup import Popup
 
 from kivy.core.window import Window
 from kivy.factory import Factory
@@ -23,6 +24,7 @@ from datetime import datetime
 from kivymd.uix.spinner import MDSpinner
 
 user_helpers2 = """
+
 <WindowManager>:
     NewloanScreen:
     NewloanScreen1:
@@ -59,6 +61,7 @@ user_helpers2 = """
                     font_size:dp(15)
                     halign:"center"
                     bold:True
+                    height:dp(50)
                     underline:True
                     italic:True
                     pos_hint: {'center_x': 0.5, 'center_y': 0.4}
@@ -66,20 +69,23 @@ user_helpers2 = """
                     text:""
                 MDGridLayout:
                     cols: 2
-                    BoxLayout:
-                        orientation:"horizontal"
-                        pos_hint: {'center_x':0.5, 'center_y':0.5}
-                        padding: dp(25)
-                        spacing: dp(10)
-                        MDLabel:
-                            text: "Credit Limit" 
-                            color:0.031, 0.463, 0.91, 1
-                            bold:True
-                            font_size:dp(23)
-                        MDLabel:
-                            id: credit_limit        
-                            text: "" 
-                            font_size:dp(20)
+                    padding: dp(25)
+                    spacing: dp(10)
+                    MDLabel:
+                        text: "Credit Limit" 
+                        color:0.031, 0.463, 0.91, 1
+                        bold:True
+                        size_hint_y:None
+                        height:dp(50)
+                        halign: "center"
+                        font_size:dp(23)
+                    MDLabel:
+                        id: credit_limit        
+                        text: "" 
+                        size_hint_y:None
+                        height:dp(50)
+                        halign: "center"
+                        font_size:dp(20)
                 MDLabel:
                     text:""
                 MDLabel:
@@ -87,35 +93,38 @@ user_helpers2 = """
 
                 MDGridLayout:
                     cols: 2
-                    BoxLayout:
-                        orientation:"horizontal"
+
+                    padding: dp(25)
+                    spacing: dp(20)
+                    MDLabel:
+                        font_size: dp(16)
+                        text: "Product Group"
+                        bold: True
+                        size_hint_y:None
+                        height:dp(50)
+                        halign: "center"
+
+                    Spinner:
+                        id: group_id1
+                        text: "Select Group"
+                        width: dp(200)
+                        multiline: False
+                        size_hint: None, None
                         pos_hint: {'center_x':0.5, 'center_y':0.5}
-                        padding: dp(25)
-                        spacing: dp(20)
-                        MDLabel:
-                            font_size: dp(16)
-                            text: "Product Group"
-                            bold: True
+                        size: "180dp", "45dp"
+                        height:dp(50)
+                        halign: "center"
+                        background_color: 1, 1, 1, 0
+                        color: 0, 0, 0, 1
+                        canvas.before:
+                            Color:
+                                rgba: 0, 0, 0, 1
+                            Line:
+                                width: 0.7
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
 
-                        Spinner:
-                            id: group_id1
-                            text: "Select Group"
-                            width: dp(200)
-                            multiline: False
-                            size_hint: None, None
-                            pos_hint: {'center_x':0.5, 'center_y':0.5}
-                            size: "180dp", "45dp"
-                            background_color: 1, 1, 1, 0
-                            color: 0, 0, 0, 1
-                            canvas.before:
-                                Color:
-                                    rgba: 0, 0, 0, 1
-                                Line:
-                                    width: 0.7
-                                    rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
-
-                            on_press: app.fetch_product_groups()
-                            text_size: self.width - dp(20), None
+                        on_press: app.fetch_product_groups()
+                        text_size: self.width - dp(20), None
                 MDLabel:
                     text:""
                 MDLabel:
@@ -124,36 +133,39 @@ user_helpers2 = """
 
                 MDGridLayout:
                     cols: 2
-                    BoxLayout:
-                        orientation:"horizontal"
+
+                    padding: dp(25)
+                    spacing: dp(20)
+                    MDLabel:
+                        font_size:dp(16)
+                        text: "Product Categories"
+                        bold: True
+                        size_hint_y:None
+                        height:dp(50)
+                        halign: "center"
+
+                    Spinner:
+                        id: group_id2
+                        text: "Select Categories"
+                        width: dp(200)
+                        multiline: False
+                        size_hint: None, None
+                        height:dp(50)
+                        halign: "center"
                         pos_hint: {'center_x':0.5, 'center_y':0.5}
-                        padding: dp(25)
-                        spacing: dp(20)
-                        MDLabel:
-                            font_size:dp(16)
-                            text: "Product Categories"
-                            bold: True
+                        size: "180dp", "45dp"
+                        background_color: 1, 1, 1, 0
+                        color: 0, 0, 0, 1
+                        canvas.before:
+                            Color:
+                                rgba: 0, 0, 0, 1
+                            Line:
+                                width: 0.7
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
 
-                        Spinner:
-                            id: group_id2
-                            text: "Select Categories"
-                            width: dp(200)
-                            multiline: False
-                            size_hint: None, None
-                            pos_hint: {'center_x':0.5, 'center_y':0.5}
-                            size: "180dp", "45dp"
-                            background_color: 1, 1, 1, 0
-                            color: 0, 0, 0, 1
-                            canvas.before:
-                                Color:
-                                    rgba: 0, 0, 0, 1
-                                Line:
-                                    width: 0.7
-                                    rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
-
-                            on_press: app.fetch_product_categories()
-                            text_size: self.width - dp(20), None
-                            disabled: not group_id1.text or group_id1.text == 'Select Group'
+                        on_press: app.fetch_product_categories()
+                        text_size: self.width - dp(20), None
+                        disabled: not group_id1.text or group_id1.text == 'Select Group'
                 MDLabel:
                     text:""
                 MDLabel:
@@ -161,86 +173,99 @@ user_helpers2 = """
 
                 MDGridLayout:
                     cols: 2
-                    BoxLayout:
-                        orientation:"horizontal"
+
+                    padding: dp(25)
+                    spacing: dp(20)
+                    MDLabel:
+                        font_size:dp(16)
+                        text: "Product Name"
+                        bold: True
+                        size_hint_y:None
+                        height:dp(50)
+                        halign: "center"
+                    Spinner:
+                        id: group_id3
+                        text: "Select product name"
+                        width: dp(200)
+                        multiline: False
+                        size_hint: None, None
+                        height:dp(50)
+                        halign: "center"
                         pos_hint: {'center_x':0.5, 'center_y':0.5}
-                        padding: dp(25)
-                        spacing: dp(20)
-                        MDLabel:
-                            font_size:dp(16)
-                            text: "Product Name"
-                            bold: True
-                        Spinner:
-                            id: group_id3
-                            text: "Select product name"
-                            width: dp(200)
-                            multiline: False
-                            size_hint: None, None
-                            pos_hint: {'center_x':0.5, 'center_y':0.5}
-                            size: "180dp", "45dp"
-                            background_color: 1, 1, 1, 0
-                            color: 0, 0, 0, 1
-                            canvas.before:
-                                Color:
-                                    rgba: 0, 0, 0, 1
-                                Line:
-                                    width: 0.7
-                                    rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
+                        size: "180dp", "45dp"
+                        background_color: 1, 1, 1, 0
+                        color: 0, 0, 0, 1
+                        canvas.before:
+                            Color:
+                                rgba: 0, 0, 0, 1
+                            Line:
+                                width: 0.7
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
 
-                            on_press: app.fetch_product_name()
-                            text_size: self.width - dp(20), None
-                            disabled: not group_id2.text or group_id2.text == 'Select Categories'
-
+                        on_press: app.fetch_product_name()
+                        text_size: self.width - dp(20), None
+                        disabled: not group_id2.text or group_id2.text == 'Select Categories'
+                        on_text: app.fetch_product_description()
                 MDLabel:
                     text: " "  
                 MDLabel:
                     text:"" 
                 MDLabel:
                     text:""
-                MDLabel:
-                    text:""
-                MDLabel:
-                    text:""
+
+
                 MDGridLayout:
                     cols: 2
-                    BoxLayout:
-                        orientation:"horizontal"
-                        pos_hint: {'center_x':0.5, 'center_y':0.5}
-                        padding: dp(25)
-                        spacing: dp(20)
-                        MDLabel:
-                            font_size: dp(16)
-                            text: "Product Description"
-                            bold: True
-                        MDLabel:
-                            id: product_description
-                            text: " "
-                            font_size: dp(10)
-                            size_hint_y: None
-                            height: self.texture_size[1] + dp(20) if self.text else 0  # Adjust height to fit content
-                            canvas.before:
-                                Color:
-                                    rgba: 1, 1, 1, 1  # Background color
-                                RoundedRectangle:
-                                    size: self.size
-                                    pos: self.pos
-                                    radius: [15, 15, 15, 15]  # Adjust radius for rounded corners
-                                Color:
-                                    rgba: 0, 0, 0, 1  # Border color
-                                Line:
-                                    width: 1  # Border width
-                                    rounded_rectangle: (self.x, self.y, self.width, self.height, 15)  # Draw rounded border
+
+                    padding: dp(25)
+                    spacing: dp(20)
+                    MDLabel:
+                        font_size: dp(16)
+                        text: "Product Description"
+                        bold: True
+                    MDLabel:
+                        id: product_description
+                        text: " "
+                        font_size: dp(11)
+                        size_hint_y: None
+                        halign: "center"
+
+                        height: self.texture_size[1] + dp(20) if self.text else 0  # Adjust height to fit content
+                        canvas.before:
+                            Color:
+                                rgba: 1, 1, 1, 1  # Background color
+                            RoundedRectangle:
+                                size: self.size
+                                pos: self.pos
+                                radius: [15, 15, 15, 15]  # Adjust radius for rounded corners
+                            Color:
+                                rgba: 0, 0, 0, 1  # Border color
+                            Line:
+                                width: 1  # Border width
+                                rounded_rectangle: (self.x, self.y, self.width, self.height, 15)  # Draw rounded border
+                MDLabel:
+                    text: " "  
+                MDLabel:
+                    text: " "  
+                MDLabel:
+                    text: " "  
+                MDLabel:
+                    text: " "
+                MDLabel:
+                    text: " "  
 
 
-                MDFloatLayout:
+                MDGridLayout:
+                    cols: 1
+                    spacing: dp(10)
+                    padding: dp(10)
                     MDRaisedButton:
                         text: "Next"
                         md_bg_color: 0.043, 0.145, 0.278, 1
                         on_release: root.go_to_newloan_screen1()
                         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                        size_hint:0.4, None  
+                        size_hint:1, None  
                         font_name:"Roboto-Bold"
-                        font_size:dp(15)
 
                 MDLabel:
                     text: " "  
@@ -583,21 +608,28 @@ class NewloanScreen(Screen):
         loading_label.animation = anim  # Store the animation object in a custom attribute
 
     def go_to_newloan_screen1(self):
-        # Show modal view with loading label
-        modal_view = ModalView(size_hint=(None, None), size=(300, 100),
-                               background_color=(0, 0, 0, 0))  # Set background color to transparent
+        # Check if all required fields are selected
+        if (self.ids.group_id1.text == 'Select Group' or
+                self.ids.group_id2.text == 'Select Categories' or
+                self.ids.group_id3.text == 'Select product name'):
+            # If any field is not selected, display a popup
+            self.show_popup("Please select all fields.")
+        else:
+            # Show modal view with loading label
+            modal_view = ModalView(size_hint=(None, None), size=(300, 100),
+                                   background_color=(0, 0, 0, 0))  # Set background color to transparent
 
-        # Create a loading label
-        loading_label = Label(text="Loading...", font_size=25)
-        modal_view.add_widget(loading_label)
-        modal_view.open()
+            # Create a loading label
+            loading_label = Label(text="Loading...", font_size=25)
+            modal_view.add_widget(loading_label)
+            modal_view.open()
 
-        # Animate the loading label
-        Clock.schedule_once(lambda dt: self.animate_loading_text(loading_label, modal_view.height), 0.1)
+            # Animate the loading label
+            Clock.schedule_once(lambda dt: self.animate_loading_text(loading_label, modal_view.height), 0.1)
 
-        # Perform the actual action (e.g., fetching loan requests)
-        # You can replace the sleep with your actual logic
-        Clock.schedule_once(lambda dt: self.performance_go_to_newloan_screen1(modal_view), 2)
+            # Perform the actual action (e.g., fetching loan requests)
+            # You can replace the sleep with your actual logic
+            Clock.schedule_once(lambda dt: self.performance_go_to_newloan_screen1(modal_view), 2)
 
     def performance_go_to_newloan_screen1(self, modal_view):
 
@@ -615,6 +647,11 @@ class NewloanScreen(Screen):
         self.manager.current = 'NewloanScreen1'
         # print(self.selected_category)
         # print(product_name)
+
+    def show_popup(self, text):
+        content = MDLabel(text=text)
+        popup = Popup(title="Warning", content=content, size_hint=(None, None), size=(400, 200))
+        popup.open()
 
 
 class NewloanScreen1(Screen):
@@ -777,7 +814,7 @@ class NewloanScreen2(Screen):
             self.ids.loan_amount.text = str(loan_amount)
             selected_category = self.root_screen.selected_category
             self.ids.tenure.text = str(self.loan_tenure)
-            #selected_product_name = self.root_screen.selected_product_name
+            # selected_product_name = self.root_screen.selected_product_name
             try:
                 data = app_tables.fin_product_details.search(product_categories=selected_category)
                 processing_fee = data[0]['processing_fee']
@@ -893,5 +930,3 @@ class NewloanScreen2(Screen):
 
 class MyScreenManager(ScreenManager):
     pass
-
-
