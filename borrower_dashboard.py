@@ -12,7 +12,7 @@ from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.spinner import MDSpinner
 from borrower_extend_loan import ExtensionLoansRequest
 from borrower_application_tracker import ALLLoansAPT
-#from borrower_today_dues import BorrowerDuesScreen
+from borrower_dues import BorrowerDuesScreen
 from new_loan_request import NewloanScreen
 from borrower_viewloan import DashboardScreenVLB
 from borrower_foreclosure import LoansDetailsB
@@ -2756,12 +2756,12 @@ class DashboardScreen(Screen):
         self.manager.current = 'WalletScreen'
 
     def go_to_borrowerdues_screen(self):
-        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="50sp", bold=True)
+                                font_size="25sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2774,12 +2774,12 @@ class DashboardScreen(Screen):
 
         # Perform the actual action (e.g., fetching loan requests)
         # You can replace the sleep with your actual logic
-        Clock.schedule_once(lambda dt: self.perform_go_to_borrowerdues_screen(modal_view), 2)
+        Clock.schedule_once(lambda dt: self.perform_request_action(modal_view), 2)
 
-    def perform_go_to_borrowerdues_screen(self, modal_view):
+    def perform_request_action(self, modal_view):
         # Close the modal view after performing the action
-        from borrower_today_dues import BorrowerDuesScreen
         modal_view.dismiss()
+        # Get the existing ScreenManager
         sm = self.manager
 
         # Create a new instance of the LoginScreen
