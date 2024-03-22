@@ -8,7 +8,7 @@ from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, SlideTransition
 from homepage import MainScreen
 import anvil.server
-anvil.server.connect("server_C54ZBVIL3OTBLAREYSSOMWYX-NGMZHEWZZT64SH5J")
+anvil.server.connect("server_DDFFDPCYFLU7YEUB7AKS3ES2-3PQ3UW72AZJGD2JJ")
 
 class MyApp(MDApp):
     def build(self):
@@ -94,6 +94,20 @@ class MyApp(MDApp):
         # Update the Spinner with unique product names
         spinner = self.root.get_screen('NewloanScreen').ids.group_id3
         spinner.values = list(unique_names)
+    def fetch_emi_type(self):
+        # Get the selected product category
+        selected_category = self.root.get_screen('NewloanScreen').ids.group_id3.text
+        # Call the server function using Anvil Uplink to filter product names based on the selected category
+        emi_type = app_tables.fin_product_details.search(product_name=selected_category)
+        # Extract emi_type from the fetched data
+        if emi_type:
+            emi_type_list = emi_type[0]['emi_payment'].split(',')  # Split the emi_type string by commas
+            # Update the Spinner with filtered product names
+            spinner = self.root.get_screen('NewloanScreen1').ids.group_id4
+            spinner.values = emi_type_list
+        else:
+            # Clear the Spinner if no emi_type is found
+            self.root.get_screen('NewloanScreen1').ids.group_id4.values = []
 
     def fetch_product_description(self):
         # Get the selected product name

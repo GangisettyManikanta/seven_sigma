@@ -241,6 +241,7 @@ user_helpers = """
             theme_text_color: 'Custom'
             text_color: 1,1,1,1
             pos_hint: {'center_x': 0.92, 'center_y': 0.1}
+            on_release: root.help_module()
             md_bg_color: 0.043, 0.145, 0.278, 1     
 
 <ProfileScreen>
@@ -2790,6 +2791,10 @@ class DashboardScreen(Screen):
 
         # Switch to the LoginScreen
         sm.current = 'BorrowerDuesScreen'
+    def help_module(self):
+        from help_module import HelpScreen
+        self.manager.add_widget(Factory.HelpScreen(name='HelpScreen'))
+        self.manager.current = 'HelpScreen'
 
 
 class ProfileScreen(Screen):

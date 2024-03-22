@@ -277,6 +277,7 @@ user_helpers1 = """
             theme_text_color: 'Custom'
             text_color: 1,1,1,1
             pos_hint: {'center_x': 0.92, 'center_y': 0.1}
+            on_release: root.help_module()
             md_bg_color: 0.043, 0.145, 0.278, 1              
 <ViewProfileScreen>
     canvas.before:
@@ -1654,6 +1655,10 @@ class LenderDashboard(Screen):
         self.manager.add_widget(Factory.LenderWalletScreen(name='LenderWalletScreen'))
         self.manager.current = 'LenderWalletScreen'
         # Get the existing ScreenManager
+    def help_module(self):
+        from help_module import HelpScreen
+        self.manager.add_widget(Factory.HelpScreen(name='HelpScreen'))
+        self.manager.current = 'HelpScreen'
 
 
 class ViewProfileScreen(Screen):

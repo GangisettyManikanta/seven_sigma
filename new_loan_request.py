@@ -35,6 +35,14 @@ user_helpers2 = """
         orientation: 'vertical'
         size_hint: 1, 1
         pos_hint: {'center_x':0.5, 'center_y':0.5}
+        MDTopAppBar:
+            title: "New Loan Request"
+            elevation: 2
+            pos_hint: {'top': 1}
+            left_action_items: [['arrow-left', lambda x: root.go_back()]]
+            right_action_items: [['home', lambda x:root.go_to_lender_dashboard()]]
+            title_align: 'center'
+            md_bg_color: 0.043, 0.145, 0.278, 1
 
         ScrollView:  # Add ScrollView here
             do_scroll_x: False
@@ -45,12 +53,7 @@ user_helpers2 = """
                 size_hint_y: None
                 height: self.minimum_height
 
-                MDIconButton:
-                    icon: 'arrow-left'
-                    on_release:root.go_back()
-                    pos_hint: {'center_x': 0.045, 'center_y': 0.90}
-                    theme_text_color: 'Custom'
-                    text_color: 0,0,0,1  # Set color to white
+
                 Image:
                     source:"LOGO.png"
                     size_hint:None,None
@@ -239,10 +242,10 @@ user_helpers2 = """
                                 pos: self.pos
                                 radius: [15, 15, 15, 15]  # Adjust radius for rounded corners
                             Color:
-                                rgba: 0, 0, 0, 1  # Border color
+                                rgba: 0.043, 0.145, 0.278, 1
                             Line:
-                                width: 1  # Border width
-                                rounded_rectangle: (self.x, self.y, self.width, self.height, 15)  # Draw rounded border
+                                width: 1.5
+                                rectangle: (self.x, self.y, self.width, self.height)
                 MDLabel:
                     text: " "  
                 MDLabel:
@@ -269,114 +272,127 @@ user_helpers2 = """
 
                 MDLabel:
                     text: " "  
+                MDLabel:
+                    text: " "
 <NewloanScreen1>:
+    MDTopAppBar:
+        title: "New Loan Request"
+        elevation: 2
+        pos_hint: {'top': 1}
+        left_action_items: [['arrow-left', lambda x: root.go_back()]]
+        right_action_items: [['home', lambda x:root.go_to_lender_dashboard()]]
+        title_align: 'center'
+        md_bg_color: 0.043, 0.145, 0.278, 1
     BoxLayout:
-        pos_hint: {'center_x':0.5, 'center_y':0.5}
+        pos_hint: {'center_x':0.5, 'center_y':0.4}
         elevation: 2
         padding: dp(20)
         spacing: dp(20)
         orientation: 'vertical'
         radius: [10,]
-        MDFloatLayout:
-            MDIconButton:
-                icon: 'arrow-left'
-                on_release:root.go_back()
-                pos_hint: {'center_x': 0, 'center_y': 0.90}
-                theme_text_color: 'Custom'
-                text_color: 0,0,0,1  # Set color to white
+
+        BoxLayout:
+            orientation: "vertical"
+            padding:dp(10)
+            spacing:dp(10)
+            size_hint_y: None
+            height: self.minimum_height
+
+
             Image:
                 source:"LOGO.png"
                 size_hint:None,None
-                size:"75dp","75dp"
-                pos_hint: {'center_x': 0.2, 'center_y': 0.92}
+                size:"100dp","100dp"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+
+
+
+        MDGridLayout:
+            cols: 2
+            padding: dp(25)
+            spacing: dp(10)
+            MDLabel:
+                text: "Loan Amount"
+                bold:True
+                font_size:dp(16)
+            MDTextField:
+                id: text_input1
+                width: dp(250)
+                multiline: False
+                hint_text: "Enter amount"
+                size_hint: None, None
+                size: "180dp", "45dp"
+                on_text: root.validate_amount(text_input1,self.text)
+                background_color: 1, 1, 1, 0 
+                color: 0, 0, 0, 1
+                line_color_normal: 0, 0, 0, 1  # Set the line color to black
+                color: 0, 0, 0, 1
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                helper_text: ""
+        MDLabel:
+            text:""
+        MDLabel:
+            text:""
+
+        MDGridLayout:
+            cols: 2
+            padding: dp(25)
+            spacing: dp(10)
+
+            MDLabel:
+                text: "Loan Period (Months)"
+                font_size:dp(16)
+                bold:True
+
+            MDTextField:
+                id: text_input2
+                size_hint_x: 0.91
+                multiline: False
+                hint_text: "Enter loan period"
+                on_text: root.validate_tenure(text_input2,self.text)
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                helper_text: ""
+                helper_text_mode: "on_error"
+                size_hint: None, None
+                size: "180dp", "45dp"
+                background_color: 1, 1, 1, 0 
+                color: 0, 0, 0, 1
+                line_color_normal: 0, 0, 0, 1  # Set the line color to black
+                color: 0, 0, 0, 1
+        MDLabel:
+            text:""
         MDLabel:
             text:""
         MDGridLayout:
             cols: 2
-            BoxLayout:
-                orientation:"horizontal"
+            padding: dp(25)
+            spacing: dp(10)
+            MDLabel:
+                font_size: dp(16)
+                text: "EMI Type"
+                bold: True
+
+            Spinner:
+                id: group_id4
+                text: "Select EMI type"
+                width: dp(200)
+                multiline: False
+                size_hint: None, None
                 pos_hint: {'center_x':0.5, 'center_y':0.5}
-                padding: dp(25)
-                spacing: dp(20)
-                MDLabel:
-                    text: "Loan Amount"
-                    bold:True
-                    font_size:dp(16)
-                MDTextField:
-                    id: text_input1
-                    width: dp(250)
-                    multiline: False
-                    hint_text: "Enter amount"
-                    size_hint: None, None
-                    size: "180dp", "45dp"
-                    on_text: root.validate_amount(text_input1,self.text)
-                    background_color: 1, 1, 1, 0 
-                    color: 0, 0, 0, 1
-                    line_color_normal: 0, 0, 0, 1  # Set the line color to black
-                    color: 0, 0, 0, 1
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    helper_text: ""
+                size: "180dp", "45dp"
+                background_color: 1, 1, 1, 0
+                color: 0, 0, 0, 1
+                canvas.before:
+                    Color:
+                        rgba: 0, 0, 0, 1
+                    Line:
+                        width: 0.7
+                        rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
 
-        MDGridLayout:
-            cols: 2
-            BoxLayout:
-                orientation:"horizontal"
-                pos_hint: {'center_x':0.5, 'center_y':0.5}
-                padding: dp(25)
-                spacing: dp(20)
-
-                MDLabel:
-                    text: "Loan Period (Months)"
-                    font_size:dp(16)
-                    bold:True
-
-                MDTextField:
-                    id: text_input2
-                    size_hint_x: 0.91
-                    multiline: False
-                    hint_text: "Enter loan period"
-                    on_text: root.validate_tenure(text_input2,self.text)
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    helper_text: ""
-                    helper_text_mode: "on_error"
-                    size_hint: None, None
-                    size: "180dp", "45dp"
-                    background_color: 1, 1, 1, 0 
-                    color: 0, 0, 0, 1
-                    line_color_normal: 0, 0, 0, 1  # Set the line color to black
-                    color: 0, 0, 0, 1
-        MDGridLayout:
-            cols: 2
-            BoxLayout:
-                orientation:"horizontal"
-                pos_hint: {'center_x':0.5, 'center_y':0.5}
-                padding: dp(25)
-                spacing: dp(20)
-                MDLabel:
-                    font_size: dp(16)
-                    text: "EMI Type"
-                    bold: True
-
-                Spinner:
-                    id: group_id4
-                    text: "Select EMI type"
-                    width: dp(200)
-                    multiline: False
-                    size_hint: None, None
-                    pos_hint: {'center_x':0.5, 'center_y':0.5}
-                    size: "180dp", "45dp"
-                    background_color: 1, 1, 1, 0
-                    color: 0, 0, 0, 1
-                    canvas.before:
-                        Color:
-                            rgba: 0, 0, 0, 1
-                        Line:
-                            width: 0.7
-                            rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
-
-                    on_press: app.fetch_emi_type()
-                    text_size: self.width - dp(20), None
-                    disabled: not group_id4.text or group_id4.text == 'Select Categories'
+                on_press: app.fetch_emi_type()
+                text_size: self.width - dp(20), None
+                disabled: not group_id4.text or group_id4.text == 'Select Categories'
 
 
         MDLabel:
@@ -416,18 +432,36 @@ user_helpers2 = """
                 font_size:dp(15)
         MDLabel:
             text: " "
+        MDLabel:
+            text: " "
+
 <NewloanScreen2>:
+    MDTopAppBar:
+        title: "View Deatils"
+        elevation: 2
+        pos_hint: {'top': 1}
+
+        title_align: 'center'
+        md_bg_color: 0.043, 0.145, 0.278, 1
     BoxLayout:
-        pos_hint: {'center_x':0.5, 'center_y':0.5}
+        pos_hint: {'center_x':0.5, 'center_y':0.4}
         padding: dp(20)
         spacing: dp(20)
         orientation: 'vertical'
-        MDFloatLayout:
+
+        BoxLayout:
+            orientation: "vertical"
+
+
+            size_hint_y: None
+            height: self.minimum_height
+
+
             Image:
                 source:"LOGO.png"
                 size_hint:None,None
-                size:"75dp","75dp"
-                pos_hint: {'center_x': 0.5, 'center_y': 0.90}
+                size:"50dp","50dp"
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
         MDGridLayout:
             cols: 1
@@ -593,6 +627,10 @@ class NewloanScreen(Screen):
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'DashboardScreen'
 
+    def go_to_lender_dashboard(self):
+        self.manager.add_widget(Factory.DashboardScreen(name='DashboardScreen'))
+        self.manager.current = 'DashboardScreen'
+
     def current(self):
         self.manager.current = 'DashboardScreen'
 
@@ -707,6 +745,9 @@ class NewloanScreen1(Screen):
 
         text_input.bind(on_focus=reset_helper_text)
 
+    def go_to_lender_dashboard(self):
+        self.manager.add_widget(Factory.DashboardScreen(name='DashboardScreen'))
+        self.manager.current = 'DashboardScreen'
     def reset_fields(self):
         self.ids.text_input1.text = ""
         self.ids.text_input2.text = ""
