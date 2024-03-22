@@ -1,4 +1,5 @@
 import anvil
+from anvil import tables
 from anvil.tables import app_tables
 from kivy.animation import Animation
 from kivy.uix.popup import Popup
@@ -232,7 +233,7 @@ user_helpers2 = """
                         font_size: dp(11)
                         size_hint_y: None
                         halign: "center"
-
+                        padding: dp(5)
                         height: self.texture_size[1] + dp(20) if self.text else 0  # Adjust height to fit content
                         canvas.before:
                             Color:
@@ -256,6 +257,8 @@ user_helpers2 = """
                     text: " "
                 MDLabel:
                     text: " "  
+                MDLabel:
+                    text: " "
 
 
                 MDGridLayout:
@@ -284,7 +287,7 @@ user_helpers2 = """
         title_align: 'center'
         md_bg_color: 0.043, 0.145, 0.278, 1
     BoxLayout:
-        pos_hint: {'center_x':0.5, 'center_y':0.4}
+        pos_hint: {'center_x':0.5, 'center_y':0.43}
         elevation: 2
         padding: dp(20)
         spacing: dp(20)
@@ -302,7 +305,7 @@ user_helpers2 = """
             Image:
                 source:"LOGO.png"
                 size_hint:None,None
-                size:"100dp","100dp"
+                size:"70dp","70dp"
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
 
@@ -313,7 +316,7 @@ user_helpers2 = """
             padding: dp(25)
             spacing: dp(10)
             MDLabel:
-                text: "Loan Amount"
+                text: "Loan Amount :"
                 bold:True
                 font_size:dp(16)
             MDTextField:
@@ -328,10 +331,49 @@ user_helpers2 = """
                 color: 0, 0, 0, 1
                 line_color_normal: 0, 0, 0, 1  # Set the line color to black
                 color: 0, 0, 0, 1
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                pos_hint: {'center_x': 0.5, 'center_y': 0.4}
                 helper_text: ""
         MDLabel:
             text:""
+        MDLabel:
+            text:""
+        MDLabel:
+            text:""
+
+        MDGridLayout:
+            cols: 2
+            padding: dp(25)
+            spacing: dp(10)   
+            MDLabel:
+                text: "Interest Rate(%) :"
+                bold:True
+                font_size:dp(16)
+
+            MDLabel:
+                id: roi
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                text: " "
+                halign:"left"
+        MDLabel:
+            text:""
+
+
+        MDGridLayout:
+            cols: 2
+            padding: dp(25)
+            spacing: dp(10)
+
+            MDLabel:
+                text: "Processing Fee(%) :"
+                bold:True
+                font_size:dp(16)
+
+            MDLabel:
+                id: processing_fee
+                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                text: ""
+                halign:"left"
+
         MDLabel:
             text:""
 
@@ -341,7 +383,7 @@ user_helpers2 = """
             spacing: dp(10)
 
             MDLabel:
-                text: "Loan Period (Months)"
+                text: "Loan Period (Months):"
                 font_size:dp(16)
                 bold:True
 
@@ -435,6 +477,7 @@ user_helpers2 = """
         MDLabel:
             text: " "
 
+
 <NewloanScreen2>:
     MDTopAppBar:
         title: "View Deatils"
@@ -498,7 +541,7 @@ user_helpers2 = """
                 bold:True
 
             MDLabel:
-                id: roi
+                id: total_interest_amount
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 text: " "
                 halign:"left"
@@ -508,11 +551,11 @@ user_helpers2 = """
             padding:dp(50)
 
             MDLabel:
-                text: " Total Processing Amount "
+                text: " Total Processing Fee Amount "
                 bold:True
 
             MDLabel:
-                id: processing_fee
+                id: total_processing_fee_amount
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 text: ""
                 halign:"left"
@@ -523,25 +566,11 @@ user_helpers2 = """
             padding:dp(50)
 
             MDLabel:
-                text: "EMI Payment"
+                text: "Monthly EMI"
                 bold:True
 
             MDLabel:
                 id: monthly_emi
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                text: ""
-                halign:"left"
-        MDGridLayout:
-            cols: 2
-            spacing:dp(30)
-            padding:dp(50)
-
-            MDLabel:
-                text: "Tenure"
-                bold:True
-
-            MDLabel:
-                id:tenure
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 text: ""
                 halign:"left"
@@ -693,21 +722,33 @@ class NewloanScreen(Screen):
 
 
 class NewloanScreen1(Screen):
-    selected_category = ""
-    product_id = ""
+    product_name = ""
+    product_group = ""
+    product_categories = ""
+    credit_limit = ""
+    product_description = ""
+
 
     def on_pre_enter(self):
         Window.bind(on_keyboard=self.on_back_button)
         self.root_screen = self.manager.get_screen('NewloanScreen')
-        selected_category = self.root_screen.ids.group_id2.text
-        selected_product_name = self.root_screen.ids.group_id3.text
+        product_name = self.root_screen.ids.group_id3.text
+        product_group = self.root_screen.ids.group_id1.text
+        product_categories = self.root_screen.ids.group_id2.text
+        prodcut_description = self.root_screen.ids.product_description.text
+        credit_limit = self.root_screen.ids.credit_limit.text
+
         try:
             # Call the Anvil server function to get the latest credit limit for the specified customer_id
-            tenure = app_tables.fin_product_details.search(product_name=selected_product_name)
+            tenure = app_tables.fin_product_details.search(product_name=product_name)
             max_tenure = tenure[0]['max_tenure']
             min_tenure = tenure[0]['min_tenure']
             max_amount = tenure[0]['max_amount']
             min_amount = tenure[0]['min_amount']
+            processing_fee = tenure[0]['processing_fee']
+            roi = tenure[0]['roi']
+            self.ids.roi.text = str(roi)
+            self.ids.processing_fee.text = str(processing_fee)
             # Update the credit_limit MDLabel with the fetched data
             self.ids.max_tenure.text = str(max_tenure)
             self.ids.min_tenure.text = str(min_tenure)
@@ -748,6 +789,7 @@ class NewloanScreen1(Screen):
     def go_to_lender_dashboard(self):
         self.manager.add_widget(Factory.DashboardScreen(name='DashboardScreen'))
         self.manager.current = 'DashboardScreen'
+
     def reset_fields(self):
         self.ids.text_input1.text = ""
         self.ids.text_input2.text = ""
@@ -810,21 +852,29 @@ class NewloanScreen1(Screen):
         loading_label.animation = anim  # Store the animation object in a custom attribute
 
     def go_to_newloan_screen2(self):
-        # Show modal view with loading label
-        modal_view = ModalView(size_hint=(None, None), size=(300, 100),
-                               background_color=(0, 0, 0, 0))  # Set background color to transparent
+        loan_amount = self.ids.text_input1.text.strip()
+        loan_tenure = self.ids.text_input2.text.strip()
+        emi_type = self.ids.group_id4.text.strip()
 
-        # Create a loading label
-        loading_label = Label(text="Loading...", font_size=25)
-        modal_view.add_widget(loading_label)
-        modal_view.open()
+        if not loan_amount or not loan_tenure or emi_type == 'Select EMI type':
+            # Show a popup indicating that the user needs to provide all necessary information
+            self.show_popup("Please enter all fields.")
+        else:
+            # Show modal view with loading label
+            modal_view = ModalView(size_hint=(None, None), size=(300, 100),
+                                   background_color=(0, 0, 0, 0))  # Set background color to transparent
 
-        # Animate the loading label
-        Clock.schedule_once(lambda dt: self.animate_loading_text(loading_label, modal_view.height), 0.1)
+            # Create a loading label
+            loading_label = Label(text="Loading...", font_size=25)
+            modal_view.add_widget(loading_label)
+            modal_view.open()
 
-        # Perform the actual action (e.g., fetching loan requests)
-        # You can replace the sleep with your actual logic
-        Clock.schedule_once(lambda dt: self.performance_go_to_newloan_screen2(modal_view), 2)
+            # Animate the loading label
+            Clock.schedule_once(lambda dt: self.animate_loading_text(loading_label, modal_view.height), 0.1)
+
+            # Perform the actual action (e.g., fetching loan requests)
+            # You can replace the sleep with your actual logic
+            Clock.schedule_once(lambda dt: self.performance_go_to_newloan_screen2(modal_view), 2)
 
     def performance_go_to_newloan_screen2(self, modal_view):
 
@@ -832,18 +882,32 @@ class NewloanScreen1(Screen):
         loan_tenure = self.ids.text_input2.text
         # Get the existing ScreenManager
 
-        self.selected_category = self.root_screen.ids.group_id2.text
+        self.product_name = self.root_screen.ids.group_id3.text
+        self.product_group = self.root_screen.ids.group_id1.text
+        self.product_categories = self.root_screen.ids.group_id2.text
+        self.product_description = self.root_screen.ids.product_description.text
+        self.credit_limit = self.root_screen.ids.credit_limit.text
+
+
         # Create a new instance of the LoginScreen
         self.manager.add_widget(Factory.NewloanScreen2(name='NewloanScreen2'))
         self.manager.current = 'NewloanScreen2'
 
         modal_view.dismiss()
 
+    def show_popup(self, text):
+        content = MDLabel(text=text)
+        popup = Popup(title="Warning", content=content, size_hint=(None, None), size=(400, 200))
+        popup.open()
+
 
 class NewloanScreen2(Screen):
     loan_amount = ""
     loan_tenure = ""
-    product_name = ""
+    emi_type = ""
+    interest_rate = ""
+    Processing_fee = ""
+
 
     def on_pre_enter(self):
         Window.bind(on_keyboard=self.on_back_button)
@@ -852,29 +916,49 @@ class NewloanScreen2(Screen):
         if self.root_screen and self.root_screen.ids:
             loan_amount = float(self.root_screen.ids.text_input1.text)
             self.loan_tenure = float(self.root_screen.ids.text_input2.text)  # Define loan_tenure here
-            self.ids.loan_amount.text = str(loan_amount)
-            selected_category = self.root_screen.selected_category
-            self.ids.tenure.text = str(self.loan_tenure)
-            # selected_product_name = self.root_screen.selected_product_name
-            try:
-                data = app_tables.fin_product_details.search(product_categories=selected_category)
-                processing_fee = data[0]['processing_fee']
-                roi = data[0]['roi']
-                self.ids.roi.text = str(roi)
-                self.ids.processing_fee.text = str(processing_fee)
-                monthly_interest_rate = (roi / 100) / 12
-                # Number of Monthly Installments
-                num_installments = self.loan_tenure
+            self.ids.loan_amount.text = "₹" + " " + str(loan_amount)
+            interest_rate = float(self.root_screen.ids.roi.text)
+            processing_fee = float(self.root_screen.ids.processing_fee.text)
+            product_name = self.root_screen.product_name
+            product_group = self.root_screen.product_group
+            product_categories = self.root_screen.product_categories
+            product_description = self.root_screen.product_description
+            credit_limit = self.root_screen.credit_limit
 
-                # Calculate EMI using the formula
-                emi = (loan_amount * monthly_interest_rate * pow(1 + monthly_interest_rate, num_installments)) / \
-                      (pow(1 + monthly_interest_rate, num_installments) - 1)
-                total_repayment = emi * num_installments
-                self.ids.monthly_emi.text = f"{float(emi):.2f}"
-                self.ids.total.text = f"{total_repayment:.2f}"
 
-            except anvil._server.AnvilWrappedError as e:
-                print(f"Anvil error: {e}")
+            p = loan_amount
+            t = self.loan_tenure
+            monthly_interest_rate = float(int(interest_rate) / 100) / 12
+            emi_denominator = ((1 + monthly_interest_rate) ** t) - 1
+            emi_numerator = p * monthly_interest_rate * ((1 + monthly_interest_rate) ** t)
+            Monthly_EMI = emi_numerator / emi_denominator
+
+            self.emi_type = self.root_screen.ids.group_id4.text.strip()
+            print("Selected emi_type:", self.emi_type)  # Debug print
+            # Adjust calculation based on emi_type
+            if self.emi_type == 'One Time':
+                print("Selected one Month")
+                emi = Monthly_EMI * t
+            elif self.emi_type == 'Three Months':
+                print("Selected Three Months")
+                emi = Monthly_EMI * 3
+            elif self.emi_type == 'Six Months':
+                print("Selected six Months")
+                emi = Monthly_EMI * 6
+            elif self.emi_type == 'Monthly':
+                print("Selected Monthly")
+                emi = Monthly_EMI
+            else:
+                emi = 0  # Default value if emi_type is not recognized
+            print("Calculated emi:", emi)  # Debug print
+            self.ids.monthly_emi.text = "₹" + " " + str(round(emi, 2))
+            interest_amount = Monthly_EMI * t - p
+            self.ids.total_interest_amount.text = "₹" + " " +  str(round(interest_amount, 2))
+            processing_fee_amount = (processing_fee / 100) * p
+            self.ids.total_processing_fee_amount.text = "₹" + " " + str(round(processing_fee_amount , 2))
+            total_repayment_amount = Monthly_EMI * t + interest_amount + processing_fee_amount
+            self.ids.total.text = "₹" + " " + str(round(total_repayment_amount , 2))
+
 
     def on_pre_leave(self):
         Window.unbind(on_keyboard=self.on_back_button)
@@ -891,10 +975,6 @@ class NewloanScreen2(Screen):
 
     def current(self):
         self.manager.current = 'NewloanScreen1'
-
-    def generate_loan_id(self):
-        loan_id = anvil.server.call('generate_loan_id')
-        return loan_id
 
     def animate_loading_text(self, loading_label, modal_height):
         # Define the animation to move the label vertically
@@ -924,30 +1004,75 @@ class NewloanScreen2(Screen):
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.performance_send_request(modal_view), 2)
 
-    def performance_send_request(self, modal_view):
-        if self.ids.loan_amount and self.ids.roi and self.ids.total:
-            loan_amount = float(self.ids.loan_amount.text)
-            loan_tenure = float(self.root_screen.ids.text_input2.text)
-            selected_category = self.root_screen.selected_category
-            roi = float(self.ids.roi.text)
-            total_repayment = float(self.ids.total.text)
-            date_of_apply = datetime.now().date()
+    def generate_loan_id(self):
+        # Query the latest loan ID from the data table
+        latest_loan = app_tables.fin_loan_details.search(tables.order_by("loan_id", ascending=False))
 
+        if latest_loan and len(latest_loan) > 0:
+            # If there are existing loans, increment the last loan ID
+            last_loan_id = latest_loan[0]['loan_id']
+            counter = int(last_loan_id[2:]) + 1
+        else:
+            # If there are no existing loans, start the counter at 100001
+            counter = 1000001
+
+        # Return the new loan ID
+        return f"LA{counter}"
+
+    def performance_send_request(self, modal_view):
+        loan_amount_text = self.ids.loan_amount.text
+        roi_text = self.root_screen.ids.roi.text
+        total_text = self.ids.total.text
+
+        if loan_amount_text and roi_text and total_text:
+            # Remove currency symbols and convert to float
             try:
-                loan_id = anvil.server.call(
-                    'add_loan_data',
-                    loan_amount,
-                    loan_tenure,
-                    roi,
-                    total_repayment,
-                    date_of_apply
+                loan_amount = float(loan_amount_text.replace('₹', '').strip())
+                loan_tenure = float(self.root_screen.ids.text_input2.text)
+                product_name = self.root_screen.product_name
+                product_group = self.root_screen.product_group
+                product_categories = self.root_screen.product_categories
+                product_description = self.root_screen.product_description
+                credit_limit = self.root_screen.credit_limit
+
+                roi = float(roi_text.replace('₹', '').strip())
+                processing_fee = float(self.root_screen.ids.processing_fee.text.replace('₹', '').strip())
+                total_interest_amount = float(self.ids.total_interest_amount.text.replace('₹', '').strip())
+                total_processing_fee_amount = float(self.ids.total_processing_fee_amount.text.replace('₹', '').strip())
+                monthly_EMI = float(self.ids.monthly_emi.text.replace('₹', '').strip())
+                emi_type = self.root_screen.ids.group_id4.text
+                total_repayment = float(total_text.replace('₹', '').strip())
+                date_of_apply = datetime.now().date()
+
+                # Call the generate_loan_id function to get the loan ID
+                loan_id = self.generate_loan_id()
+                product_id = app_tables.fin_product_details.search(product_name=product_name)
+                product_id = product_id[0]['product_id']
+                app_tables.fin_loan_details.add_row(
+                    loan_id=str(loan_id),
+                    product_id=str(product_id),
+                    loan_amount=float(loan_amount),
+                    tenure=float(loan_tenure),
+                    loan_updated_status="under process",
+                    borrower_loan_created_timestamp=date_of_apply,
+                    interest_rate=float(roi),
+                    product_name=str(product_name),
+                    total_repayment_amount=float(total_repayment),
+                    product_description=str(product_description),
+                    credit_limit=int(credit_limit),
+                    total_processing_fee_amount=float(total_processing_fee_amount),
+                    total_interest_amount=float(total_interest_amount),
+                    monthly_emi=float(monthly_EMI),
+                    emi_payment_type=str(emi_type)
                 )
                 modal_view.dismiss()
-                self.show_success_dialog(f"Loan details added successfully! Loan ID: {loan_id}")
-            except anvil._server.AnvilWrappedError as e:
+                self.show_success_dialog(f"Request submitted successfully!")
+            except ValueError as e:
                 modal_view.dismiss()
-                print(f"Anvil error: {e}")
-
+                print(f"An error occurred: {e}")
+        else:
+            # Handle the case where some fields are empty
+            self.show_popup("Please fill in all fields before submitting.")
     def show_success_dialog(self, text):
         dialog = MDDialog(
             text=text,

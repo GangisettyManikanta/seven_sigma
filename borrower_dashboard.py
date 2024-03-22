@@ -180,7 +180,7 @@ user_helpers = """
                     orientation: 'horizontal'
                     spacing:dp(10)
                     MDLabel:
-                        text: "Discount Coupons"
+                        text: "View Transaction History"
                         font_size:dp(14)
                         bold:True
                         theme_text_color: 'Custom'
