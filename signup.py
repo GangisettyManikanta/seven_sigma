@@ -12,7 +12,7 @@ import sqlite3
 
 from kivymd.uix.label import MDLabel
 
-from tables import create_user_table, create_registration_table
+from tables import create_user_table,create_registration_table
 from kivymd.uix.selectioncontrol import MDCheckbox
 from kivymd.uix.snackbar import Snackbar
 from kivymd.uix.dialog import MDDialog
@@ -56,7 +56,6 @@ KV = """
             icon_left: 'account'
             font_name: "Roboto-Bold"
             pos_hint: {'center_y': 0.1}
-            on_text: root.on_text_validate(self, label1)
 
         MDTextField:
             id: mobile
@@ -68,7 +67,6 @@ KV = """
             font_name: "Roboto-Bold"
             input_type: 'number'  
             on_touch_down: root.on_mobile_number_touch_down()
-            
 
         MDTextField:
             id: email
@@ -166,14 +164,6 @@ class SignupScreen(Screen):
     create_user_table()
     create_registration_table()
 
-    def on_text_validate(self, text_field, error_label):
-        if not text_field.text:
-            error_label.text = "This field is required"
-            error_label.color = [1, 0, 0, 1]  # Red color for error text
-        else:
-            error_label.text = ""  # Clear error text when there's input
-            error_label.color = [0, 0, 0, 0]  # Transparent color to hide the label
-
     def on_mobile_number_touch_down(self):
         # Change keyboard mode to numeric when the mobile number text input is touched
         self.ids.mobile.input_type = 'number'
@@ -226,6 +216,7 @@ class SignupScreen(Screen):
 
             self.add_data(user_id=user_id, email=self.ids.email.text, password=hash_pashword,
                           name=self.ids.name.text, number=self.ids.mobile.text, enable=True)
+            self.wallet_generator(self.ids.email.text, self.ids.name.text, user_id)
             conn.commit()
         except sqlite3.Error as e:
 
@@ -233,7 +224,9 @@ class SignupScreen(Screen):
 
     def add_data(self, user_id, email, password, name, number, enable):
         # Ensure 'YOUR_ANVIL_UPLINK_KEY' is replaced with your actual Anvil Uplink key
-        anvil.server.call('add_data', user_id, email, password, name, number, enable)
+        app_tables.users.add_row(email=email, password_hash=password, enabled=enable)
+        app_tables.fin_user_profile.add_row(customer_id=user_id, email_user=email, full_name=name,
+                                                   mobile=number)
 
     def animate_loading_text(self, loading_label, modal_height):
         # Define the animation to move the label vertically
@@ -246,13 +239,14 @@ class SignupScreen(Screen):
         # Store the animation object
         loading_label.animation = anim  # Store the animation object in a custom attribute
 
+
     def go_to_login(self):
-        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(200, 150), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="50sp", bold=True)
+                                font_size="25sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -266,6 +260,7 @@ class SignupScreen(Screen):
         # Perform the actual action (e.g., fetching loan requests)
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.perform_signup_action(modal_view), 2)
+
 
     def perform_signup_action(self, modal_view):
         # Close the modal view after
@@ -293,8 +288,11 @@ class SignupScreen(Screen):
         existing_user = cursor.fetchone()
 
         # Check if the email already exists in the database
-        if existing_user:
-            validation_errors.append((self.ids.email, "Email already exists"))
+        c_id = app_tables.fin_user_profile.search()
+
+        anvil_email = []
+        for i in c_id:
+            anvil_email.append(i['email_user'])
 
         # Other input validations
         # Name validation
@@ -312,6 +310,10 @@ class SignupScreen(Screen):
         # Email validation
         if not email or not re.match(email_regex, email):
             validation_errors.append((self.ids.email, "Invalid email address"))
+        elif email in anvil_email:
+            validation_errors.append((self.ids.email, "Email already exists"))
+        elif existing_user:
+            validation_errors.append((self.ids.email, "Email already exists"))
         else:
             self.ids.email.helper_text = ''
 
@@ -369,10 +371,54 @@ class SignupScreen(Screen):
         sm.add_widget(lender_screen)
         sm.transition.direction = 'left'  # Set the transition direction explicitly
         sm.current = 'DashScreen'
-
     def share_email_with_anvil(self, email):
         # Make an API call to Anvil server to share the email
         anvil.server.call('share_email', email)
+    def wallet_generator(self, email_user, name, customer_id1):
+        wallet = app_tables.fin_wallet.search()
+        wallet_amount = 0
+        id_w = []
+        acc_id = []
+        for i in wallet:
+            id_w.append(i['wallet_id'])
+            acc_id.append(i['account_id'])
+
+        if len(id_w) >= 1:
+            wallet_id = 'WA' + str(int(id_w[-1][2:]) + 1).zfill(4)
+        else:
+            wallet_id = 'WA0001'
+
+        if len(acc_id) >= 1:
+            account_id = 'AC' + str(int(acc_id[-1][2:]) + 1).zfill(4)
+        else:
+            account_id = 'AC0001'
+        data = app_tables.fin_user_profile.search()
+        email = []
+        customer_id = []
+        acc_number = []
+        acc_name = []
+        acc_type = []
+        branch_name = []
+        bank_name = []
+        user_type = []
+        for i in data:
+            email.append(i['email_user'])
+            customer_id.append(i['customer_id'])
+            acc_number.append(i['account_number'])
+            acc_name.append(i['account_name'])
+            acc_type.append(i['account_type'])
+            branch_name.append(i['account_bank_branch'])
+            bank_name.append(i['bank_name'])
+            user_type.append(i['usertype'])
+
+        if customer_id1 in customer_id:
+            index = email.index(email_user)
+            app_tables.fin_wallet.add_row(account_id=account_id, wallet_id=wallet_id,
+                                                 wallet_amount=wallet_amount, customer_id=customer_id1,
+                                                 user_name=name, user_email=email_user,
+                                                 user_type=user_type[index])
+        else:
+            print("customer ID not defined")
 
     def show_validation_error(self, widget, error_text):
         widget.error = True
@@ -402,8 +448,8 @@ class SignupScreen(Screen):
     def is_strong_password(self, password):
         # Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter,
         # one digit, and one special character
-        return len(password) >= 8 and bool(
-            re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+=-])[A-Za-z\d!@#$%^&*()_+=-]+$', password))
+        return len(password) >= 8 and bool(re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+=-])[A-Za-z\d!@#$%^&*()_+=-]+$', password))
+
 
     def on_pre_enter(self):
         Window.bind(on_keyboard=self.on_back_button)

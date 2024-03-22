@@ -1,3 +1,4 @@
+from anvil.tables import app_tables
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.modules import cursor
@@ -94,8 +95,6 @@ class DashScreen(Screen):
         data = anvil.server.call('another_method')
         return data
 
-    def profile(self):
-        return anvil.server.call('profile')
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.on_pre_enter()
@@ -105,7 +104,7 @@ class DashScreen(Screen):
 
     def on_pre_enter(self):
         # Connect to the SQLite database
-        profile = self.profile()
+        profile = app_tables.fin_user_profile.search()
         log_email = self.get_email()
 
         email_user = []
@@ -151,8 +150,32 @@ class DashScreen(Screen):
         # Get the existing ScreenManager
         self.manager.add_widget(Factory.LenderLanding(name='LenderLanding'))
         self.manager.current = 'LenderLanding'
+        '''
+        sm = self.manager
 
+        # Create a new instance of the LoginScreen
+        login_screen = LenderLanding(name='LenderLanding')
+
+        # Add the LoginScreen to the existing ScreenManager
+        sm.add_widget(login_screen)
+
+        # Switch to the LoginScreen
+        sm.current = 'LenderLanding'
+        '''
 
     def go_to_borrower_landing(self):
         self.manager.add_widget(Factory.BorrowerLanding(name='BorrowerLanding'))
         self.manager.current = 'BorrowerLanding'
+        '''
+        # Get the screen manager
+        sm = self.manager
+
+        # Create a new instance of the LoginScreen
+        login_screen = BorrowerLanding(name='BorrowerLanding')
+
+        # Add the LoginScreen to the existing ScreenManager
+        sm.add_widget(login_screen)
+
+        # Switch to the LoginScreen
+        sm.current = 'BorrowerLanding'
+        '''

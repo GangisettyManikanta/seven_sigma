@@ -1,6 +1,5 @@
 import sqlite3
 import threading
-
 from anvil.tables import app_tables
 from kivy.clock import Clock
 from kivy.core.window import Window
@@ -19,11 +18,13 @@ from lender_dashboard import LenderDashboard
 from borrower_dashboard import DashboardScreen
 from kivy.factory import Factory
 import bcrypt
+# anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
+import server
 
 KV = """
 <WindowManager>:
     LoginScreen:
-    
+
 
 
 <LoginScreen>:
@@ -301,25 +302,25 @@ class LoginScreen(Screen):
                     # Schedule the creation of borrower DashboardScreen on the main thread
                     Clock.schedule_once(lambda dt: self.show_dashboard('DashboardScreen'), 0)
                     self.hide_loading_spinner()
-                    return  # Added to exit the method after successful login as borrower
+                    # Added to exit the method after successful login as borrower
                 elif (email_list[i] == entered_email) and (password_value) and (
                         registartion_approve[index] == True) and (user_type[index] == 'lender'):
                     self.share_email_with_anvil(email_list[i])
                     # Schedule the creation of lender DashboardScreen on the main thread
                     Clock.schedule_once(lambda dt: self.show_dashboard('LenderDashboard'), 0)
                     self.hide_loading_spinner()
-                    return  # Added to exit the method after successful login as lender
+                    # Added to exit the method after successful login as lender
                 elif (email_list[i] == entered_email) and (password_value):
                     self.share_email_with_anvil(email_list[i])
                     # Schedule the creation of default DashboardScreen on the main thread
                     Clock.schedule_once(lambda dt: self.show_dashboard('DashScreen'), 0)
                     self.hide_loading_spinner()
-                    return  # Added to exit the method after successful login with no specific user type
+                    # Added to exit the method after successful login with no specific user type
                 else:
                     # Schedule the error dialog on the main thread
                     Clock.schedule_once(lambda dt: self.show_error_dialog("Incorrect email/password"), 0)
                     self.hide_loading_spinner()
-                    return  # Added to exit the method after showing error dialog
+                    # Added to exit the method after showing error dialog
 
         if user_data:
             password_value2 = bcrypt.checkpw(entered_password.encode('utf-8'), user_data[4].encode('utf-8'))
@@ -357,7 +358,7 @@ class LoginScreen(Screen):
 
                 Clock.schedule_once(lambda dt: self.show_error_dialog("Incorrect password"), 0)
                 # Clock.schedule_once(lambda dt: self.hide_loading_spinner(), 0)
-        else:
+        elif entered_email not in email_list and not user_data:
 
             Clock.schedule_once(lambda dt: self.show_error_dialog("Enter valid Email and password"), 0)
             # Clock.schedule_once(lambda dt: self.hide_loading_spinner(), 0)
