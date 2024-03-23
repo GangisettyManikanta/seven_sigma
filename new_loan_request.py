@@ -3,7 +3,7 @@ from anvil import tables
 from anvil.tables import app_tables
 from kivy.animation import Animation
 from kivy.uix.popup import Popup
-
+import server
 from kivy.core.window import Window
 from kivy.factory import Factory
 from kivy.properties import ListProperty, Clock
@@ -81,7 +81,7 @@ user_helpers2 = """
                         bold:True
                         size_hint_y:None
                         height:dp(50)
-                        halign: "center"
+                        halign: "left"
                         font_size:dp(23)
                     MDLabel:
                         id: credit_limit        
@@ -106,7 +106,7 @@ user_helpers2 = """
                         bold: True
                         size_hint_y:None
                         height:dp(50)
-                        halign: "center"
+                        halign: "left"
 
                     Spinner:
                         id: group_id1
@@ -146,7 +146,7 @@ user_helpers2 = """
                         bold: True
                         size_hint_y:None
                         height:dp(50)
-                        halign: "center"
+                        halign: "left"
 
                     Spinner:
                         id: group_id2
@@ -186,7 +186,7 @@ user_helpers2 = """
                         bold: True
                         size_hint_y:None
                         height:dp(50)
-                        halign: "center"
+                        halign: "left"
                     Spinner:
                         id: group_id3
                         text: "Select product name"
@@ -261,16 +261,13 @@ user_helpers2 = """
                     text: " "
 
 
-                MDGridLayout:
-                    cols: 1
-                    spacing: dp(10)
-                    padding: dp(10)
+                MDFloatLayout:
                     MDRaisedButton:
                         text: "Next"
                         md_bg_color: 0.043, 0.145, 0.278, 1
                         on_release: root.go_to_newloan_screen1()
                         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                        size_hint:1, None  
+                        size_hint:0.4, None  
                         font_name:"Roboto-Bold"
 
                 MDLabel:
@@ -1046,10 +1043,20 @@ class NewloanScreen2(Screen):
 
                 # Call the generate_loan_id function to get the loan ID
                 loan_id = self.generate_loan_id()
+                email=anvil.server.call('another_method')
+                customer=app_tables.fin_user_profile.search(email_user=email)
+                customer_id=customer[0]['customer_id']
+                borrower_name=customer[0]['full_name']
+                print(borrower_name)
+                print(customer_id)
+                print(email)
                 product_id = app_tables.fin_product_details.search(product_name=product_name)
                 product_id = product_id[0]['product_id']
                 app_tables.fin_loan_details.add_row(
                     loan_id=str(loan_id),
+                    borrower_full_name=borrower_name,
+                    borrower_email_id=email,
+                    borrower_customer_id=customer_id,
                     product_id=str(product_id),
                     loan_amount=float(loan_amount),
                     tenure=float(loan_tenure),
