@@ -12,7 +12,7 @@ import sqlite3
 
 from kivymd.uix.label import MDLabel
 
-from tables import create_user_table,create_registration_table
+from tables import create_user_table, create_registration_table
 from kivymd.uix.selectioncontrol import MDCheckbox
 from kivymd.uix.snackbar import Snackbar
 from kivymd.uix.dialog import MDDialog
@@ -226,7 +226,7 @@ class SignupScreen(Screen):
         # Ensure 'YOUR_ANVIL_UPLINK_KEY' is replaced with your actual Anvil Uplink key
         app_tables.users.add_row(email=email, password_hash=password, enabled=enable)
         app_tables.fin_user_profile.add_row(customer_id=user_id, email_user=email, full_name=name,
-                                                   mobile=number)
+                                            mobile=number)
 
     def animate_loading_text(self, loading_label, modal_height):
         # Define the animation to move the label vertically
@@ -238,7 +238,6 @@ class SignupScreen(Screen):
         anim.start(loading_label)
         # Store the animation object
         loading_label.animation = anim  # Store the animation object in a custom attribute
-
 
     def go_to_login(self):
         modal_view = ModalView(size_hint=(None, None), size=(200, 150), background_color=[0, 0, 0, 0])
@@ -260,7 +259,6 @@ class SignupScreen(Screen):
         # Perform the actual action (e.g., fetching loan requests)
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.perform_signup_action(modal_view), 2)
-
 
     def perform_signup_action(self, modal_view):
         # Close the modal view after
@@ -371,9 +369,11 @@ class SignupScreen(Screen):
         sm.add_widget(lender_screen)
         sm.transition.direction = 'left'  # Set the transition direction explicitly
         sm.current = 'DashScreen'
+
     def share_email_with_anvil(self, email):
         # Make an API call to Anvil server to share the email
         anvil.server.call('share_email', email)
+
     def wallet_generator(self, email_user, name, customer_id1):
         wallet = app_tables.fin_wallet.search()
         wallet_amount = 0
@@ -414,9 +414,9 @@ class SignupScreen(Screen):
         if customer_id1 in customer_id:
             index = email.index(email_user)
             app_tables.fin_wallet.add_row(account_id=account_id, wallet_id=wallet_id,
-                                                 wallet_amount=wallet_amount, customer_id=customer_id1,
-                                                 user_name=name, user_email=email_user,
-                                                 user_type=user_type[index])
+                                          wallet_amount=wallet_amount, customer_id=customer_id1,
+                                          user_name=name, user_email=email_user,
+                                          user_type=user_type[index])
         else:
             print("customer ID not defined")
 
@@ -448,8 +448,8 @@ class SignupScreen(Screen):
     def is_strong_password(self, password):
         # Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter,
         # one digit, and one special character
-        return len(password) >= 8 and bool(re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+=-])[A-Za-z\d!@#$%^&*()_+=-]+$', password))
-
+        return len(password) >= 8 and bool(
+            re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+=-])[A-Za-z\d!@#$%^&*()_+=-]+$', password))
 
     def on_pre_enter(self):
         Window.bind(on_keyboard=self.on_back_button)

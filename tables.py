@@ -1,5 +1,6 @@
 import sqlite3
 
+
 def create_user_table():
     conn = sqlite3.connect("fin_user_profile.db")
     cursor = conn.cursor()
@@ -19,6 +20,7 @@ def create_user_table():
     ''')
 
     conn.commit()
+
 
 def create_registration_table():
     conn = sqlite3.connect("fin_user_profile.db")
@@ -117,4 +119,3 @@ def create_registration_table():
 
     # Commit the changes and close the connection
     conn.commit()
-

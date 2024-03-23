@@ -1,10 +1,12 @@
 import anvil.server
 
+
 @anvil.server.callable
 def share_email(email):
     # Save the email directly as a global variable
     globals()['email_user'] = email
     return email
+
 
 @anvil.server.callable
 def another_method():

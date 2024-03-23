@@ -29,7 +29,7 @@ from kivy.uix.modalview import ModalView
 from kivymd.uix.spinner import MDSpinner
 from kivy.clock import Clock
 
-#anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
+# anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
 
 from lender_dashboard import LenderDashboard
 
@@ -4962,7 +4962,6 @@ class LenderScreenIndividualForm1(Screen):
     def get_email(self):
         data = anvil.server.call('another_method')
         return data
-
 
     def profile(self):
         return anvil.server.call('profile')

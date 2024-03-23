@@ -20,7 +20,7 @@ from lender_dashboard import LenderDashboard
 from borrower_dashboard import DashboardScreen
 from kivy.factory import Factory
 import bcrypt
-# anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
+
 import server
 
 KV = """

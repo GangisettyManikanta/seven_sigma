@@ -190,6 +190,7 @@ Builder.load_string(lost_opportunities)
 conn = sqlite3.connect('fin_user_profile.db')
 cursor = conn.cursor()
 
+
 class LostOpportunitiesScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -248,7 +249,7 @@ class LostOpportunitiesScreen(Screen):
             item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container1.add_widget(item)
 
-    def icon_button_clicked(self, instance,loan_id):
+    def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
         data = app_tables.fin_loan_details.search()
         sm = self.manager
@@ -301,7 +302,7 @@ class LostOpportunitiesProfileScreen(Screen):
         loan_amount = []
         interest_rate = []
         tenure = []
-        date_of_apply=[]
+        date_of_apply = []
         name = []
         status = []
         for i in data:

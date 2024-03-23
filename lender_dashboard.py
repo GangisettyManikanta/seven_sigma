@@ -1673,10 +1673,11 @@ class LenderDashboard(Screen):
         self.manager.add_widget(Factory.LenderWalletScreen(name='LenderWalletScreen'))
         self.manager.current = 'LenderWalletScreen'
         # Get the existing ScreenManager
+
     def help_module(self):
-        from help_module import HelpScreen
-        self.manager.add_widget(Factory.HelpScreen(name='HelpScreen'))
-        self.manager.current = 'HelpScreen'
+        from lender_help_module import LenderHelpScreen
+        self.manager.add_widget(Factory.LenderHelpScreen(name='LenderHelpScreen'))
+        self.manager.current = 'LenderHelpScreen'
 
 
 class ViewProfileScreen(Screen):

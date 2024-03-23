@@ -725,7 +725,6 @@ class NewloanScreen1(Screen):
     credit_limit = ""
     product_description = ""
 
-
     def on_pre_enter(self):
         Window.bind(on_keyboard=self.on_back_button)
         self.root_screen = self.manager.get_screen('NewloanScreen')
@@ -885,7 +884,6 @@ class NewloanScreen1(Screen):
         self.product_description = self.root_screen.ids.product_description.text
         self.credit_limit = self.root_screen.ids.credit_limit.text
 
-
         # Create a new instance of the LoginScreen
         self.manager.add_widget(Factory.NewloanScreen2(name='NewloanScreen2'))
         self.manager.current = 'NewloanScreen2'
@@ -905,7 +903,6 @@ class NewloanScreen2(Screen):
     interest_rate = ""
     Processing_fee = ""
 
-
     def on_pre_enter(self):
         Window.bind(on_keyboard=self.on_back_button)
         self.root_screen = self.manager.get_screen('NewloanScreen1')
@@ -921,7 +918,6 @@ class NewloanScreen2(Screen):
             product_categories = self.root_screen.product_categories
             product_description = self.root_screen.product_description
             credit_limit = self.root_screen.credit_limit
-
 
             p = loan_amount
             t = self.loan_tenure
@@ -950,12 +946,11 @@ class NewloanScreen2(Screen):
             print("Calculated emi:", emi)  # Debug print
             self.ids.monthly_emi.text = "₹" + " " + str(round(emi, 2))
             interest_amount = Monthly_EMI * t - p
-            self.ids.total_interest_amount.text = "₹" + " " +  str(round(interest_amount, 2))
+            self.ids.total_interest_amount.text = "₹" + " " + str(round(interest_amount, 2))
             processing_fee_amount = (processing_fee / 100) * p
-            self.ids.total_processing_fee_amount.text = "₹" + " " + str(round(processing_fee_amount , 2))
+            self.ids.total_processing_fee_amount.text = "₹" + " " + str(round(processing_fee_amount, 2))
             total_repayment_amount = Monthly_EMI * t + interest_amount + processing_fee_amount
-            self.ids.total.text = "₹" + " " + str(round(total_repayment_amount , 2))
-
+            self.ids.total.text = "₹" + " " + str(round(total_repayment_amount, 2))
 
     def on_pre_leave(self):
         Window.unbind(on_keyboard=self.on_back_button)
@@ -1043,10 +1038,10 @@ class NewloanScreen2(Screen):
 
                 # Call the generate_loan_id function to get the loan ID
                 loan_id = self.generate_loan_id()
-                email=anvil.server.call('another_method')
-                customer=app_tables.fin_user_profile.search(email_user=email)
-                customer_id=customer[0]['customer_id']
-                borrower_name=customer[0]['full_name']
+                email = anvil.server.call('another_method')
+                customer = app_tables.fin_user_profile.search(email_user=email)
+                customer_id = customer[0]['customer_id']
+                borrower_name = customer[0]['full_name']
                 print(borrower_name)
                 print(customer_id)
                 print(email)
@@ -1080,6 +1075,7 @@ class NewloanScreen2(Screen):
         else:
             # Handle the case where some fields are empty
             self.show_popup("Please fill in all fields before submitting.")
+
     def show_success_dialog(self, text):
         dialog = MDDialog(
             text=text,

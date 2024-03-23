@@ -1,4 +1,3 @@
-
 import anvil.server
 from anvil.tables import app_tables
 from kivy.clock import Clock
@@ -13,8 +12,6 @@ from kivy.uix.screenmanager import Screen, SlideTransition
 from kivymd.uix.list import *
 from kivy.animation import Animation
 from kivymd.uix.label import MDLabel
-
-
 
 view_loans = '''
 <WindowManager>:
@@ -991,10 +988,10 @@ class OpenViewLoanScreen(Screen):
                 tertiary_text_color=(0, 0, 0, 1),
                 tertiary_theme_text_color='Custom'
             )
-            item.bind(on_release=lambda instance, loan_id = loan_id[i]: self.icon_button_clicked(instance, loan_id))
+            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container1.add_widget(item)
 
-    def icon_button_clicked(self, instance,loan_id):
+    def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
 
         data = app_tables.fin_loan_details.search()
@@ -1234,7 +1231,7 @@ class ViewApprovedLoansScreen(Screen):
             item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container3.add_widget(item)
 
-    def icon_button_clicked(self, instance,loan_id):
+    def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
         data = app_tables.fin_loan_details.search()
         sm = self.manager
@@ -1273,6 +1270,7 @@ class ViewApprovedLoansScreen(Screen):
         self.ids.container3.clear_widgets()
         self.__init__()
 
+
 class ViewRejectedLoansScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -1282,7 +1280,7 @@ class ViewRejectedLoansScreen(Screen):
         loan_id = []
         borrower_name = []
         loan_status = []
-        product_name=[]
+        product_name = []
         s = 0
         for i in data:
             s += 1
@@ -1329,7 +1327,7 @@ class ViewRejectedLoansScreen(Screen):
             item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container4.add_widget(item)
 
-    def icon_button_clicked(self, instance,loan_id):
+    def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
         data = app_tables.fin_loan_details.search()
         sm = self.manager
@@ -1427,7 +1425,7 @@ class ViewUnderProcessLoansScreen(Screen):
             item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container5.add_widget(item)
 
-    def icon_button_clicked(self, instance,loan_id):
+    def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
 
         data = app_tables.fin_loan_details.search()
@@ -1525,7 +1523,8 @@ class ViewClosedLoansScreen(Screen):
             )
             item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container6.add_widget(item)
-    def icon_button_clicked(self, instance,loan_id):
+
+    def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
         data = self.get_table_data()
         sm = self.manager
@@ -1563,6 +1562,7 @@ class ViewClosedLoansScreen(Screen):
     def refresh(self):
         self.ids.container6.clear_widgets()
         self.__init__()
+
 
 class MyScreenManager(ScreenManager):
     pass

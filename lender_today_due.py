@@ -10,8 +10,6 @@ from kivymd.uix.list import ThreeLineAvatarIconListItem, IconLeftWidget
 import anvil.server
 import anvil.server
 
-
-
 lender_today_due = '''
 
 <WindowManager>:
@@ -243,7 +241,6 @@ class TodayDuesTD(Screen):
         # Switch to the LoginScreen
         sm.current = 'ViewProfileTD'
         self.manager.get_screen('ViewProfileTD').initialize_with_value(value, data, data1, data2)
-
 
     '''
     def get_table_data(self):

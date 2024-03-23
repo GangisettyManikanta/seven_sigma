@@ -18,7 +18,7 @@ if platform == 'android':
 
 import anvil.server
 
-#anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
+# anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
 
 loan_forecloseB = '''
 <WindowManager>:
@@ -539,17 +539,19 @@ class LoansDetailsB(Screen):
         else:
             # Handle other loan statuses or show an error message
             pass
+
     def get_table_data(self):
         # Make a call to the Anvil server function
         # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
         return anvil.server.call('get_table_data')
+
     def go_back(self):
         self.manager.current = 'DashboardScreen'
 
 
 class ViewProfileScreenFB(Screen):
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)    #on_release: root.foreclose_details(loan.text)
+        super().__init__(**kwargs)  # on_release: root.foreclose_details(loan.text)
 
     def initialize_with_value(self, value, data):
         loan_id = []
@@ -606,8 +608,10 @@ class ViewProfileScreenFB(Screen):
             self.go_back()
             return True
         return False
+
     def on_back_button_press(self):
         self.manager.current = 'LoansDetailsB'
+
     def on_keyboard(self, window, key, *args):
         if key == 27:  # Key code for the 'Escape' key
             # Keyboard is closed, move the screen down
@@ -682,5 +686,3 @@ class ForecloseDetails(Screen):
 
 class MyScreenManager(ScreenManager):
     pass
-
-

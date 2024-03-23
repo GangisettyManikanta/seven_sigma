@@ -805,7 +805,7 @@ class OpenLoanVLB(Screen):
         borrower_name = []
         loan_status = []
         product_name = []
-        email1=[]
+        email1 = []
         s = 0
         for i in data:
             s += 1
@@ -831,7 +831,8 @@ class OpenLoanVLB(Screen):
             index_list = []
             for i in range(s):
                 c += 1
-                if loan_status[c] == 'disbursed' and customer_id[c] == cos_id or loan_status[c] == 'foreclosure' and customer_id[c] == cos_id or loan_status[c] == 'extension' and customer_id[c] == cos_id:
+                if loan_status[c] == 'disbursed' and customer_id[c] == cos_id or loan_status[c] == 'foreclosure' and \
+                        customer_id[c] == cos_id or loan_status[c] == 'extension' and customer_id[c] == cos_id:
                     index_list.append(c)
 
             b = 1
@@ -858,7 +859,7 @@ class OpenLoanVLB(Screen):
                     tertiary_text_color=(0, 0, 0, 1),
                     tertiary_theme_text_color='Custom'
                 )
-                item.bind(on_release=lambda instance, loan_id = loan_id[i]: self.icon_button_clicked(instance, loan_id))
+                item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
                 self.ids.container.add_widget(item)
 
     def icon_button_clicked(self, instance, loan_id):
@@ -930,7 +931,7 @@ class UnderProcessLoanVLB(Screen):
         borrower_name = []
         loan_status = []
         product_name = []
-        email1=[]
+        email1 = []
         s = 0
         for i in data:
             s += 1
@@ -955,8 +956,7 @@ class UnderProcessLoanVLB(Screen):
             index_list = []
             for i in range(s):
                 c += 1
-                if loan_status[c] == 'under process'and customer_id[c] == cos_id:
-
+                if loan_status[c] == 'under process' and customer_id[c] == cos_id:
                     index_list.append(c)
 
             b = 1
@@ -1051,7 +1051,7 @@ class RejectedLoanVLB(Screen):
         borrower_name = []
         loan_status = []
         product_name = []
-        email1=[]
+        email1 = []
         s = 0
         for i in data:
             s += 1
@@ -1076,8 +1076,7 @@ class RejectedLoanVLB(Screen):
             index_list = []
             for i in range(s):
                 c += 1
-                if loan_status[c] == 'rejected'and customer_id[c] == cos_id:
-
+                if loan_status[c] == 'rejected' and customer_id[c] == cos_id:
                     index_list.append(c)
 
             b = 1
@@ -1172,7 +1171,7 @@ class ClosedLoanVLB(Screen):
         borrower_name = []
         loan_status = []
         product_name = []
-        email1=[]
+        email1 = []
         s = 0
         for i in data:
             s += 1
@@ -1197,8 +1196,7 @@ class ClosedLoanVLB(Screen):
             index_list = []
             for i in range(s):
                 c += 1
-                if loan_status[c] == 'closed'and customer_id[c] == cos_id:
-
+                if loan_status[c] == 'closed' and customer_id[c] == cos_id:
                     index_list.append(c)
 
             b = 1
@@ -1348,7 +1346,6 @@ class ForeCloseLoanVLB(Screen):
                 item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance,
                                                                                                    loan_id))  # Corrected the binding
                 self.ids.container4.add_widget(item)
-
 
     def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here

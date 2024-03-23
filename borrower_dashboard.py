@@ -2492,7 +2492,6 @@ user_helpers = """
 """
 
 
-
 class DashboardScreen(Screen):
     Builder.load_string(user_helpers)
 
@@ -2808,6 +2807,7 @@ class DashboardScreen(Screen):
 
         # Switch to the LoginScreen
         sm.current = 'BorrowerDuesScreen'
+
     def help_module(self):
         from help_module import HelpScreen
         self.manager.add_widget(Factory.HelpScreen(name='HelpScreen'))

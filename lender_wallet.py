@@ -7,7 +7,6 @@ from kivy.uix.screenmanager import Screen, SlideTransition, ScreenManager
 from kivymd.uix.snackbar import Snackbar
 import anvil
 
-
 Builder.load_string(
     """
 <WindowManager>:
@@ -193,11 +192,12 @@ class LenderWalletScreen(Screen):
             self.ids.total_amount.text = str(w_amount[index])
         else:
             print("no email found")
+
     def highlight_button(self, button_type):
         if button_type == 'deposit':
             self.ids.deposit_button_grid.md_bg_color = 0.043, 0.145, 0.278, 1
             self.ids.withdraw_button_grid.md_bg_color = 253 / 255, 254 / 255, 254 / 255, 1
-            self.ids.deposit_button_grid.text_color= 1, 1, 1, 1
+            self.ids.deposit_button_grid.text_color = 1, 1, 1, 1
             self.ids.withdraw_button_grid.text_color = 0, 0, 0, 1
             self.type = 'deposit'
         elif button_type == 'withdraw':
@@ -210,8 +210,10 @@ class LenderWalletScreen(Screen):
     def go_back(self):
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'LenderDashboard'
+
     def show_snackbar(self, text):
         Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
+
     def submit(self):
         if self.type == 'deposit':
             data = app_tables.fin_wallet.search()
@@ -247,7 +249,8 @@ class LenderWalletScreen(Screen):
                 index = w_email.index(email)
                 if w_amount[index] > int(self.ids.enter_amount.text):
                     data[index]['wallet_amount'] = w_amount[index] - int(self.ids.enter_amount.text)
-                    self.show_snackbar(f'Amount {self.ids.enter_amount.text} Withdraw from this wallet ID {w_id[index]}')
+                    self.show_snackbar(
+                        f'Amount {self.ids.enter_amount.text} Withdraw from this wallet ID {w_id[index]}')
                     self.ids.enter_amount.text = ''
                 else:
                     self.show_snackbar(
@@ -256,12 +259,11 @@ class LenderWalletScreen(Screen):
             else:
                 print("no email found")
 
-
     def refresh(self):
         self.__init__()
+
     def email(self):
         return anvil.server.call('another_method')
-
 
 
 class MyScreenManager(ScreenManager):

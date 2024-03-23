@@ -12,6 +12,7 @@ from kivy.factory import Factory
 from borrowerlanding import BorrowerLanding
 from lender_landing import LenderLanding
 import anvil
+
 KV = """
 
 
@@ -89,7 +90,6 @@ KV = """
 
 class DashScreen(Screen):
     Builder.load_string(KV)
-
 
     def get_email(self):
         data = anvil.server.call('another_method')

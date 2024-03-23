@@ -18,7 +18,6 @@ from datetime import datetime
 
 from kivymd.uix.spinner import MDSpinner
 
-
 user_helpers2 = """
 <WindowManager>:
     BorrowerDuesScreen:
@@ -405,11 +404,15 @@ user_helpers2 = """
                 font_size:dp(15)
 """
 Builder.load_string(user_helpers2)
+
+
 class BorrowerDuesScreen(Screen):
     def on_pre_enter(self, *args):
         Window.bind(on_keyboard=self.on_back_button)
+
     def on_pre_leave(self):
         Window.unbind(on_keyboard=self.on_back_button)
+
     def on_back_button(self, instance, key, scancode, codepoint, modifier):
         if key == 27:
             self.go_back()
@@ -422,7 +425,6 @@ class BorrowerDuesScreen(Screen):
 
     def current(self):
         self.manager.current = 'DashboardScreen'
-
 
 
 class MyScreenManager(ScreenManager):

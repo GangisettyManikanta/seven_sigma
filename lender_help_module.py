@@ -24,7 +24,7 @@ if platform == 'android':
 Builder.load_string(
     """
 <WindowManager>:
-    HelpScreen:
+    LenderHelpScreen:
     FirstScreen:
     SecondScreen:
     ThirdScreen:
@@ -40,8 +40,8 @@ Builder.load_string(
     ThirteenScreen:
     FourteenScreen:
 
-<HelpScreen>:
-    name: 'HelpScreen'
+<LenderHelpScreen>:
+    name: 'LenderHelpScreen'
     BoxLayout:
         orientation: "vertical"
         MDTopAppBar:
@@ -2144,14 +2144,15 @@ Builder.load_string(
 )
 
 
-class HelpScreen(Screen):
+class LenderHelpScreen(Screen):
     def go_back(self):
-        from borrower_dashboard import DashboardScreen
+        from lender_dashboard import LenderDashboard
         sm = self.manager
-        borrower_screen = DashboardScreen(name='DashboardScreen')
+        borrower_screen = LenderDashboard(name='LenderDashboard')
         sm.add_widget(borrower_screen)
         sm.transition.direction = 'left'  # Set the transition direction explicitly
-        sm.current = 'DashboardScreen'
+        sm.current = 'LenderDashboard'
+        print(borrower_screen)
 
     def first_screen(self):
         sm = self.manager
@@ -2254,7 +2255,7 @@ class HelpScreen(Screen):
 
 class FirstScreen(Screen):
     def go_back(self):
-        self.manager.current = 'HelpScreen'
+        self.manager.current = 'LenderHelpScreen'
 
 
 class Permission:
@@ -2271,7 +2272,7 @@ def request_permissions(param, permission_callback):
 
 class SecondScreen(Screen):
     def go_back(self):
-        self.manager.current = 'HelpScreen'
+        self.manager.current = 'LenderHelpScreen'
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
@@ -2341,7 +2342,7 @@ class SecondScreen(Screen):
             issue_occured=issue_occured,
             issue_description=issue_description
         )
-        self.manager.current = 'HelpScreen'
+        self.manager.current = 'LenderHelpScreen'
 
     def on_pre_enter(self):
         Window.bind(on_keyboard=self.on_back_button)
@@ -2362,62 +2363,62 @@ class SecondScreen(Screen):
 
 class ThirdScreen(Screen):
     def go_back(self):
-        self.manager.current = 'HelpScreen'
+        self.manager.current = 'LenderHelpScreen'
 
 
 class FourthScreen(Screen):
     def go_back(self):
-        self.manager.current = 'HelpScreen'
+        self.manager.current = 'LenderHelpScreen'
 
 
 class FifthScreen(Screen):
     def go_back(self):
-        self.manager.current = 'HelpScreen'
+        self.manager.current = 'LenderHelpScreen'
 
 
 class SixthScreen(Screen):
     def go_back(self):
-        self.manager.current = 'HelpScreen'
+        self.manager.current = 'LenderHelpScreen'
 
 
 class SeventhScreen(Screen):
     def go_back(self):
-        self.manager.current = 'HelpScreen'
+        self.manager.current = 'LenderHelpScreen'
 
 
 class EighthScreen(Screen):
     def go_back(self):
-        self.manager.current = 'HelpScreen'
+        self.manager.current = 'LenderHelpScreen'
 
 
 class NinthScreen(Screen):
     def go_back(self):
-        self.manager.current = 'HelpScreen'
+        self.manager.current = 'LenderHelpScreen'
 
 
 class TenthScreen(Screen):
     def go_back(self):
-        self.manager.current = 'HelpScreen'
+        self.manager.current = 'LenderHelpScreen'
 
 
 class EleventhScreen(Screen):
     def go_back(self):
-        self.manager.current = 'HelpScreen'
+        self.manager.current = 'LenderHelpScreen'
 
 
 class TwelveScreen(Screen):
     def go_back(self):
-        self.manager.current = 'HelpScreen'
+        self.manager.current = 'LenderHelpScreen'
 
 
 class ThirteenScreen(Screen):
     def go_back(self):
-        self.manager.current = 'HelpScreen'
+        self.manager.current = 'LenderHelpScreen'
 
 
 class FourteenScreen(Screen):
     def go_back(self):
-        self.manager.current = 'HelpScreen'
+        self.manager.current = 'LenderHelpScreen'
 
 
 class MyScreenManager(ScreenManager):

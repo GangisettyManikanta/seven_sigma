@@ -7,6 +7,7 @@ from kivy.uix.popup import Popup
 from kivymd.uix.list import *
 from kivy.lang import Builder
 from kivy.core.window import Window
+import server
 import anvil.users
 from anvil.tables import app_tables
 from kivy.uix.screenmanager import Screen, SlideTransition, ScreenManager
@@ -449,6 +450,8 @@ class ExtensionLoansRequest(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         data = app_tables.fin_loan_details.search()
+        email = anvil.server.call('another_method')
+        profile = app_tables.fin_user_profile.search(email_user=email)
         profile = app_tables.fin_user_profile.search()
         customer_id = []
         loan_id = []
@@ -457,6 +460,7 @@ class ExtensionLoansRequest(Screen):
         loan_status = []
         tenure = []
         product_name = []
+        email1 = []
         s = 0
         for i in data:
             s += 1
@@ -467,43 +471,48 @@ class ExtensionLoansRequest(Screen):
             loan_status.append(i['loan_updated_status'])
             tenure.append(i['tenure'])
             product_name.append(i['product_name'])
-
+            email1.append(i['borrower_email_id'])
         profile_customer_id = []
         profile_mobile_number = []
         for i in profile:
             profile_customer_id.append(i['customer_id'])
             profile_mobile_number.append(i['mobile'])
-        c = -1
-        index_list = []
-        for i in range(s):
-            c += 1
-            if loan_status[c] == 'disbursed':
-                index_list.append(c)
+        cos_id = None
+        if email in email1:
+            index = email1.index(email)
+            cos_id = customer_id[index]
+        if cos_id is not None:
+            c = -1
+            index_list = []
+            for i in range(s):
+                c += 1
+                if loan_status[c] == 'disbursed' and customer_id[c] == cos_id:
+                    index_list.append(c)
 
-        b = 1
-        k = -1
-        for i in index_list:
-            b += 1
-            k += 1
-            number = profile_customer_id.index(customer_id[i])
-            item = ThreeLineAvatarIconListItem(
+            b = 1
+            k = -1
+            for i in index_list:
+                b += 1
+                k += 1
+                number = profile_customer_id.index(customer_id[i])
+                item = ThreeLineAvatarIconListItem(
 
-                IconLeftWidget(
-                    icon="card-account-details-outline"
-                ),
-                text=f"Borrower Name : {borrower_name[i]}",
-                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
-                tertiary_text=f"Product Name : {product_name[i]}",
-                text_color=(0, 0, 0, 1),  # Black color
-                theme_text_color='Custom',
-                secondary_text_color=(0, 0, 0, 1),
-                secondary_theme_text_color='Custom',
-                tertiary_text_color=(0, 0, 0, 1),
-                tertiary_theme_text_color='Custom'
-            )
-            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance,
-                                                                                               loan_id))  # Corrected the binding
-            self.ids.container1.add_widget(item)
+                    IconLeftWidget(
+                        icon="card-account-details-outline"
+                    ),
+                    text=f"Borrower Name : {borrower_name[i]}",
+                    secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                    tertiary_text=f"Product Name : {product_name[i]}",
+                    text_color=(0, 0, 0, 1),  # Black color
+                    theme_text_color='Custom',
+                    secondary_text_color=(0, 0, 0, 1),
+                    secondary_theme_text_color='Custom',
+                    tertiary_text_color=(0, 0, 0, 1),
+                    tertiary_theme_text_color='Custom'
+                )
+                item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance,
+                                                                                                   loan_id))  # Corrected the binding
+                self.ids.container1.add_widget(item)
 
     def on_back_button_press(self):
         self.manager.current = 'DashboardScreen'

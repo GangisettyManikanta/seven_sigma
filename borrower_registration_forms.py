@@ -40,7 +40,7 @@ if platform == 'android':
     )
 import anvil.server
 
-#anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
+# anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
 Borrower = '''
 <WindowManager>:
     BorrowerScreen:

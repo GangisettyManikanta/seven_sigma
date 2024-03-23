@@ -19,7 +19,6 @@ from anvil.tables import app_tables
 from kivy.uix.modalview import ModalView
 from kivy.clock import Clock
 
-
 if platform == 'android':
     from kivy.uix.button import Button
 
@@ -635,7 +634,6 @@ class NewExtension(Screen):
             return True
         return False
 
-
     def go_back(self):
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'borrower_dashboard'
@@ -653,7 +651,6 @@ class NewExtension(Screen):
         anim.start(loading_label)
         # Store the animation object
         loading_label.animation = anim  # Store the animation object in a custom attribute
-
 
     def go_to_approved_loans(self):
         modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
@@ -675,7 +672,6 @@ class NewExtension(Screen):
         # Perform the actual action (e.g., fetching loan requests)
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.performance_go_to_approved_loans(modal_view), 2)
-
 
     def performance_go_to_approved_loans(self, modal_view):
         # Cancel the animation
@@ -707,7 +703,6 @@ class NewExtension(Screen):
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.performance_go_to_under_process_loans(modal_view), 2)
 
-
     def performance_go_to_under_process_loans(self, modal_view):
         # Cancel the animation
         modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
@@ -716,8 +711,6 @@ class NewExtension(Screen):
         # Get the existing ScreenManager
         self.manager.add_widget(Factory.UnderProcessLoansEX(name='UnderProcessLoansEX'))
         self.manager.current = 'UnderProcessLoansEX'
-
-
 
     def go_to_rejected_loans(self):
         modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
@@ -739,7 +732,6 @@ class NewExtension(Screen):
         # Perform the actual action (e.g., fetching loan requests)
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.performance_go_to_rejected_loans(modal_view), 2)
-
 
     def performance_go_to_rejected_loans(self, modal_view):
         # Cancel the animation
@@ -770,7 +762,6 @@ class NewExtension(Screen):
         # Perform the actual action (e.g., fetching loan requests)
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.performance_all_loan_screen(modal_view), 2)
-
 
     def performance_all_loan_screen(self, modal_view):
         # Cancel the animation

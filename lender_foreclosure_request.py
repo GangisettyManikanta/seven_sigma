@@ -1,13 +1,16 @@
 import anvil
 from anvil.tables import app_tables
+from kivy.animation import Animation
 from kivy.core.window import Window
 from kivy.uix.filechooser import platform
 from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.clock import Clock
+from kivy.uix.modalview import ModalView
 import anvil.server
 from kivy.lang import Builder
-import anvil.server
 from kivy.uix.screenmanager import Screen, SlideTransition
 from kivymd.app import MDApp
+from kivymd.uix.label import MDLabel
 from kivymd.uix.list import ThreeLineAvatarIconListItem, IconLeftWidget
 
 if platform == 'android':
@@ -17,8 +20,6 @@ if platform == 'android':
     from android import api_version, mActivity
     from android.permissions import (
         request_permissions, check_permission, Permission)
-
-
 
 lender_foreclouser = '''
 
@@ -963,7 +964,37 @@ class DashboardScreenLF(Screen):
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'LenderDashboard'
 
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=5)
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label,
+                                                                      modal_height))  # Bind to the completion event to repeat the animation
+        anim.start(loading_label)
+
     def go_to_open_loans(self):
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
+        modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
+        Clock.schedule_once(lambda dt: self.performance_go_to_open_loans(modal_view), 2)
+
+    def performance_go_to_open_loans(self, modal_view):
+        modal_view.dismiss()
         sm = self.manager
 
         # Create a new instance of the LoginScreen
@@ -976,6 +1007,27 @@ class DashboardScreenLF(Screen):
         sm.current = 'ApprovedLoansLF'
 
     def go_to_under_loans(self):
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
+        modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
+        Clock.schedule_once(lambda dt: self.performance_go_to_open_loans(modal_view), 2)
+
+    def performance_go_to_under_loans(self, modal_view):
         sm = self.manager
 
         # Create a new instance of the LoginScreen
@@ -988,6 +1040,27 @@ class DashboardScreenLF(Screen):
         sm.current = 'UnderProcessLoansLF'
 
     def go_to_app_tracker(self):
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
+        modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
+        Clock.schedule_once(lambda dt: self.performance_go_to_open_loans(modal_view), 2)
+
+    def performance_go_to_app_tracker(self, modal_view):
         sm = self.manager
 
         # Create a new instance of the LoginScreen
@@ -1000,6 +1073,27 @@ class DashboardScreenLF(Screen):
         sm.current = 'ClosedLoansLF'
 
     def go_to_reject_loans(self):
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
+        modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
+        Clock.schedule_once(lambda dt: self.performance_go_to_open_loans(modal_view), 2)
+
+    def performance_go_to_reject_loans(self, modal_view):
         sm = self.manager
 
         # Create a new instance of the LoginScreen
@@ -1012,6 +1106,27 @@ class DashboardScreenLF(Screen):
         sm.current = 'RejectedLoansLF'
 
     def all_loanscreen(self):
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
+        modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
+        Clock.schedule_once(lambda dt: self.performance_go_to_open_loans(modal_view), 2)
+
+    def performance_all_loanscreen(self, modal_view):
         sm = self.manager
 
         # Create a new instance of the LoginScreen
@@ -1082,7 +1197,8 @@ class ApprovedLoansLF(Screen):
             item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance,
                                                                                                loan_id))  # Corrected the binding
             self.ids.container1.add_widget(item)
-    def icon_button_clicked(self, instance,loan_id):
+
+    def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
         data = app_tables.fin_foreclosure.search()
         sm = self.manager
@@ -1119,7 +1235,6 @@ class ApprovedLoansLF(Screen):
     def refresh(self):
         self.ids.container1.clear_widgets()
         self.__init__()
-
 
     def on_back_button_press(self):
         self.manager.current = 'DashboardScreenLF'
@@ -1184,7 +1299,7 @@ class ClosedLoansLF(Screen):
                                                                                                loan_id))  # Corrected the binding
             self.ids.container3.add_widget(item)
 
-    def icon_button_clicked(self, instance,loan_id):
+    def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
         data = app_tables.fin_foreclosure.search()
         sm = self.manager
@@ -1282,7 +1397,8 @@ class RejectedLoansLF(Screen):
             item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance,
                                                                                                loan_id))  # Corrected the binding
             self.ids.container4.add_widget(item)
-    def icon_button_clicked(self, instance,loan_id):
+
+    def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
         data = app_tables.fin_foreclosure.search()
         sm = self.manager
@@ -1384,7 +1500,7 @@ class UnderProcessLoansLF(Screen):
                                                                                                loan_id))  # Corrected the binding
             self.ids.container2.add_widget(item)
 
-    def icon_button_clicked(self, instance,loan_id):
+    def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
         data = app_tables.fin_foreclosure.search()
         sm = self.manager
@@ -1485,7 +1601,7 @@ class ViewAllLoansLF(Screen):
                                                                                                loan_id))  # Corrected the binding
             self.ids.container5.add_widget(item)
 
-    def icon_button_clicked(self, instance,loan_id):
+    def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
 
         data = app_tables.fin_foreclosure.search()

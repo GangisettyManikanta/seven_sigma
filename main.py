@@ -8,10 +8,12 @@ from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, SlideTransition
 from homepage import MainScreen
 import anvil.server
+
 anvil.server.connect("server_DDFFDPCYFLU7YEUB7AKS3ES2-3PQ3UW72AZJGD2JJ")
 import anvil.server
 
-#anvil.server.connect("server_SWSIWWCDQSKHY4EBV5H4Q6JC-T3A6LAGG7GF47HXE")
+
+# anvil.server.connect("server_SWSIWWCDQSKHY4EBV5H4Q6JC-T3A6LAGG7GF47HXE")
 
 class MyApp(MDApp):
     def build(self):
@@ -97,6 +99,7 @@ class MyApp(MDApp):
         # Update the Spinner with unique product names
         spinner = self.root.get_screen('NewloanScreen').ids.group_id3
         spinner.values = list(unique_names)
+
     def fetch_emi_type(self):
         # Get the selected product category
         selected_category = self.root.get_screen('NewloanScreen').ids.group_id3.text
@@ -135,6 +138,7 @@ class MyApp(MDApp):
 
     def clear_label(self, label_id):
         self.root.get_screen('NewloanScreen').ids[label_id].text = ""
+
     def on_start(self):
         Window.softinput_mode = "below_target"
 
