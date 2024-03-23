@@ -17,7 +17,7 @@ from kivy.uix.spinner import Spinner
 from datetime import datetime
 
 from kivymd.uix.spinner import MDSpinner
-anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
+
 
 user_helpers2 = """
 <WindowManager>:

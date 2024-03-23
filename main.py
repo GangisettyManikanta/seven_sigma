@@ -1,3 +1,5 @@
+import os
+
 from anvil.tables import app_tables
 from kivy.app import App
 from kivy.core.window import Window
@@ -6,21 +8,33 @@ from kivy.metrics import dp
 from kivy.uix.spinner import SpinnerOption
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, SlideTransition
+import anvil.server
 from homepage import MainScreen
-import anvil.server
-#anvil.server.connect("server_DDFFDPCYFLU7YEUB7AKS3ES2-3PQ3UW72AZJGD2JJ")
-import anvil.server
-
-anvil.server.connect("server_SWSIWWCDQSKHY4EBV5H4Q6JC-T3A6LAGG7GF47HXE")
-
+from borrower_dashboard import DashboardScreen
+from lender_dashboard import LenderDashboard
+anvil.server.connect("server_PB72N67CPKFT7OZAZOOXOJEE-4YOBZHMRNHA2HC4Q")
+import configparser
+# Initialize configuration
+config = configparser.ConfigParser()
 class MyApp(MDApp):
     def build(self):
         sm = ScreenManager(transition=SlideTransition())
-        main_screen = MainScreen(name='MainScreen')
+
+        # Check user configuration
+        if self.check_user_config():
+            user_type = config.get('USER', 'user_type')
+            if user_type == 'borrower':
+                dashboard_screen = DashboardScreen(name='DashboardScreen')
+            elif user_type == 'lender':
+                dashboard_screen = LenderDashboard(name='LenderDashboard')
+            sm.add_widget(dashboard_screen)
+        else:
+            main_screen = MainScreen(name='MainScreen')
+            sm.add_widget(main_screen)
+
         SpinnerOption.font_size = dp(10.5)
         SpinnerOption.background_color = [0.2, 0.4, 0.6, 1]
         SpinnerOption.font_name = "Roboto-Bold"
-        sm.add_widget(main_screen)
 
         return sm
 
@@ -138,6 +152,20 @@ class MyApp(MDApp):
     def on_start(self):
         Window.softinput_mode = "below_target"
 
+    def check_user_config(self):
+        # Check if config file exists
+        if not os.path.exists('config.ini'):
+            return False
+
+        # Read config file
+        config.read('config.ini')
+
+        # Check if 'USER' section exists and required fields are present
+        if 'USER' in config and 'email' in config['USER'] and 'user_type' in config['USER'] and 'logged_in' in config[
+            'USER']:
+            return config.getboolean('USER', 'logged_in')
+
+        return False
 
 class MyScreenManager(ScreenManager):
     pass
