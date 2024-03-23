@@ -1,3 +1,5 @@
+import configparser
+import os
 import sqlite3
 import threading
 from anvil.tables import app_tables
@@ -180,6 +182,40 @@ Builder.load_string(KV)
 
 
 class LoginScreen(Screen):
+    def __init__(self, **kwargs):
+        super(LoginScreen, self).__init__(**kwargs)
+
+        # Check if config.ini file exists
+        if not os.path.exists('config.ini'):
+            # Create default config.ini file
+            self.create_default_config()
+
+        self.config = configparser.ConfigParser()
+        self.config.read('config.ini')
+
+        # Delaying the addition of widgets to the manager
+        Clock.schedule_once(self.delayed_init, 0.1)
+
+    def create_default_config(self):
+        # Create a default config.ini file with default values
+        self.config = configparser.ConfigParser()
+        self.config['USER'] = {
+            'logged_in': 'false',
+            'user_type': ''
+        }
+        with open('config.ini', 'w') as config_file:
+            self.config.write(config_file)
+
+    def delayed_init(self, dt):
+        if self.config['USER']['logged_in'].lower() == 'true':
+            # Directly go to the respective dashboard
+            user_type = self.config['USER']['user_type']
+            if user_type == 'borrower':
+                self.manager.add_widget(Factory.DashboardScreen(name='DashboardScreen'))
+                self.manager.current = 'DashboardScreen'
+            elif user_type == 'lender':
+                self.manager.add_widget(LenderDashboard(name='LenderDashboard'))
+                self.manager.current = 'LenderDashboard'
 
     def on_checkbox_active(self, checkbox, value):
         # Handle checkbox state change
@@ -295,6 +331,13 @@ class LoginScreen(Screen):
                     index = email_user.index(entered_email)
                 else:
                     print('no email found')
+                # Update config file with user data
+                self.config['USER']['email'] = entered_email
+                self.config['USER']['user_type'] = user_type[index]
+                self.config['USER']['logged_in'] = 'True'
+
+                with open('config.ini', 'w') as config_file:
+                    self.config.write(config_file)
 
                 if (email_list[i] == entered_email) and (password_value) and (
                         registartion_approve[index] == True) and (user_type[index] == 'borrower'):

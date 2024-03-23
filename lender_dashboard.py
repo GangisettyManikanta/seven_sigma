@@ -1,3 +1,5 @@
+import configparser
+
 from anvil.tables import app_tables
 from kivy.factory import Factory
 from kivymd.app import MDApp
@@ -1429,6 +1431,22 @@ class LenderDashboard(Screen):
         self.manager.current = 'MainScreen'
 
     def logout(self):
+        # Clear specific values in config.ini under the USER section
+        config = configparser.ConfigParser()
+        config.read('config.ini')
+
+        if 'USER' in config:
+            if 'email' in config['USER']:
+                config['USER']['email'] = ''
+            if 'user_type' in config['USER']:
+                config['USER']['user_type'] = ''
+            if 'logged_in' in config['USER']:
+                config['USER']['logged_in'] = 'False'  # Assuming 'logged_in' is a boolean flag represented as string
+
+        with open('config.ini', 'w') as config_file:
+            config.write(config_file)
+
+        self.manager.add_widget(Factory.MainScreen(name='MainScreen'))
         self.manager.current = 'MainScreen'
 
     def profile(self):
