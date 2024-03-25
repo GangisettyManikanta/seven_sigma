@@ -1,5 +1,6 @@
 import os
 
+from anvil.tables import app_tables
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
@@ -2856,11 +2857,6 @@ cursor = conn.cursor()
 
 class LenderScreen(Screen):
     Builder.load_string(KV)
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
     def add_data(self, name, gender, date):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -2902,13 +2898,13 @@ class LenderScreen(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
 
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['full_name'] = name
@@ -2949,19 +2945,7 @@ class LenderScreen(Screen):
     def go_to_dashboard(self):
         self.manager.current = 'DashScreen'
 
-    # def go_to_lenderscreen1(self):
-    def profile(self):
-        return anvil.server.call('profile')
-
-
 class LenderScreen1(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def add_data(self, mobile_number, alternate_email):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
@@ -2993,12 +2977,12 @@ class LenderScreen1(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['mobile'] = mobile_number
@@ -3040,13 +3024,6 @@ class LenderScreen1(Screen):
 
 
 class LenderScreen2(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -3158,12 +3135,12 @@ class LenderScreen2(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['aadhaar_no'] = aadhar_number
@@ -3198,12 +3175,6 @@ class LenderScreen2(Screen):
 
 
 class LenderScreen3(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def next_pressed(self, id):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
@@ -3264,12 +3235,12 @@ class LenderScreen3(Screen):
             cursor.execute("UPDATE fin_registration_table SET highest_qualification = ? WHERE customer_id = ?",
                            (id, row_id_list[log_index]))
             conn.commit()
-            data = self.profile()
+            data = app_tables.fin_user_profile.search()
             id_list = []
             for i in data:
                 id_list.append(i['email_user'])
 
-            user_email = self.get_email()
+            user_email = anvil.server.call('another_method')
             if user_email in id_list:
                 index = id_list.index(user_email)
                 data[index]['qualification'] = id
@@ -3299,12 +3270,6 @@ class LenderScreen3(Screen):
 
 
 class LenderScreen_Edu_10th(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
@@ -3429,9 +3394,6 @@ class LenderScreen_Edu_10th(Screen):
 
 class LenderScreen_Edu_Intermediate(Screen):
 
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
@@ -3582,13 +3544,6 @@ class LenderScreen_Edu_Intermediate(Screen):
 
 
 class LenderScreen_Edu_Bachelors(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -3769,13 +3724,6 @@ class LenderScreen_Edu_Bachelors(Screen):
 
 
 class LenderScreen_Edu_Masters(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -3984,13 +3932,6 @@ class LenderScreen_Edu_Masters(Screen):
 
 
 class LenderScreen_Edu_PHD(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -4225,10 +4166,6 @@ class LenderScreen_Edu_PHD(Screen):
 
 class LenderScreen4(Screen):
 
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
     def add_data(self, street, city, zip_code, state, country):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -4258,12 +4195,12 @@ class LenderScreen4(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['city'] = city
@@ -4302,18 +4239,7 @@ class LenderScreen4(Screen):
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'LenderScreen3'
 
-    def profile(self):
-        return anvil.server.call('profile')
-
-
 class LenderScreen5(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def next_pressed(self, id, investment, period):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
@@ -4362,12 +4288,12 @@ class LenderScreen5(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['loan_type'] = id
@@ -4402,13 +4328,6 @@ class LenderScreen5(Screen):
 
 class LenderScreenInstitutionalForm1(Screen):
 
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, business_name, business_location, business_address, business_branch_name):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -4442,12 +4361,12 @@ class LenderScreenInstitutionalForm1(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['business_name'] = business_name
@@ -4484,13 +4403,6 @@ class LenderScreenInstitutionalForm1(Screen):
 
 class LenderScreenInstitutionalForm2(Screen):
 
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, business_type, nearest_location, no_of_employees_working, year_of_estd):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -4524,11 +4436,11 @@ class LenderScreenInstitutionalForm2(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['business_type'] = business_type
@@ -4565,14 +4477,6 @@ class LenderScreenInstitutionalForm2(Screen):
 
 
 class LenderScreenInstitutionalForm3(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -4677,11 +4581,11 @@ class LenderScreenInstitutionalForm3(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['industry_type'] = industry_type
@@ -4720,14 +4624,6 @@ class LenderScreenInstitutionalForm3(Screen):
 
 
 class LenderScreenInstitutionalForm4(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, director_name, director_mobile_number, DIN, CIN):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -4760,11 +4656,11 @@ class LenderScreenInstitutionalForm4(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['director_name'] = director_name
@@ -4805,14 +4701,6 @@ class LenderScreenInstitutionalForm4(Screen):
 
 
 class LenderScreenInstitutionalForm5(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -4919,11 +4807,11 @@ class LenderScreenInstitutionalForm5(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['registered_off_add'] = registered_office_address
@@ -4959,13 +4847,6 @@ class LenderScreenInstitutionalForm5(Screen):
 
 class LenderScreenIndividualForm1(Screen):
 
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, employeent_type, company_name, organization):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -4997,11 +4878,11 @@ class LenderScreenIndividualForm1(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['employment_type'] = employeent_type
@@ -5036,13 +4917,6 @@ class LenderScreenIndividualForm1(Screen):
 
 
 class LenderScreenIndividualForm2(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
@@ -5177,11 +5051,11 @@ class LenderScreenIndividualForm2(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['annual_salary'] = annual_salary
@@ -5224,14 +5098,6 @@ class LenderScreenIndividualForm2(Screen):
 
 
 class LenderScreenIndividualForm3(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, company_address, company_pincode, company_country, landmark, business_number):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -5265,11 +5131,11 @@ class LenderScreenIndividualForm3(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['company_address'] = company_address
@@ -5319,14 +5185,6 @@ class LenderScreenIndividualForm3(Screen):
 
 
 class LenderScreenIndividualBankForm1(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, account_holder_name, account_type, account_number, bank_name):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -5359,11 +5217,11 @@ class LenderScreenIndividualBankForm1(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['account_name'] = account_holder_name
@@ -5404,14 +5262,6 @@ class LenderScreenIndividualBankForm1(Screen):
 
 
 class LenderScreenIndividualBankForm2(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def go_to_lender_dashboard(self, bank_id, branch_name):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -5446,11 +5296,11 @@ class LenderScreenIndividualBankForm2(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data =app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['bank_id'] = bank_id
@@ -5493,14 +5343,6 @@ class LenderScreenIndividualBankForm2(Screen):
 
 
 class LenderScreenInstitutionalBankForm1(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, account_holder_name, account_type, account_number, bank_name):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -5533,11 +5375,11 @@ class LenderScreenInstitutionalBankForm1(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['account_name'] = account_holder_name
@@ -5575,13 +5417,6 @@ class LenderScreenInstitutionalBankForm1(Screen):
 
 class LenderScreenInstitutionalBankForm2(Screen):
 
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def go_to_lender_dashboard(self, bank_id, branch_name):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -5616,11 +5451,11 @@ class LenderScreenInstitutionalBankForm2(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['bank_id'] = bank_id

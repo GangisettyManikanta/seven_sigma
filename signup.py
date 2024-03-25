@@ -362,17 +362,13 @@ class SignupScreen(Screen):
         )
 
         snackbar.open()
-        self.share_email_with_anvil(email)
+        #self.share_email_with_anvil(email)
         # self.manager.current = 'LoginScreen'
         sm = self.manager
-        lender_screen = DashScreen(name='DashScreen')
+        lender_screen = LoginScreen(name='LoginScreen')
         sm.add_widget(lender_screen)
         sm.transition.direction = 'left'  # Set the transition direction explicitly
-        sm.current = 'DashScreen'
-
-    def share_email_with_anvil(self, email):
-        # Make an API call to Anvil server to share the email
-        anvil.server.call('share_email', email)
+        sm.current = 'LoginScreen'
 
     def wallet_generator(self, email_user, name, customer_id1):
         wallet = app_tables.fin_wallet.search()
