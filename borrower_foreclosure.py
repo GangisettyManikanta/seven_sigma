@@ -21,7 +21,6 @@ if platform == 'android':
         request_permissions, check_permission, Permission)
 
 import anvil.server
-anvil.server.connect("server_DDFFDPCYFLU7YEUB7AKS3ES2-3PQ3UW72AZJGD2JJ")
 
 
 loan_forecloseB = '''
@@ -500,10 +499,12 @@ class LoansDetailsB(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         data = app_tables.fin_loan_details.search()
+        email = self.get_table()
         profile = app_tables.fin_user_profile.search()
         customer_id = []
         product_name = []
         loan_id = []
+        email1 = []
         borrower_name = []
         loan_status = []
         s = 0
@@ -514,6 +515,7 @@ class LoansDetailsB(Screen):
             loan_id.append(i['loan_id'])
             borrower_name.append(i['borrower_full_name'])
             loan_status.append(i['loan_updated_status'])
+            email1.append(i['borrower_email_id'])
 
         profile_customer_id = []
         profile_mobile_number = []
@@ -524,61 +526,73 @@ class LoansDetailsB(Screen):
             profile_mobile_number.append(i['mobile'])
             profile_email_id.append('email_user')
 
-        c = -1
-        index_list = []
-        for i in range(s):
-            c += 1
-            if loan_status[c] == 'disbursed':
-                index_list.append(c)
+        cos_id = None
+        index = -1
+        if email in profile_email_id:
+            index = profile_email_id.index(email)
 
-        b = 1
-        k = -1
-        for i in index_list:
-            b += 1
-            k += 1
-            number = profile_customer_id.index(customer_id[i])
-            item = ThreeLineAvatarIconListItem(
-                IconLeftWidget(
-                    icon="card-account-details-outline"
-                ),
-                text=f"Borrower Name : {borrower_name[i]}",
-                secondary_text=f"Mobile Number : {profile_mobile_number[number]}",
-                tertiary_text=f"Product Name : {product_name[i]}",
-                text_color=(0, 0, 0, 1),  # Black color
-                theme_text_color='Custom',
-                secondary_text_color=(0, 0, 0, 1),
-                secondary_theme_text_color='Custom',
-                tertiary_text_color=(0, 0, 0, 1),
-                tertiary_theme_text_color='Custom'
-            )
-            # Create a lambda function with loan_id as an argument
-            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
-            self.ids.container.add_widget(item)
+        if email in email1:
+            index = email1.index(email)
+            cos_id = customer_id[index]
+
+        if cos_id is not None:
+            print(cos_id, type(cos_id))
+            print(customer_id[-1], type(customer_id[-1]))
+            c = -1
+            index_list = []
+            for i in range(s):
+                c += 1
+                if customer_id[c] == cos_id and loan_status[c] == 'disbursed':
+                    index_list.append(c)
+
+            b = 1
+            k = -1
+            for i in index_list:
+                b += 1
+                k += 1
+                number = profile_customer_id.index(customer_id[i])
+                item = ThreeLineAvatarIconListItem(
+                    IconLeftWidget(
+                        icon="card-account-details-outline"
+                    ),
+                    text=f"Borrower Name : {borrower_name[i]}",
+                    secondary_text=f"Mobile Number : {profile_mobile_number[number]}",
+                    tertiary_text=f"Product Name : {product_name[i]}",
+                    text_color=(0, 0, 0, 1),  # Black color
+                    theme_text_color='Custom',
+                    secondary_text_color=(0, 0, 0, 1),
+                    secondary_theme_text_color='Custom',
+                    tertiary_text_color=(0, 0, 0, 1),
+                    tertiary_theme_text_color='Custom'
+                )
+                # Create a lambda function with loan_id as an argument
+                item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
+                self.ids.container.add_widget(item)
 
     def icon_button_clicked(self, instance, loan_id):
-        # Handle the on_release event here
-        value = instance.text.split(':')[-1].strip()
-        data = app_tables.fin_loan_details.search()
-        loan_status = None
-        for loan in data:
-            if loan['loan_id'] == value:
-                loan_status = loan['loan_updated_status']
-                break
-        print(loan_id)
+            # Handle the on_release event here
+            value = instance.text.split(':')[-1].strip()
+            data = app_tables.fin_loan_details.search()
+            loan_status = None
+            for loan in data:
+                if loan['loan_id'] == value:
+                    loan_status = loan['loan_updated_status']
+                    break
+            print(loan_id)
 
-        # Proceed with the action for the selected loan ID
+            # Proceed with the action for the selected loan ID
 
-        sm = self.manager
+            sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        approved = ViewProfileScreenFB(name='ViewProfileScreenFB')
+            # Create a new instance of the LoginScreen
+            approved = ViewProfileScreenFB(name='ViewProfileScreenFB')
 
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(approved)
+            # Add the LoginScreen to the existing ScreenManager
+            sm.add_widget(approved)
 
-        # Switch to the LoginScreen
-        sm.current = 'ViewProfileScreenFB'
-        self.manager.get_screen('ViewProfileScreenFB').initialize_with_value(loan_id, data)
+            # Switch to the LoginScreen
+            sm.current = 'ViewProfileScreenFB'
+            self.manager.get_screen('ViewProfileScreenFB').initialize_with_value(loan_id, data)
 
     def go_back(self):
         self.manager.current = 'DashboardScreen'
@@ -586,11 +600,14 @@ class LoansDetailsB(Screen):
     def refresh(self):
         self.ids.container.clear_widgets()
         self.__init__()
-
+    def get_table(self):
+        # Make a call to the Anvil server function
+        # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
+        return anvil.server.call('another_method')
 
 class ViewProfileScreenFB(Screen):
     def initialize_with_value(self, value, data):
-        emi1 = app_tables.fin_emi_table.search()
+        emi1 = app_tables.fin_emi_table.search()  # Assuming this retrieves all emi data
         loan_id = []
         loan_amount = []
         email1 = []
@@ -599,8 +616,8 @@ class ViewProfileScreenFB(Screen):
         interest = []
         credit = []
         foreclose_type = []
-
         index = -1
+
         # Populate lists with data
         for i in data:
             loan_id.append(i['loan_id'])
@@ -622,11 +639,14 @@ class ViewProfileScreenFB(Screen):
             self.ids.interest.text = str(interest[index])
             self.ids.limit.text = str(credit[index])
             self.ids.closer_type.text = str(foreclose_type[index])
-            if value in loan_id:
-                emi_number = [i['emi_number'] for i in emi1]
-                self.ids.total_payment.text = str(emi_number[index])
 
-                # Enable/disable foreclose button based on tenure
+            emi_loan = [i['emi_number'] for i in emi1 if i['loan_id'] == value]
+            print(emi_loan)
+            if emi_loan:
+                self.ids.total_payment.text = str(emi_loan[0])
+            else:
+                print("No emi numbers found for the provided loan_id")
+
                 if int(tenure[index]) >= 12:
                     self.ids.foreclose_button.disabled = False
 
@@ -714,19 +734,23 @@ class ForecloseDetails(Screen):
             emi_num.append(i['emi_number'])
             loan_id2.append(i['loan_id'])
 
-        if value in loan_id:
-            index = loan_id.index(value)
-            self.ids.loan_id_label1.text = str(loan_id[index])
+        if value in loan_id1:
+            index = loan_id1.index(value)
+            self.ids.loan_id_label1.text = str(loan_id1[index])
 
         if value in loan_id1:
             index2 = loan_id1.index(value)
             self.ids.monthly_emi1.text = str(month_emi[index2])
 
+        for i in emi1:
+            if i['loan_id'] == value:
+                emi_num = i['emi_number']
+                break  # Break the loop once the EMI number is found
+
         total_amount = 0
-        for loan_id, emi_number in zip(loan_id2, emi_num):
-            if loan_id == value:
-                total_amount = month_emi[index2] * emi_number
-                print(month_emi[index2], emi_num)
+        if emi_num is not None:  # Check if emi_num is found
+            total_amount = month_emi[index2] * emi_num
+            print(month_emi[index2], emi_num)
 
         self.ids.totalamount.text = str(total_amount)
 
@@ -744,13 +768,13 @@ class ForecloseDetails(Screen):
 
         if value in loan_id1:
             index5 = loan_id1.index(value)
-            overall_outstanding_amount = loan_amount[index5] - (monthly_installment * emi_num[index5])
-            print(loan_amount[index5], monthly_installment, emi_num[index5])
+            overall_outstanding_amount = loan_amount[index5] - (monthly_installment * emi_num)
+            print(loan_amount[index5], monthly_installment, emi_num)
             self.ids.overall_amount.text = str(overall_outstanding_amount)
 
         if value in loan_id1:
             index6 = loan_id1.index(value)
-            outstanding_months = tenure[index6] - emi_num[index6]
+            outstanding_months = tenure[index6] - emi_num
             overall_monthly_installment = monthly_installment * outstanding_months
             print(monthly_installment, outstanding_months)
             self.ids.over_month.text = str(overall_monthly_installment)
@@ -798,7 +822,6 @@ class ForecloseDetails(Screen):
         app_tables.fin_foreclosure.add_row(loan_id=loan_id, outstanding_amount=float(outstanding_amount),
                                            foreclose_fee=int(foreclose_fee), foreclose_amount=float(foreclose_amount),
                                            reason=reason, status='under process')
-
 
 class MyScreenManager(ScreenManager):
     pass
