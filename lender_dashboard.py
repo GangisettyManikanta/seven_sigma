@@ -1,4 +1,3 @@
-import configparser
 
 from anvil.tables import app_tables
 from kivy.factory import Factory
@@ -12,7 +11,6 @@ from kivy.uix.screenmanager import Screen, SlideTransition
 from kivy.utils import platform
 from kivy.clock import mainthread
 from kivymd.uix.filemanager import MDFileManager
-import server
 from lender_lost_opportunities import LostOpportunitiesScreen
 from lender_view_loans import ViewLoansScreen
 from lender_view_loans_request import ViewLoansRequest
@@ -24,7 +22,7 @@ from kivymd.uix.spinner import MDSpinner
 from kivy.clock import Clock
 from kivy.animation import Animation
 from kivymd.uix.label import MDLabel
-import server
+
 if platform == 'android':
     from kivy.uix.button import Button
     from kivy.uix.modalview import ModalView
@@ -116,7 +114,7 @@ user_helpers1 = """
                         halign: "center"
                         text_color:1,1,1,1
                         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                        
+
             MDFlatButton:
                 size_hint: None, None
 
@@ -133,28 +131,6 @@ user_helpers1 = """
                     spacing:dp(10)
                     MDLabel:
                         text: "Today's Dues"
-                        font_size:dp(14)
-                        bold:True
-                        theme_text_color: 'Custom'
-                        halign: "center"
-                        text_color:1,1,1,1
-                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-
-            MDFlatButton:
-                size_hint: None, None
-
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                md_bg_color:0.043, 0.145, 0.278, 1
-                size_hint_y: None
-                height: dp(60)
-                size_hint_x: None
-                width: dp(110)
-
-                BoxLayout:
-                    orientation: 'horizontal'
-                    spacing:dp(10)
-                    MDLabel:
-                        text: "Request Top-up Amount"
                         font_size:dp(14)
                         bold:True
                         theme_text_color: 'Custom'
@@ -230,11 +206,13 @@ user_helpers1 = """
                         text_color:1,1,1,1
                         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
+            MDLabel:
+                text:""
             MDFlatButton:
                 size_hint: None, None
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 md_bg_color: 0.043, 0.145, 0.278, 1
-                
+
                 size_hint_y: None
                 height: dp(60)
                 size_hint_x: None
@@ -251,29 +229,7 @@ user_helpers1 = """
                         halign: "center"
                         text_color:1,1,1,1
                         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            MDFlatButton:
-                size_hint: None, None
 
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                md_bg_color:0.043, 0.145, 0.278, 1 
-                size_hint_y: None
-                height: dp(60)
-                size_hint_x: None
-                width: dp(110)
-
-                BoxLayout:
-                    orientation: 'horizontal'
-                    spacing:dp(10)
-                    MDLabel:
-                        text: "Loan Disbursement"
-                        font_size:dp(14)
-                        bold:True
-                        theme_text_color: 'Custom'
-                        halign: "center"
-                        text_color:1,1,1,1
-                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            MDLabel:
-                text:""
 
         MDIconButton:
             icon:'help-circle'
@@ -1432,22 +1388,6 @@ class LenderDashboard(Screen):
         self.manager.current = 'MainScreen'
 
     def logout(self):
-        # Clear specific values in config.ini under the USER section
-        config = configparser.ConfigParser()
-        config.read('config.ini')
-
-        if 'USER' in config:
-            if 'email' in config['USER']:
-                config['USER']['email'] = ''
-            if 'user_type' in config['USER']:
-                config['USER']['user_type'] = ''
-            if 'logged_in' in config['USER']:
-                config['USER']['logged_in'] = 'False'  # Assuming 'logged_in' is a boolean flag represented as string
-
-        with open('config.ini', 'w') as config_file:
-            config.write(config_file)
-
-        self.manager.add_widget(Factory.MainScreen(name='MainScreen'))
         self.manager.current = 'MainScreen'
 
     def profile(self):
@@ -1676,16 +1616,15 @@ class LenderDashboard(Screen):
         # Get the existing ScreenManager
 
     def help_module(self):
-        from lender_help_module import LenderHelpScreen
-        self.manager.add_widget(Factory.LenderHelpScreen(name='LenderHelpScreen'))
-        self.manager.current = 'LenderHelpScreen'
+        from help_module import HelpScreen
+        self.manager.add_widget(Factory.HelpScreen(name='HelpScreen'))
+        self.manager.current = 'HelpScreen'
 
 
 class ViewProfileScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        email = anvil.server.call('another_method')
-        print(email)
+        email = self.get_email()
         data = app_tables.fin_user_profile.search()
         customer = []
         email1 = []

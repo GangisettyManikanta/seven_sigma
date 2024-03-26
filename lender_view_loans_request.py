@@ -1,3 +1,4 @@
+
 from anvil.tables import app_tables
 from kivy.animation import Animation
 from kivy.clock import Clock
@@ -17,6 +18,8 @@ from datetime import datetime, timedelta, timezone
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.snackbar import Snackbar
+
+from borrower_wallet import WalletScreen
 from lender_wallet import LenderWalletScreen
 
 view_loan_request = """
@@ -72,7 +75,7 @@ view_loan_request = """
                         id: box1
                         orientation: 'vertical'
                         size_hint_y: None
-                        height: dp(750)
+                        height: dp(680)
 
                         padding: [10, 0,0,0]
                         canvas.before:
@@ -159,18 +162,7 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
-                            MDLabel:
-                                text: "Product Description:" 
-                                size_hint_y:None
-                                height:dp(50)
-                                halign: "center"
-                                bold: True
-                            MDLabel:
-                                id: product_description
-                                text: "" 
-                                size_hint_y:None
-                                height:dp(50)
-                                halign: "center"
+
                             MDLabel:
                                 text: "Interest Rate:" 
                                 size_hint_y:None
@@ -269,7 +261,7 @@ view_loan_request = """
                         id: box1
                         orientation: 'vertical'
                         size_hint_y: None
-                        height: dp(680)
+                        height: dp(650)
 
                         padding: [10, 0,0,0]
                         canvas.before:
@@ -310,7 +302,7 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
-                                
+
                         GridLayout:
                             cols: 2
                             spacing: dp(10)
@@ -327,7 +319,7 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
-                                
+
                         GridLayout:
                             cols: 2
                             spacing: dp(10)
@@ -345,7 +337,7 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
-                                
+
                         GridLayout:
                             cols: 2
                             spacing: dp(10)
@@ -362,7 +354,7 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
-                                
+
                         GridLayout:
                             cols: 2
                             spacing: dp(10)
@@ -380,24 +372,9 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
-                                
-                        GridLayout:
-                            cols: 2
-                            spacing: dp(10)
-                            padding: dp(10)
-                            MDLabel:
-                                text: "Product Description:" 
-                                size_hint_y:None
-                                height:dp(50)
-                                halign: "center"
-                                bold: True
-                            MDLabel:
-                                id: product_description
-                                text: "" 
-                                size_hint_y:None
-                                height:dp(50)
-                                halign: "center"
-                                
+
+
+
                         GridLayout:
                             cols: 2
                             spacing: dp(10)
@@ -414,7 +391,7 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
-                        
+
                         GridLayout:
                             cols: 2
                             spacing: dp(10)
@@ -431,7 +408,7 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
-                                
+
                         GridLayout:
                             cols: 2
                             spacing: dp(10)
@@ -448,7 +425,7 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
-                                
+
                         GridLayout:
                             cols: 2
                             spacing: dp(10)
@@ -597,18 +574,8 @@ view_loan_request = """
                                 size_hint_y:None
                                 height:dp(50)
                                 halign: "center"
-                            MDLabel:
-                                text: "Product Description:" 
-                                size_hint_y:None
-                                height:dp(50)
-                                halign: "center"
-                                bold: True
-                            MDLabel:
-                                id: product_description
-                                text: "" 
-                                size_hint_y:None
-                                height:dp(50)
-                                halign: "center"
+
+
                             MDLabel:
                                 text: "Interest Rate:" 
                                 size_hint_y:None
@@ -832,7 +799,7 @@ class ViewLoansProfileScreen(Screen):
         date_of_apply = []
         loan_status = []
         product_name = []
-        product_description = []
+
         name = []
         for i in data:
             customer_id.append(i['borrower_customer_id'])
@@ -844,7 +811,6 @@ class ViewLoansProfileScreen(Screen):
             name.append(i['borrower_full_name'])
             date_of_apply.append(i['borrower_loan_created_timestamp'])
             loan_status.append(i['loan_updated_status'])
-            product_description.append(i['product_description'])
 
         if value in loan_id:
             index = loan_id.index(value)
@@ -859,7 +825,6 @@ class ViewLoansProfileScreen(Screen):
             self.ids.date.text = str(date_of_apply[index])
             self.ids.status.text = str(loan_status[index])
             self.ids.number.text = str(profile_mobile_number[number])
-            self.ids.product_description.text = str(product_description[index])
 
     def email_user(self):
         return anvil.server.call('another_method')
@@ -986,7 +951,7 @@ class ViewLoansProfileScreenLR(Screen):
         date_of_apply = []
         loan_status = []
         product_name = []
-        product_description = []
+
         name = []
         for i in data:
             customer_id.append(i['borrower_customer_id'])
@@ -998,7 +963,6 @@ class ViewLoansProfileScreenLR(Screen):
             name.append(i['borrower_full_name'])
             date_of_apply.append(i['borrower_loan_created_timestamp'])
             loan_status.append(i['loan_updated_status'])
-            product_description.append(i['product_description'])
 
         if value in loan_id:
             index = loan_id.index(value)
@@ -1013,7 +977,6 @@ class ViewLoansProfileScreenLR(Screen):
             self.ids.date.text = str(date_of_apply[index])
             self.ids.status.text = str(loan_status[index])
             self.ids.number.text = str(profile_mobile_number[number])
-            self.ids.product_description.text = str(product_description[index])
 
     def on_pre_enter(self):
         # Bind the back button event to the on_back_button method
@@ -1113,7 +1076,7 @@ class ViewLoansProfileScreenRL(Screen):
         date_of_apply = []
         loan_status = []
         product_name = []
-        product_description = []
+
         name = []
         for i in data:
             customer_id.append(i['borrower_customer_id'])
@@ -1125,7 +1088,6 @@ class ViewLoansProfileScreenRL(Screen):
             name.append(i['borrower_full_name'])
             date_of_apply.append(i['borrower_loan_created_timestamp'])
             loan_status.append(i['loan_updated_status'])
-            product_description.append(i['product_description'])
 
         if value in loan_id:
             index = loan_id.index(value)
@@ -1140,7 +1102,6 @@ class ViewLoansProfileScreenRL(Screen):
             self.ids.date.text = str(date_of_apply[index])
             self.ids.status.text = str(loan_status[index])
             self.ids.number.text = str(profile_mobile_number[number])
-            self.ids.product_description.text = str(product_description[index])
 
     def on_pre_enter(self):
         # Bind the back button event to the on_back_button method

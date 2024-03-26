@@ -1,3 +1,4 @@
+
 import anvil
 from anvil import tables
 from anvil.tables import app_tables
@@ -41,7 +42,7 @@ user_helpers2 = """
             elevation: 2
             pos_hint: {'top': 1}
             left_action_items: [['arrow-left', lambda x: root.go_back()]]
-            right_action_items: [['home', lambda x:root.go_to_lender_dashboard()]]
+            right_action_items: [['refresh', lambda x: root.refresh()]]
             title_align: 'center'
             md_bg_color: 0.043, 0.145, 0.278, 1
 
@@ -280,7 +281,7 @@ user_helpers2 = """
         elevation: 2
         pos_hint: {'top': 1}
         left_action_items: [['arrow-left', lambda x: root.go_back()]]
-        right_action_items: [['home', lambda x:root.go_to_lender_dashboard()]]
+        right_action_items: [['refresh', lambda x: root.refresh()]]
         title_align: 'center'
         md_bg_color: 0.043, 0.145, 0.278, 1
     BoxLayout:
@@ -480,8 +481,8 @@ user_helpers2 = """
         title: "View Deatils"
         elevation: 2
         pos_hint: {'top': 1}
-
         title_align: 'center'
+        left_action_items: [['arrow-left', lambda x: root.go_back()]]
         md_bg_color: 0.043, 0.145, 0.278, 1
     BoxLayout:
         pos_hint: {'center_x':0.5, 'center_y':0.4}
@@ -653,9 +654,8 @@ class NewloanScreen(Screen):
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'DashboardScreen'
 
-    def go_to_lender_dashboard(self):
-        self.manager.add_widget(Factory.DashboardScreen(name='DashboardScreen'))
-        self.manager.current = 'DashboardScreen'
+    def refresh(self):
+       pass
 
     def current(self):
         self.manager.current = 'DashboardScreen'
@@ -782,10 +782,8 @@ class NewloanScreen1(Screen):
 
         text_input.bind(on_focus=reset_helper_text)
 
-    def go_to_lender_dashboard(self):
-        self.manager.add_widget(Factory.DashboardScreen(name='DashboardScreen'))
-        self.manager.current = 'DashboardScreen'
-
+    def refresh(self):
+        pass
     def reset_fields(self):
         self.ids.text_input1.text = ""
         self.ids.text_input2.text = ""
