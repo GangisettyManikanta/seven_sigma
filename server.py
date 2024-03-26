@@ -12,4 +12,5 @@ def share_email(email):
 def another_method():
     # Retrieve the email directly from the global variable
     email_user = globals().get('email_user', None)
+    print(email_user)
     return email_user

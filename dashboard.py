@@ -12,7 +12,7 @@ from kivy.factory import Factory
 from borrowerlanding import BorrowerLanding
 from lender_landing import LenderLanding
 import anvil
-
+import server
 KV = """
 
 
@@ -95,17 +95,14 @@ class DashScreen(Screen):
         data = anvil.server.call('another_method')
         return data
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.on_pre_enter()
-
     def load_user_data(self):
         pass
 
-    def on_pre_enter(self):
-        # Connect to the SQLite database
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         profile = app_tables.fin_user_profile.search()
-        log_email = self.get_email()
+        log_email = anvil.server.call('another_method')
+        print(log_email)
 
         email_user = []
         name_list = []

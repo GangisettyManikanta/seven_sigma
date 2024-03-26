@@ -1,6 +1,6 @@
 import configparser
 import sqlite3
-
+import server
 import anvil
 from anvil.tables import app_tables
 from kivymd.app import MDApp
@@ -23,6 +23,7 @@ from kivy.clock import Clock
 from kivy.animation import Animation
 from kivymd.uix.label import MDLabel
 from kivy.factory import Factory
+import server
 
 if platform == 'android':
     from kivy.uix.button import Button
@@ -2227,7 +2228,8 @@ class DashboardScreen(Screen):
 class ProfileScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        email = self.get_email()
+        email = anvil.server.call('another_method')
+        print(email)
         data = app_tables.fin_user_profile.search()
         customer = []
         name_list = []

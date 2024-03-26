@@ -12,6 +12,7 @@ from kivy.uix.screenmanager import Screen, SlideTransition
 from kivy.utils import platform
 from kivy.clock import mainthread
 from kivymd.uix.filemanager import MDFileManager
+import server
 from lender_lost_opportunities import LostOpportunitiesScreen
 from lender_view_loans import ViewLoansScreen
 from lender_view_loans_request import ViewLoansRequest
@@ -23,7 +24,7 @@ from kivymd.uix.spinner import MDSpinner
 from kivy.clock import Clock
 from kivy.animation import Animation
 from kivymd.uix.label import MDLabel
-
+import server
 if platform == 'android':
     from kivy.uix.button import Button
     from kivy.uix.modalview import ModalView
@@ -1683,7 +1684,8 @@ class LenderDashboard(Screen):
 class ViewProfileScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        email = self.get_email()
+        email = anvil.server.call('another_method')
+        print(email)
         data = app_tables.fin_user_profile.search()
         customer = []
         email1 = []
