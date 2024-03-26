@@ -1,3 +1,4 @@
+
 import anvil
 from anvil.tables import app_tables
 from kivy.core.window import Window
@@ -18,7 +19,7 @@ if platform == 'android':
     from android.permissions import (
         request_permissions, check_permission, Permission)
 
-anvil.server.connect("server_DDFFDPCYFLU7YEUB7AKS3ES2-3PQ3UW72AZJGD2JJ")
+
 
 lender_foreclouser = '''
 

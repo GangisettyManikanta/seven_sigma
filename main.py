@@ -1,3 +1,4 @@
+
 from anvil.tables import app_tables
 from kivy.app import App
 from kivy.core.window import Window
@@ -7,12 +8,10 @@ from kivy.uix.spinner import SpinnerOption
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, SlideTransition
 from homepage import MainScreen
-import anvil.server
 
-#anvil.server.connect("server_DDFFDPCYFLU7YEUB7AKS3ES2-3PQ3UW72AZJGD2JJ")
 import anvil.server
 import server
-anvil.server.connect("server_SWSIWWCDQSKHY4EBV5H4Q6JC-T3A6LAGG7GF47HXE")
+anvil.server.connect("server_556O424JJMYIGQ5SUFKQ2KRA-IGXIG3DK3ZYWHDUP")
 
 class MyApp(MDApp):
     def build(self):

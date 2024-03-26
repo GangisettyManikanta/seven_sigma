@@ -1,3 +1,4 @@
+
 import re
 import bcrypt
 from anvil.tables import app_tables
@@ -240,7 +241,7 @@ class SignupScreen(Screen):
         loading_label.animation = anim  # Store the animation object in a custom attribute
 
     def go_to_login(self):
-        modal_view = ModalView(size_hint=(None, None), size=(200, 150), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",

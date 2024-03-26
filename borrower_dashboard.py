@@ -1,6 +1,7 @@
+
 import configparser
 import sqlite3
-import server
+
 import anvil
 from anvil.tables import app_tables
 from kivymd.app import MDApp
@@ -23,7 +24,6 @@ from kivy.clock import Clock
 from kivy.animation import Animation
 from kivymd.uix.label import MDLabel
 from kivy.factory import Factory
-import server
 
 if platform == 'android':
     from kivy.uix.button import Button
@@ -119,11 +119,11 @@ user_helpers = """
 
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 md_bg_color: 0.043, 0.145, 0.278, 1 
-                on_release: root.go_to_borrowerdues_screen()
+
 
                 size_hint_y: None
                 height: dp(60)
-                
+
                 size_hint_x: None
                 width: dp(110)
 
@@ -138,7 +138,7 @@ user_helpers = """
                         halign: "center"
                         text_color:1,1,1,1
                         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                        
+
 
             MDFlatButton:
                 size_hint: None, None
@@ -2184,7 +2184,7 @@ class DashboardScreen(Screen):
         self.manager.current = 'WalletScreen'
 
     def go_to_borrowerdues_screen(self):
-        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
@@ -2228,8 +2228,7 @@ class DashboardScreen(Screen):
 class ProfileScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        email = anvil.server.call('another_method')
-        print(email)
+        email = self.get_email()
         data = app_tables.fin_user_profile.search()
         customer = []
         name_list = []
@@ -2438,8 +2437,6 @@ class ProfileScreen(Screen):
 
     def on_back_button_press(self):
         self.manager.current = 'DashboardScreen'
-
-
 
 
 class MyScreenManager(ScreenManager):
