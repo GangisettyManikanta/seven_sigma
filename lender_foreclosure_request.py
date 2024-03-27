@@ -1,4 +1,3 @@
-
 import anvil
 from anvil.tables import app_tables
 from kivy.core.window import Window
@@ -18,7 +17,6 @@ if platform == 'android':
     from android import api_version, mActivity
     from android.permissions import (
         request_permissions, check_permission, Permission)
-
 
 
 lender_foreclouser = '''
@@ -43,9 +41,12 @@ lender_foreclouser = '''
             title: "Foreclose Loans"
             elevation: 3
             left_action_items: [['arrow-left', lambda x: root.on_back_button_press()]]
+            right_action_items: [['refresh', lambda x: root.refresh()]]
             title_align: 'left'
             pos_hint: {'center_x': 0.5, 'center_y': 0.96}
             md_bg_color: 0.043, 0.145, 0.278, 1
+            MDList:
+                id: container
 
         MDGridLayout:
             cols: 2
@@ -286,13 +287,13 @@ lender_foreclouser = '''
                                 text: "Loan Foreclosure for Loan A/C:"
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id : loan1
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
 
                         MDGridLayout:
@@ -303,14 +304,14 @@ lender_foreclouser = '''
                                 text: "Borrower Name:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: name
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -320,14 +321,14 @@ lender_foreclouser = '''
                                 text: "Loan Amount:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: amount
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -337,14 +338,14 @@ lender_foreclouser = '''
                                 text: "Interest Rate:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: rate
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -354,14 +355,14 @@ lender_foreclouser = '''
                                 text: "Foreclosure Fee:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: fee
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -371,14 +372,14 @@ lender_foreclouser = '''
                                 text: "Foreclosure Amount:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: famount
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -388,15 +389,14 @@ lender_foreclouser = '''
                                 text: "Total Paid Amount:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: total_paid
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
-
+                                halign: "left"
 
 
                         MDGridLayout:
@@ -407,14 +407,14 @@ lender_foreclouser = '''
                                 text: "Outstanding Amount:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: samount
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -424,14 +424,14 @@ lender_foreclouser = '''
                                 text: "Reason For Foreclosure:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: reason
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"           
+                                halign: "left"           
 
 
                         MDGridLayout:
@@ -442,14 +442,14 @@ lender_foreclouser = '''
                                 text: "Total Due Amount:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: due_amount
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"  
+                                halign: "left"  
 
 
 
@@ -538,13 +538,13 @@ lender_foreclouser = '''
                                 text: "Loan Foreclosure for Loan A/C:"
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id : loan1
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
 
                         MDGridLayout:
@@ -555,14 +555,14 @@ lender_foreclouser = '''
                                 text: "Borrower Name:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: name
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -572,14 +572,14 @@ lender_foreclouser = '''
                                 text: "Loan Amount:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: amount
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -589,14 +589,14 @@ lender_foreclouser = '''
                                 text: "Interest Rate:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: rate
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -606,14 +606,14 @@ lender_foreclouser = '''
                                 text: "Foreclosure Fee:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: fee
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -623,14 +623,14 @@ lender_foreclouser = '''
                                 text: "Foreclosure Amount:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: famount
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -640,14 +640,14 @@ lender_foreclouser = '''
                                 text: "Total Paid Amount:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: total_paid
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
 
 
@@ -659,14 +659,14 @@ lender_foreclouser = '''
                                 text: "Outstanding Amount:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: samount
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -676,14 +676,14 @@ lender_foreclouser = '''
                                 text: "Reason For Foreclosure:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: reason
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"           
+                                halign: "left"           
 
 
                         MDGridLayout:
@@ -694,14 +694,14 @@ lender_foreclouser = '''
                                 text: "Total Due Amount:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: due_amount
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center" 
+                                halign: "left" 
 
                         MDGridLayout:
                             cols: 2
@@ -761,13 +761,13 @@ lender_foreclouser = '''
                                 text: "Loan Foreclosure for Loan A/C:"
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id : loan1
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
 
                         MDGridLayout:
@@ -778,14 +778,14 @@ lender_foreclouser = '''
                                 text: "Borrower Name:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: name
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -795,14 +795,14 @@ lender_foreclouser = '''
                                 text: "Loan Amount:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: amount
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -812,14 +812,14 @@ lender_foreclouser = '''
                                 text: "Interest Rate:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: rate
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -829,14 +829,14 @@ lender_foreclouser = '''
                                 text: "Foreclosure Fee:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: fee
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -846,14 +846,14 @@ lender_foreclouser = '''
                                 text: "Foreclosure Amount:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: famount
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -863,14 +863,14 @@ lender_foreclouser = '''
                                 text: "Total Paid Amount:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: total_paid
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
 
 
@@ -882,14 +882,14 @@ lender_foreclouser = '''
                                 text: "Outstanding Amount:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: samount
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -899,14 +899,14 @@ lender_foreclouser = '''
                                 text: "Reason For Foreclosure:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: reason
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"           
+                                halign: "left"           
 
 
                         MDGridLayout:
@@ -917,14 +917,14 @@ lender_foreclouser = '''
                                 text: "Total Due Amount:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: due_amount
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center" 
+                                halign: "left" 
 
                         MDGridLayout:
                             cols: 2
@@ -1024,13 +1024,17 @@ class DashboardScreenLF(Screen):
 
         # Switch to the LoginScreen
         sm.current = 'ViewAllLoansLF'
+    def refresh(self):
+        self.ids.container.clear_widgets()
+        self.__init__()
 
 
 class ApprovedLoansLF(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        view = app_tables.fin_loan_details.search()
+        profile = app_tables.fin_user_profile.search()
         data = app_tables.fin_foreclosure.search()
-        customer_id = []
         loan_id = []
         borrower_name = []
         loan_status = []
@@ -1042,31 +1046,50 @@ class ApprovedLoansLF(Screen):
             borrower_name.append(i['borrower_name'])
             loan_status.append(i['status'])
 
+        customer_id = []
+        product_name = []
+        for i in view:
+            customer_id.append(i['borrower_customer_id'])
+            product_name.append(i['product_name'])
+        profile_customer_id = []
+        profile_mobile_number = []
+        for i in profile:
+            profile_customer_id.append(i['customer_id'])
+            profile_mobile_number.append(i['mobile'])
         c = -1
         index_list = []
         for i in range(s):
             c += 1
             if loan_status[c] == 'approved':
                 index_list.append(c)
-
         b = 1
         k = -1
         for i in index_list:
             b += 1
             k += 1
+            if customer_id[i] in profile_customer_id:
+                number = profile_customer_id.index(customer_id[i])
+            else:
+                number = 0
             item = ThreeLineAvatarIconListItem(
 
                 IconLeftWidget(
                     icon="card-account-details-outline"
                 ),
-                text=f"Loan ID : {loan_id[i]}",
-                secondary_text=f"Borrower Name: {borrower_name[i]}",
-                tertiary_text=f"Status: {loan_status[i]}",
+                text=f"Borrower Name : {borrower_name[i]}",
+                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                tertiary_text=f"Product Name : {product_name[i]}",
+                text_color=(0, 0, 0, 1),  # Black color
+                theme_text_color='Custom',
+                secondary_text_color=(0, 0, 0, 1),
+                secondary_theme_text_color='Custom',
+                tertiary_text_color=(0, 0, 0, 1),
+                tertiary_theme_text_color='Custom'
             )
-            item.bind(on_release=self.icon_button_clicked)  # Corrected the binding
+            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container1.add_widget(item)
 
-    def icon_button_clicked(self, instance):
+    def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
         value = instance.text.split(':')
         value = value[-1][1:]
@@ -1081,7 +1104,7 @@ class ApprovedLoansLF(Screen):
 
         # Switch to the LoginScreen
         sm.current = 'ViewProfileScreenFLF'
-        self.manager.get_screen('ViewProfileScreenFLF').initialize_with_value(value, data)
+        self.manager.get_screen('ViewProfileScreenFLF').initialize_with_value(loan_id, data)
 
     def on_pre_enter(self):
         # Bind the back button event to the on_back_button method
@@ -1113,8 +1136,9 @@ class ApprovedLoansLF(Screen):
 class ClosedLoansLF(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        view = app_tables.fin_loan_details.search()
+        profile = app_tables.fin_user_profile.search()
         data = app_tables.fin_foreclosure.search()
-        customer_id = []
         loan_id = []
         borrower_name = []
         loan_status = []
@@ -1126,31 +1150,50 @@ class ClosedLoansLF(Screen):
             borrower_name.append(i['borrower_name'])
             loan_status.append(i['status'])
 
+        customer_id = []
+        product_name = []
+        for i in view:
+            customer_id.append(i['borrower_customer_id'])
+            product_name.append(i['product_name'])
+        profile_customer_id = []
+        profile_mobile_number = []
+        for i in profile:
+            profile_customer_id.append(i['customer_id'])
+            profile_mobile_number.append(i['mobile'])
         c = -1
         index_list = []
         for i in range(s):
             c += 1
-            if loan_status[c] == 'close':
+            if loan_status[c] == 'closed':
                 index_list.append(c)
-
         b = 1
         k = -1
         for i in index_list:
             b += 1
             k += 1
+            if customer_id[i] in profile_customer_id:
+                number = profile_customer_id.index(customer_id[i])
+            else:
+                number = 0
             item = ThreeLineAvatarIconListItem(
 
                 IconLeftWidget(
                     icon="card-account-details-outline"
                 ),
-                text=f"Loan ID : {loan_id[i]}",
-                secondary_text=f"Borrower Name: {borrower_name[i]}",
-                tertiary_text=f"Status: {loan_status[i]}",
+                text=f"Borrower Name : {borrower_name[i]}",
+                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                tertiary_text=f"Product Name : {product_name[i]}",
+                text_color=(0, 0, 0, 1),  # Black color
+                theme_text_color='Custom',
+                secondary_text_color=(0, 0, 0, 1),
+                secondary_theme_text_color='Custom',
+                tertiary_text_color=(0, 0, 0, 1),
+                tertiary_theme_text_color='Custom'
             )
-            item.bind(on_release=self.icon_button_clicked)  # Corrected the binding
+            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container3.add_widget(item)
 
-    def icon_button_clicked(self, instance):
+    def icon_button_clicked(self, instance, loan_id):
         value = instance.text.split(':')
         value = value[-1][1:]
         data = app_tables.fin_foreclosure.search()
@@ -1164,7 +1207,7 @@ class ClosedLoansLF(Screen):
 
         # Switch to the LoginScreen
         sm.current = 'ViewProfileScreenLF'
-        self.manager.get_screen('ViewProfileScreenLF').initialize_with_value(value, data)
+        self.manager.get_screen('ViewProfileScreenLF').initialize_with_value(loan_id, data)
 
     def on_back_button(self, instance, key, scancode, codepoint, modifier):
         # Handle the back button event
@@ -1187,15 +1230,16 @@ class ClosedLoansLF(Screen):
         Window.unbind(on_keyboard=self.on_back_button)
 
     def refresh(self):
-        self.ids.container.clear_widgets()
+        self.ids.container3.clear_widgets()
         self.__init__()
 
 
 class RejectedLoansLF(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        view = app_tables.fin_loan_details.search()
+        profile = app_tables.fin_user_profile.search()
         data = app_tables.fin_foreclosure.search()
-        customer_id = []
         loan_id = []
         borrower_name = []
         loan_status = []
@@ -1207,31 +1251,50 @@ class RejectedLoansLF(Screen):
             borrower_name.append(i['borrower_name'])
             loan_status.append(i['status'])
 
+        customer_id = []
+        product_name = []
+        for i in view:
+            customer_id.append(i['borrower_customer_id'])
+            product_name.append(i['product_name'])
+        profile_customer_id = []
+        profile_mobile_number = []
+        for i in profile:
+            profile_customer_id.append(i['customer_id'])
+            profile_mobile_number.append(i['mobile'])
         c = -1
         index_list = []
         for i in range(s):
             c += 1
             if loan_status[c] == 'rejected':
                 index_list.append(c)
-
         b = 1
         k = -1
         for i in index_list:
             b += 1
             k += 1
+            if customer_id[i] in profile_customer_id:
+                number = profile_customer_id.index(customer_id[i])
+            else:
+                number = 0
             item = ThreeLineAvatarIconListItem(
 
                 IconLeftWidget(
                     icon="card-account-details-outline"
                 ),
-                text=f"Loan ID : {loan_id[i]}",
-                secondary_text=f"Borrower Name: {borrower_name[i]}",
-                tertiary_text=f"Status: {loan_status[i]}",
+                text=f"Borrower Name : {borrower_name[i]}",
+                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                tertiary_text=f"Product Name : {product_name[i]}",
+                text_color=(0, 0, 0, 1),  # Black color
+                theme_text_color='Custom',
+                secondary_text_color=(0, 0, 0, 1),
+                secondary_theme_text_color='Custom',
+                tertiary_text_color=(0, 0, 0, 1),
+                tertiary_theme_text_color='Custom'
             )
-            item.bind(on_release=self.icon_button_clicked)  # Corrected the binding
+            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container4.add_widget(item)
 
-    def icon_button_clicked(self, instance):
+    def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
         value = instance.text.split(':')
         value = value[-1][1:]
@@ -1246,7 +1309,7 @@ class RejectedLoansLF(Screen):
 
         # Switch to the LoginScreen
         sm.current = 'ViewProfileScreenLFL'
-        self.manager.get_screen('ViewProfileScreenLFL').initialize_with_value(value, data)
+        self.manager.get_screen('ViewProfileScreenLFL').initialize_with_value(loan_id, data)
 
     def on_back_button(self, instance, key, scancode, codepoint, modifier):
         # Handle the back button event
@@ -1264,7 +1327,7 @@ class RejectedLoansLF(Screen):
         Window.unbind(on_keyboard=self.on_back_button)
 
     def refresh(self):
-        self.ids.container.clear_widgets()
+        self.ids.container4.clear_widgets()
         self.__init__()
 
     def go_back_screen(self):
@@ -1279,8 +1342,9 @@ class RejectedLoansLF(Screen):
 class UnderProcessLoansLF(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        view = app_tables.fin_loan_details.search()
+        profile = app_tables.fin_user_profile.search()
         data = app_tables.fin_foreclosure.search()
-        customer_id = []
         loan_id = []
         borrower_name = []
         loan_status = []
@@ -1292,31 +1356,50 @@ class UnderProcessLoansLF(Screen):
             borrower_name.append(i['borrower_name'])
             loan_status.append(i['status'])
 
+        customer_id = []
+        product_name = []
+        for i in view:
+            customer_id.append(i['borrower_customer_id'])
+            product_name.append(i['product_name'])
+        profile_customer_id = []
+        profile_mobile_number = []
+        for i in profile:
+            profile_customer_id.append(i['customer_id'])
+            profile_mobile_number.append(i['mobile'])
         c = -1
         index_list = []
         for i in range(s):
             c += 1
             if loan_status[c] == 'under process':
                 index_list.append(c)
-
         b = 1
         k = -1
         for i in index_list:
             b += 1
             k += 1
+            if customer_id[i] in profile_customer_id:
+                number = profile_customer_id.index(customer_id[i])
+            else:
+                number = 0
             item = ThreeLineAvatarIconListItem(
 
                 IconLeftWidget(
                     icon="card-account-details-outline"
                 ),
-                text=f"Loan ID : {loan_id[i]}",
-                secondary_text=f"Borrower Name: {borrower_name[i]}",
-                tertiary_text=f"Status: {loan_status[i]}",
+                text=f"Borrower Name : {borrower_name[i]}",
+                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                tertiary_text=f"Product Name : {product_name[i]}",
+                text_color=(0, 0, 0, 1),  # Black color
+                theme_text_color='Custom',
+                secondary_text_color=(0, 0, 0, 1),
+                secondary_theme_text_color='Custom',
+                tertiary_text_color=(0, 0, 0, 1),
+                tertiary_theme_text_color='Custom'
             )
-            item.bind(on_release=self.icon_button_clicked)  # Corrected the binding
+            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container2.add_widget(item)
 
-    def icon_button_clicked(self, instance):
+    def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
         value = instance.text.split(':')
         value = value[-1][1:]
@@ -1331,7 +1414,7 @@ class UnderProcessLoansLF(Screen):
 
         # Switch to the LoginScreen
         sm.current = 'ViewProfileScreenLF'
-        self.manager.get_screen('ViewProfileScreenLF').initialize_with_value(value, data)
+        self.manager.get_screen('ViewProfileScreenLF').initialize_with_value(loan_id, data)
 
     def on_pre_enter(self):
         # Bind the back button event to the on_back_button method
@@ -1349,7 +1432,7 @@ class UnderProcessLoansLF(Screen):
         return False  # Continue handling the event
 
     def refresh(self):
-        self.ids.container.clear_widgets()
+        self.ids.container2.clear_widgets()
         self.__init__()
 
     def go_back_screen(self):
@@ -1365,8 +1448,9 @@ class UnderProcessLoansLF(Screen):
 class ViewAllLoansLF(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        view = app_tables.fin_loan_details.search()
+        profile = app_tables.fin_user_profile.search()
         data = app_tables.fin_foreclosure.search()
-        customer_id = []
         loan_id = []
         borrower_name = []
         loan_status = []
@@ -1378,30 +1462,50 @@ class ViewAllLoansLF(Screen):
             borrower_name.append(i['borrower_name'])
             loan_status.append(i['status'])
 
+        customer_id = []
+        product_name = []
+        for i in view:
+            customer_id.append(i['borrower_customer_id'])
+            product_name.append(i['product_name'])
+        profile_customer_id = []
+        profile_mobile_number = []
+        for i in profile:
+            profile_customer_id.append(i['customer_id'])
+            profile_mobile_number.append(i['mobile'])
         c = -1
         index_list = []
         for i in range(s):
             c += 1
-            index_list.append(c)
-
+            if loan_status[c] == 'under process' or loan_status[c] == 'approved' or loan_status[c] == 'rejected':
+                index_list.append(c)
         b = 1
         k = -1
         for i in index_list:
             b += 1
             k += 1
+            if customer_id[i] in profile_customer_id:
+                number = profile_customer_id.index(customer_id[i])
+            else:
+                number = 0
             item = ThreeLineAvatarIconListItem(
 
                 IconLeftWidget(
                     icon="card-account-details-outline"
                 ),
-                text=f"Loan ID : {loan_id[i]}",
-                secondary_text=f"Borrower Name: {borrower_name[i]}",
-                tertiary_text=f"Status: {loan_status[i]}",
+                text=f"Borrower Name : {borrower_name[i]}",
+                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                tertiary_text=f"Product Name : {product_name[i]}",
+                text_color=(0, 0, 0, 1),  # Black color
+                theme_text_color='Custom',
+                secondary_text_color=(0, 0, 0, 1),
+                secondary_theme_text_color='Custom',
+                tertiary_text_color=(0, 0, 0, 1),
+                tertiary_theme_text_color='Custom'
             )
-            item.bind(on_release=self.icon_button_clicked)  # Corrected the binding
+            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container5.add_widget(item)
 
-    def icon_button_clicked(self, instance):
+    def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
         value = instance.text.split(':')
         value = value[-1][1:]
@@ -1425,7 +1529,7 @@ class ViewAllLoansLF(Screen):
 
             # Switch to the LoginScreen
             sm.current = 'ViewProfileScreenFLF'
-            self.manager.get_screen('ViewProfileScreenFLF').initialize_with_value(value, data)
+            self.manager.get_screen('ViewProfileScreenFLF').initialize_with_value(loan_id, data)
 
         elif loan_status == 'under process':
             # Open the screen for pending loans
@@ -1439,7 +1543,7 @@ class ViewAllLoansLF(Screen):
 
             # Switch to the LoginScreen
             sm.current = 'ViewProfileScreenLF'
-            self.manager.get_screen('ViewProfileScreenLF').initialize_with_value(value, data)
+            self.manager.get_screen('ViewProfileScreenLF').initialize_with_value(loan_id, data)
 
         elif loan_status == 'rejected':
             # Open the screen for pending loans
@@ -1453,7 +1557,7 @@ class ViewAllLoansLF(Screen):
 
             # Switch to the LoginScreen
             sm.current = 'ViewProfileScreenLFL'
-            self.manager.get_screen('ViewProfileScreenLF').initialize_with_value(value, data)
+            self.manager.get_screen('ViewProfileScreenLF').initialize_with_value(loan_id, data)
         else:
             # Handle other loan statuses or show an error message
             pass
@@ -1479,7 +1583,7 @@ class ViewAllLoansLF(Screen):
         self.manager.current = 'DashboardScreenLF'
 
     def refresh(self):
-        self.ids.container2.clear_widgets()
+        self.ids.container5.clear_widgets()
         self.__init__()
 
 
@@ -1595,6 +1699,7 @@ class ViewProfileScreenLF(Screen):
             outstanding_amount.append(i['outstanding_amount'])
             reason_foreclose.append(i['reason'])
             total_due_amount.append(i['total_due_amount'])
+        print(value)
         if value in loan_id:
             index = loan_id.index(value)
             self.ids.loan1.text = str(loan_id[index])

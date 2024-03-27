@@ -12,6 +12,8 @@ from kivy.clock import mainthread
 from kivymd.uix.filemanager import MDFileManager
 from datetime import datetime
 
+from kivymd.uix.snackbar import Snackbar
+
 if platform == 'android':
     from kivy.uix.button import Button
     from kivy.uix.modalview import ModalView
@@ -822,6 +824,10 @@ class ForecloseDetails(Screen):
         app_tables.fin_foreclosure.add_row(loan_id=loan_id, outstanding_amount=float(outstanding_amount),
                                            foreclose_fee=int(foreclose_fee), foreclose_amount=float(foreclose_amount),
                                            reason=reason, status='under process')
+        self.show_snackbar(f"This Loan ID {loan_id} has been submitted")
+        self.manager.current = 'DashboardScreen'
+    def show_snackbar(self, text):
+        Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
 
 class MyScreenManager(ScreenManager):
     pass
