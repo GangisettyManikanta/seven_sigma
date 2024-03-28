@@ -129,7 +129,7 @@ user_helpers2 = """
                                 rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
 
                         on_press: app.fetch_product_groups()
-                        text_size: self.width - dp(20), None
+                        text_size: self.width, None
                 MDLabel:
                     text:""
                 MDLabel:
@@ -169,7 +169,7 @@ user_helpers2 = """
                                 rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
 
                         on_press: app.fetch_product_categories()
-                        text_size: self.width - dp(20), None
+                        text_size: self.width , None
                         disabled: not group_id1.text or group_id1.text == 'Select Group'
                 MDLabel:
                     text:""
@@ -208,7 +208,7 @@ user_helpers2 = """
                                 rounded_rectangle: (self.x, self.y, self.width, self.height, 15)
 
                         on_press: app.fetch_product_name()
-                        text_size: self.width - dp(20), None
+                        text_size: self.width, None
                         disabled: not group_id2.text or group_id2.text == 'Select Categories'
                         on_text: app.fetch_product_description()
                 MDLabel:
@@ -234,8 +234,8 @@ user_helpers2 = """
                         font_size: dp(11)
                         size_hint_y: None
                         halign: "center"
-                        padding: dp(5)
-                        height: self.texture_size[1] + dp(20) if self.text else 0  # Adjust height to fit content
+                        padding: [dp(5), dp(5)]
+                        height: self.texture_size[1] + dp(20) if self.text else 0 # Adjust height to fit content
                         canvas.before:
                             Color:
                                 rgba: 1, 1, 1, 1  # Background color
@@ -680,11 +680,11 @@ class NewloanScreen(Screen):
             self.show_popup("Please select all fields.")
         else:
             # Show modal view with loading label
-            modal_view = ModalView(size_hint=(None, None), size=(300, 100),
+            modal_view = ModalView(size_hint=(None, None), size=(500, 100),
                                    background_color=(0, 0, 0, 0))  # Set background color to transparent
 
             # Create a loading label
-            loading_label = Label(text="Loading...", font_size=25)
+            loading_label = Label(text="Loading...", font_size=50)
             modal_view.add_widget(loading_label)
             modal_view.open()
 
@@ -855,11 +855,11 @@ class NewloanScreen1(Screen):
             self.show_popup("Please enter all fields.")
         else:
             # Show modal view with loading label
-            modal_view = ModalView(size_hint=(None, None), size=(300, 100),
+            modal_view = ModalView(size_hint=(None, None), size=(500, 100),
                                    background_color=(0, 0, 0, 0))  # Set background color to transparent
 
             # Create a loading label
-            loading_label = Label(text="Loading...", font_size=25)
+            loading_label = Label(text="Loading...", font_size=50)
             modal_view.add_widget(loading_label)
             modal_view.open()
 
@@ -979,11 +979,11 @@ class NewloanScreen2(Screen):
 
     def send_request(self):
         # Show modal view with loading label
-        modal_view = ModalView(size_hint=(None, None), size=(300, 150),
+        modal_view = ModalView(size_hint=(None, None), size=(500, 150),
                                background_color=(0, 0, 0, 0))  # Set background color to transparent
 
         # Create a loading label
-        loading_label = Label(text="Loading...", font_size=25)
+        loading_label = Label(text="Loading...", font_size=50)
         modal_view.add_widget(loading_label)
         modal_view.open()
 

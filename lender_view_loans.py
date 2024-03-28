@@ -1,3 +1,4 @@
+
 import anvil.server
 from anvil.tables import app_tables
 from kivy.clock import Clock
@@ -288,7 +289,7 @@ view_loans = '''
                         id: box1
                         orientation: 'vertical'
                         size_hint_y: None
-                        height: dp(650)
+                        height: dp(550)
 
                         padding: [10, 0,0,0]
                         canvas.before:
@@ -347,18 +348,6 @@ view_loans = '''
 
                             MDLabel:
                                 id: tenure
-                                text: "" 
-                                size_hint_y:None
-                                height:dp(50)
-                                halign: "center"
-                            MDLabel:
-                                text: "Phone Number:" 
-                                size_hint_y:None
-                                height:dp(50)
-                                halign: "center"
-                                bold: True
-                            MDLabel:
-                                id: number
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
@@ -456,7 +445,7 @@ view_loans = '''
                         id: box1
                         orientation: 'vertical'
                         size_hint_y: None
-                        height: dp(650)
+                        height: dp(550)
 
                         padding: [10, 0,0,0]
                         canvas.before:
@@ -515,18 +504,6 @@ view_loans = '''
 
                             MDLabel:
                                 id: tenure
-                                text: "" 
-                                size_hint_y:None
-                                height:dp(50)
-                                halign: "center"
-                            MDLabel:
-                                text: "Phone Number:" 
-                                size_hint_y:None
-                                height:dp(50)
-                                halign: "center"
-                                bold: True
-                            MDLabel:
-                                id: number
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
@@ -1057,6 +1034,7 @@ class ViewLoansProfileScreens(Screen):
         member_rom = []
         member_since = []
         credit_limit = []
+        date_of_apply = []
         beseem_score = []
         name = []
         status = []
@@ -1068,6 +1046,7 @@ class ViewLoansProfileScreens(Screen):
             loan_amount.append(i['loan_amount'])
             credit_limit.append(i['credit_limit'])
             name.append(i['borrower_full_name'])
+            date_of_apply.append(i['borrower_loan_created_timestamp'])
             status.append(i['loan_updated_status'])
 
         if value in loan_id:
@@ -1079,6 +1058,7 @@ class ViewLoansProfileScreens(Screen):
             self.ids.amount_applied.text = str(loan_amount[index])
             self.ids.limit.text = str(credit_limit[index])
             self.ids.name.text = str(name[index])
+            self.ids.date.text = str(date_of_apply[index])
             self.ids.status.text = str(status[index])
 
     def on_pre_enter(self):
@@ -1127,6 +1107,7 @@ class ViewLoansProfileScreens2(Screen):
         member_rom = []
         member_since = []
         credit_limit = []
+        date_of_apply = []
         beseem_score = []
         name = []
         status = []
@@ -1134,6 +1115,7 @@ class ViewLoansProfileScreens2(Screen):
             customer_id.append(i['borrower_customer_id'])
             loan_id.append(i['loan_id'])
             tenure.append(i['tenure'])
+            date_of_apply.append(i['borrower_loan_created_timestamp'])
             interest_rate.append(i['interest_rate'])
             loan_amount.append(i['loan_amount'])
             credit_limit.append(i['credit_limit'])
@@ -1145,6 +1127,7 @@ class ViewLoansProfileScreens2(Screen):
             self.ids.loan_id.text = str(loan_id[index])
             self.ids.user1.text = str(customer_id[index])
             self.ids.interest.text = str(interest_rate[index])
+            self.ids.date.text = str(date_of_apply[index])
             self.ids.tenure.text = str(tenure[index])
             self.ids.amount_applied.text = str(loan_amount[index])
             self.ids.limit.text = str(credit_limit[index])
@@ -1288,6 +1271,8 @@ class ViewRejectedLoansScreen(Screen):
             loan_id.append(i['loan_id'])
             borrower_name.append(i['borrower_full_name'])
             loan_status.append(i['loan_updated_status'])
+            product_name.append(i['product_name'])
+
         profile_customer_id = []
         profile_mobile_number = []
         for i in profile:
@@ -1326,6 +1311,7 @@ class ViewRejectedLoansScreen(Screen):
             )
             item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
             self.ids.container4.add_widget(item)
+
 
     def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
@@ -1526,7 +1512,7 @@ class ViewClosedLoansScreen(Screen):
 
     def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
-        data = self.get_table_data()
+        data = app_tables.fin_loan_details.search()
         sm = self.manager
 
         # Create a new instance of the LoginScreen

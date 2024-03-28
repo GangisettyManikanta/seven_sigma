@@ -1,4 +1,3 @@
-
 from anvil.tables import app_tables
 from kivy.animation import Animation
 from kivy.clock import Clock
@@ -33,11 +32,12 @@ view_loan_request = """
     BoxLayout:
         orientation: 'vertical'
         MDTopAppBar:
-            title: "View Loans Request"
+            title: "Loan Request"
             elevation: 3
             left_action_items: [['arrow-left', lambda x: root.go_back()]]
             right_action_items: [['refresh', lambda x: root.refresh()]]
             md_bg_color: 0.043, 0.145, 0.278, 1
+            title_align: 'center'
         MDScrollView:
 
             MDList:
@@ -50,6 +50,7 @@ view_loan_request = """
             title: "View Profile"
             elevation: 3
             left_action_items: [['arrow-left', lambda x: root.on_back_button_press()]]
+            title_align: 'center'
             md_bg_color: 0.043, 0.145, 0.278, 1
 
         ScrollView:
@@ -237,6 +238,7 @@ view_loan_request = """
             elevation: 3
             left_action_items: [['arrow-left', lambda x: root.on_back_button_press()]]
             md_bg_color: 0.043, 0.145, 0.278, 1
+            title_align: 'center'
 
         ScrollView:
             MDBoxLayout:
@@ -461,6 +463,7 @@ view_loan_request = """
             title: "View Profile"
             elevation: 3
             left_action_items: [['arrow-left', lambda x: root.on_back_button_press()]]
+            title_align: 'center'
             md_bg_color: 0.043, 0.145, 0.278, 1
 
         ScrollView:
@@ -877,7 +880,11 @@ class ViewLoansProfileScreen(Screen):
             data[index]['lender_customer_id'] = profile_customer_id[email_index]
             data[index]['lender_full_name'] = profile_name[email_index]
             data[index]['lender_email_id'] = profile_email[email_index]
-            self.manager.current = 'ViewLoansRequest'
+            sm = self.manager
+            disbursed = ViewLoansProfileScreenLR(name='ViewLoansProfileScreenLR')
+            sm.add_widget(disbursed)
+            sm.current = 'ViewLoansProfileScreenLR'
+            self.manager.get_screen('ViewLoansProfileScreenLR').initialize_with_value(loan_id, data)
             self.show_snackbar(f"This Loan ID {loan_id} is Approved")
             return
         else:
@@ -895,7 +902,11 @@ class ViewLoansProfileScreen(Screen):
         if loan_id in loan_idlist:
             index = loan_idlist.index(loan_id)
             data[index]['loan_updated_status'] = 'rejected'
-            self.manager.current = 'ViewLoansRequest'
+            sm = self.manager
+            disbursed = ViewLoansProfileScreenRL(name='ViewLoansProfileScreenRL')
+            sm.add_widget(disbursed)
+            sm.current = 'ViewLoansProfileScreenRL'
+            self.manager.get_screen('ExtensionLoansProfileScreen').initialize_with_value(loan_id, data)
             self.show_snackbar(f"This Loan ID {loan_id} is Rejected")
             return
         else:
@@ -1126,3 +1137,5 @@ class ViewLoansProfileScreenRL(Screen):
 
 class MyScreenManager(ScreenManager):
     pass
+
+
