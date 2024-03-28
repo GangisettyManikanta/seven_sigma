@@ -10,9 +10,8 @@ from kivy.uix.screenmanager import ScreenManager, SlideTransition
 from homepage import MainScreen
 
 import anvil.server
-import server
-anvil.server.connect("server_556O424JJMYIGQ5SUFKQ2KRA-IGXIG3DK3ZYWHDUP")
 
+anvil.server.connect("server_556O424JJMYIGQ5SUFKQ2KRA-IGXIG3DK3ZYWHDUP")
 class MyApp(MDApp):
     def build(self):
         sm = ScreenManager(transition=SlideTransition())
