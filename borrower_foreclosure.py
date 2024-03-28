@@ -602,6 +602,7 @@ class LoansDetailsB(Screen):
     def refresh(self):
         self.ids.container.clear_widgets()
         self.__init__()
+
     def get_table(self):
         # Make a call to the Anvil server function
         # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
@@ -609,7 +610,8 @@ class LoansDetailsB(Screen):
 
 class ViewProfileScreenFB(Screen):
     def initialize_with_value(self, value, data):
-        emi1 = app_tables.fin_emi_table.search()  # Assuming this retrieves all emi data
+        emi1 = app_tables.fin_emi_table.search()
+        pro_details = app_tables.fin_product_details.search()
         loan_id = []
         loan_amount = []
         email1 = []
@@ -617,10 +619,7 @@ class ViewProfileScreenFB(Screen):
         tenure = []
         interest = []
         credit = []
-        foreclose_type = []
-        index = -1
 
-        # Populate lists with data
         for i in data:
             loan_id.append(i['loan_id'])
             loan_amount.append(i['loan_amount'])
@@ -629,9 +628,7 @@ class ViewProfileScreenFB(Screen):
             tenure.append(i['tenure'])
             interest.append(i['interest_rate'])
             credit.append(i['credit_limit'])
-            foreclose_type.append(i['foreclosure_type'])
 
-        # Check if value exists in loan_id
         if value in loan_id:
             index = loan_id.index(value)
             self.ids.loan.text = str(loan_id[index])
@@ -640,25 +637,42 @@ class ViewProfileScreenFB(Screen):
             self.ids.tenure.text = str(tenure[index])
             self.ids.interest.text = str(interest[index])
             self.ids.limit.text = str(credit[index])
-            self.ids.closer_type.text = str(foreclose_type[index])
 
             emi_loan = [i['emi_number'] for i in emi1 if i['loan_id'] == value]
             print(emi_loan)
             if emi_loan:
-                self.ids.total_payment.text = str(emi_loan[0])
+                highest_number = max(emi_loan)
+                total_payment = highest_number
             else:
-                print("No emi numbers found for the provided loan_id")
+                total_payment = 0
 
-                if int(tenure[index]) >= 12:
+            self.ids.total_payment.text = str(total_payment)
+
+            foreclose_type = [i['foreclose_type'] for i in pro_details if
+                              i['product_id'] == data[index]['product_id']]
+            print(foreclose_type)
+            if foreclose_type:
+                foreclose_value = foreclose_type[0]
+                self.ids.closer_type.text = str(foreclose_value)
+
+                if foreclose_value == 'Eligible':
                     self.ids.foreclose_button.disabled = False
-
                 else:
-                    self.show_popup("Tenure Warning", "Your tenure needs to be more than 12 months ")
                     self.ids.foreclose_button.disabled = True
+                    self.show_snackbar(f"This Foreclose Value need to be Eligible")
 
-    def show_popup(self, title, content):
-        popup = Popup(title=title, content=Label(text=content), size_hint=(None, None), size=(400, 200))
-        popup.open()
+            minimum_months = [i['min_months'] for i in pro_details if i['product_id'] == data[index]['product_id']]
+            print(minimum_months)
+            if emi_loan and minimum_months:
+                if emi_loan[0] >= minimum_months[0]:
+                    self.ids.foreclose_button.disabled = False
+                else:
+                    self.ids.foreclose_button.disabled = True
+            else:
+                print("Either emi_loan or minimum_months is empty.")
+
+    def show_snackbar(self, text):
+        Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
 
     def on_pre_enter(self):
         Window.bind(on_keyboard=self.on_keyboard)
