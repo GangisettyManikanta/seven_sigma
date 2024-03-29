@@ -765,7 +765,7 @@ class ExtendLoansScreen(Screen):
         # loan_status=str(self.root_screen.ids.loan_status.text)
         if loan_id and customer_id and extension_fee and loan_extension_months and extension_amount and finial_repayment and loan_status and new_emi and reason:
             app_tables.fin_extends_loan.add_row(loan_id=loan_id,
-                                                borrower_customer_id=str(customer_id),
+                                                borrower_customer_id=customer_id,
                                                 extend_fee=extension_fee,
                                                 extension_amount=extension_amount,
                                                 final_repayment_amount=finial_repayment,

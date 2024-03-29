@@ -21,7 +21,6 @@ view_loans = '''
     OpenViewLoanScreen:
     ViewLoansProfileScreens:
     ViewLoansProfileScreens2:
-    ViewApprovedLoansScreen:
     ViewRejectedLoansScreen:
     ViewUnderProcessLoansScreen:
     ViewClosedLoansScreen:
@@ -136,25 +135,6 @@ view_loans = '''
 
         MDFlatButton:
             size_hint: None, None
-            md_bg_color: 0.043, 0.145, 0.278, 1
-            on_release: root.go_to_approved_loans()
-            size_hint_y: None
-            height: dp(60)
-            size_hint_x: None
-            width: dp(110)
-
-            BoxLayout:
-                orientation: 'horizontal'
-                spacing:dp(10)
-                MDLabel:
-                    text: "Approved Loans"
-                    font_size:dp(14)
-                    bold:True
-                    theme_text_color: 'Custom'
-                    halign: "center"
-                    text_color:1,1,1,1
-        MDFlatButton:
-            size_hint: None, None
             md_bg_color: 0.043, 0.145, 0.278, 1 
 
             size_hint_y: None
@@ -201,19 +181,6 @@ view_loans = '''
             MDList:
                 id: container2
 
-<ViewApprovedLoansScreen>
-    BoxLayout:
-        orientation: 'vertical'
-        MDTopAppBar:
-            title: "View Approved Loans"
-            elevation: 3
-            left_action_items: [['arrow-left', lambda x: root.go_back()]]
-            right_action_items: [['refresh', lambda x: root.refresh()]]
-            md_bg_color: 0.043, 0.145, 0.278, 1
-        MDScrollView:
-
-            MDList:
-                id: container3
 
 <ViewRejectedLoansScreen>
     BoxLayout:
@@ -769,40 +736,7 @@ class ViewLoansScreen(Screen):
         # Switch to the LoginScreen
         sm.current = 'OpenViewLoanScreen'
 
-    def go_to_approved_loans(self):
-        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
-        # Create MDLabel with white text color, increased font size, and bold text
-        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
-                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="50sp", bold=True)
-
-        # Set initial y-position off-screen
-        loading_label.y = -loading_label.height
-
-        modal_view.add_widget(loading_label)
-        modal_view.open()
-
-        # Perform the animation
-        self.animate_loading_text(loading_label, modal_view.height)
-
-        # Perform the actual action (e.g., fetching loan requests)
-        # You can replace the sleep with your actual logic
-        Clock.schedule_once(lambda dt: self.performance_go_to_approved_loans(modal_view), 2)
-
-    def performance_go_to_approved_loans(self, modal_view):
-        # self.manager.current = 'ViewProfileScreen'
-        modal_view.dismiss()
-        sm = self.manager
-
-        # Create a new instance of the LoginScreen
-        approved = ViewApprovedLoansScreen(name='ViewApprovedLoansScreen')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(approved)
-
-        # Switch to the LoginScreen
-        sm.current = 'ViewApprovedLoansScreen'
 
     def go_to_rejected_loans(self):
         modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
@@ -1016,8 +950,6 @@ class ViewLoansProfileScreens(Screen):
     def on_back_button_press(self):
         if self.ids.status.text == 'disbursed':
             self.manager.current = 'OpenViewLoanScreen'
-        elif self.ids.status.text == 'approved':
-            self.manager.current = 'ViewApprovedLoansScreen'
         elif self.ids.status.text == 'rejected':
             self.manager.current = 'ViewRejectedLoansScreen'
         elif self.ids.status.text == 'under process':
@@ -1081,8 +1013,6 @@ class ViewLoansProfileScreens(Screen):
         self.manager.transition = SlideTransition(direction='right')
         if self.ids.status.text == 'disbursed':
             self.manager.current = 'OpenViewLoanScreen'
-        elif self.ids.status.text == 'approved':
-            self.manager.current = 'ViewApprovedLoansScreen'
         elif self.ids.status.text == 'rejected':
             self.manager.current = 'ViewRejectedLoansScreen'
         elif self.ids.status.text == 'under process':
@@ -1155,103 +1085,6 @@ class ViewLoansProfileScreens2(Screen):
 
         self.manager.current = 'ALlLoansScreen'
 
-
-class ViewApprovedLoansScreen(Screen):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        data = app_tables.fin_loan_details.search()
-        profile = app_tables.fin_user_profile.search()
-        customer_id = []
-        loan_id = []
-        borrower_name = []
-        loan_status = []
-        product_name = []
-        s = 0
-        for i in data:
-            s += 1
-            customer_id.append(i['borrower_customer_id'])
-            loan_id.append(i['loan_id'])
-            borrower_name.append(i['borrower_full_name'])
-            loan_status.append(i['loan_updated_status'])
-            product_name.append(i['product_name'])
-
-        profile_customer_id = []
-        profile_mobile_number = []
-        for i in profile:
-            profile_customer_id.append(i['customer_id'])
-            profile_mobile_number.append(i['mobile'])
-        c = -1
-        index_list = []
-        for i in range(s):
-            c += 1
-            if loan_status[c] == 'approved':
-                index_list.append(c)
-
-        b = 1
-        k = -1
-        for i in index_list:
-            b += 1
-            k += 1
-            if customer_id[i] in profile_customer_id:
-                number = profile_customer_id.index(customer_id[i])
-            else:
-                number = 0
-            item = ThreeLineAvatarIconListItem(
-
-                IconLeftWidget(
-                    icon="card-account-details-outline"
-                ),
-                text=f"Borrower Name : {borrower_name[i]}",
-                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
-                tertiary_text=f"Product Name : {product_name[i]}",
-                text_color=(0, 0, 0, 1),  # Black color
-                theme_text_color='Custom',
-                secondary_text_color=(0, 0, 0, 1),
-                secondary_theme_text_color='Custom',
-                tertiary_text_color=(0, 0, 0, 1),
-                tertiary_theme_text_color='Custom'
-            )
-            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
-            self.ids.container3.add_widget(item)
-
-    def icon_button_clicked(self, instance, loan_id):
-        # Handle the on_release event here
-        data = app_tables.fin_loan_details.search()
-        sm = self.manager
-
-        # Create a new instance of the LoginScreen
-        profile = ViewLoansProfileScreens(name='ViewLoansProfileScreens')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(profile)
-
-        # Switch to the LoginScreen
-        sm.current = 'ViewLoansProfileScreens'
-        self.manager.get_screen('ViewLoansProfileScreens').initialize_with_value(loan_id, data)
-
-    def on_pre_enter(self):
-        # Bind the back button event to the on_back_button method
-        Window.bind(on_keyboard=self.on_back_button)
-
-    def on_pre_leave(self):
-        # Unbind the back button event when leaving the screen
-        Window.unbind(on_keyboard=self.on_back_button)
-
-    def on_back_button(self, instance, key, scancode, codepoint, modifier):
-        # Handle the back button event
-        if key == 27:  # 27 is the keycode for the hardware back button on Android
-            self.go_back()
-            return True  # Consume the event, preventing further handling
-        return False  # Continue handling the event
-
-    def go_back(self):
-        # Navigate to the previous screen with a slide transition
-        self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'ViewLoansScreen'
-
-    def refresh(self):
-        self.ids.container3.clear_widgets()
-        self.__init__()
 
 
 class ViewRejectedLoansScreen(Screen):

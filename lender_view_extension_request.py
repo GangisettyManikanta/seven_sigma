@@ -48,7 +48,7 @@ lender_view_extension = """
             title_align: 'left'
             elevation: 3
             left_action_items: [['arrow-left', lambda x: root.on_back_button_press()]]
-            pos_hint: {'center_x': 0.5, 'center_y': 0.96}
+            pos_hint: {'top': 1}
             md_bg_color: 0.043, 0.145, 0.278, 1
 
 

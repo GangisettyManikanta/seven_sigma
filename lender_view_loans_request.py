@@ -1,6 +1,7 @@
 from anvil.tables import app_tables
 from kivy.animation import Animation
 from kivy.clock import Clock
+from kivy.factory import Factory
 from kivy.uix.modalview import ModalView
 from kivymd.uix.label import MDLabel
 from kivymd.uix.list import *
@@ -20,6 +21,7 @@ from kivymd.uix.snackbar import Snackbar
 
 from borrower_wallet import WalletScreen
 from lender_wallet import LenderWalletScreen
+
 
 view_loan_request = """
 <WindowManager>:
@@ -234,11 +236,11 @@ view_loan_request = """
     BoxLayout:
         orientation: 'vertical'
         MDTopAppBar:
-            title: "View Profile"
+            title: "Borrower Loan Details"
             elevation: 3
-            left_action_items: [['arrow-left', lambda x: root.on_back_button_press()]]
             md_bg_color: 0.043, 0.145, 0.278, 1
             title_align: 'center'
+            halign:"center"
 
         ScrollView:
             MDBoxLayout:
@@ -670,7 +672,7 @@ class ViewLoansRequest(Screen):
         index_list = []
         for i in range(s):
             c += 1
-            if loan_status[c] == 'approved' or loan_status[c] == 'rejected' or loan_status[c] == 'under process':
+            if loan_status[c] == 'under process':
                 index_list.append(c)
 
         b = 1
@@ -847,8 +849,45 @@ class ViewLoansProfileScreen(Screen):
             return True  # Consume the event, preventing further handling
         return False  # Continue handling the event
 
-    def approved_click(self):
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
 
+
+    def approved_click(self):
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
+        modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
+        Clock.schedule_once(lambda dt: self.perform_approved_click(modal_view), 2)
+
+    def perform_approved_click(self, modal_view):
+        # Cancel the animation
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
+        # Close the modal view after performing the action
+        modal_view.dismiss()
+        # Get the existing ScreenManager
         profile = app_tables.fin_user_profile.search()
         email_user = self.email_user()
         profile_customer_id = []
@@ -890,6 +929,8 @@ class ViewLoansProfileScreen(Screen):
         else:
             pass
 
+
+
     def rejected_click(self):
         data = app_tables.fin_loan_details.search()
         loan_id = self.ids.loan_id.text
@@ -906,7 +947,7 @@ class ViewLoansProfileScreen(Screen):
             disbursed = ViewLoansProfileScreenRL(name='ViewLoansProfileScreenRL')
             sm.add_widget(disbursed)
             sm.current = 'ViewLoansProfileScreenRL'
-            self.manager.get_screen('ExtensionLoansProfileScreen').initialize_with_value(loan_id, data)
+            self.manager.get_screen('ViewLoansProfileScreenRL').initialize_with_value(loan_id, data)
             self.show_snackbar(f"This Loan ID {loan_id} is Rejected")
             return
         else:
@@ -944,8 +985,7 @@ class ViewLoansProfileScreenLR(Screen):
         # Close alert box
         self.dialog.dismiss()
 
-    def on_back_button_press(self):
-        self.manager.current = 'ViewLoansRequest'
+
 
     def initialize_with_value(self, value, data):
         profile = app_tables.fin_user_profile.search()
@@ -1000,14 +1040,15 @@ class ViewLoansProfileScreenLR(Screen):
     def on_back_button(self, instance, key, scancode, codepoint, modifier):
         # Handle the back button event
         if key == 27:  # 27 is the keycode for the hardware back button on Android
-            self.go_back()
+            #self.go_back()
             return True  # Consume the event, preventing further handling
         return False  # Continue handling the event
 
-    def go_back(self):
+    '''def go_back(self):
         # Navigate to the previous screen with a slide transition
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'ViewLoansRequest'
+        '''
 
     def show_snackbar(self, text):
         Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
@@ -1043,19 +1084,20 @@ class ViewLoansProfileScreenLR(Screen):
         print(f"The difference in minutes is: {minutes_difference} minutes")
 
         if minutes_difference < 30:
-            self.show_snackbar(f"Amount Paid Successfully {loan_amount[index]} to this Loan ID {loan_id_list[index]}")
+            self.show_snackbar(f"Time Out You Must Finish Before 30 Minutes {loan_amount[index]} to this Loan ID {loan_id_list[index]}")
             data[index]['loan_updated_status'] = 'disbursed'
             data[index]['loan_disbursed_timestamp'] = paid_time
+            from lender_dashboard import LenderDashboard
             sm = self.manager
 
             # Create a new instance of the LoginScreen
-            login_screen = WalletScreen(name='WalletScreen')
+            login_screen = LenderDashboard(name='LenderDashboard')
 
             # Add the LoginScreen to the existing ScreenManager
             sm.add_widget(login_screen)
 
             # Switch to the LoginScreen
-            sm.current = 'WalletScreen'
+            sm.current = 'LenderDashboard'
             return
 
         elif minutes_difference > 30:

@@ -122,10 +122,16 @@ class MyApp(MDApp):
         # Check if product list is not empty before accessing its elements
         if product:
             if len(product) > 0:
-                # Update the product description label with the fetched description
-                self.root.get_screen('NewloanScreen').ids.product_description.text = product[0]['product_description']
+                product_description = product[0]['product_description']
+                # Check if product_description is not None before updating the label
+                if product_description is not None:
+                    # Update the product description label with the fetched description
+                    self.root.get_screen('NewloanScreen').ids.product_description.text = product_description
+                else:
+                    # Set a default message when product_description is None
+                    self.root.get_screen('NewloanScreen').ids.product_description.text = "No description available"
         else:
-            # Clear the product description label if no product description is found
+            # Clear the product description label if no product is found
             self.root.get_screen('NewloanScreen').ids.product_description.text = ""
 
     def clear_spinners_and_labels(self, spinner_ids):

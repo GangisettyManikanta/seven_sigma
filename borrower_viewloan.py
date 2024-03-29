@@ -98,7 +98,7 @@ kv = '''
                     orientation: 'horizontal'
                     spacing:dp(10)
                     MDLabel:
-                        text: "UnderProcess Loans"
+                        text: "Under process Loans"
                         font_size:dp(14)
                         bold:True
                         theme_text_color: 'Custom'
@@ -166,7 +166,7 @@ kv = '''
                     orientation: 'horizontal'
                     spacing:dp(10)
                     MDLabel:
-                        text: "ForeClose Loans"
+                        text: "Foreclosure Loans"
                         font_size:dp(14)
                         bold:True
                         theme_text_color: 'Custom'
